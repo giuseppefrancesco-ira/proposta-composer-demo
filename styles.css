@@ -1081,7 +1081,7 @@ button {
 
 .composer-card.focus-expanded .composer-textarea,
 .composer-card.focus-expanded .translation-preview-textarea {
-  min-height: 130px;
+  min-height: 185px;
 }
 
 /* COMPOSER BOTTOM BAR */
@@ -1826,12 +1826,15 @@ button {
   }
 
   .composer-card.focus-expanded .composer-split-surface {
-    margin: 10px 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 260px;
+    margin: 8px 12px;
     width: calc(100% - 24px);
     border: 1.5px solid var(--brand);
     border-radius: 10px;
     overflow: hidden;
-    flex-shrink: 0;
   }
 
   .composer-col-origin {
@@ -1852,8 +1855,12 @@ button {
 
   .composer-card.focus-expanded .composer-col-origin,
   .composer-card.focus-expanded .composer-col-target {
-    padding: 10px 12px;
-    gap: 6px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    gap: 8px;
+    min-height: 120px;
   }
 
   .composer-textarea {
@@ -1863,13 +1870,14 @@ button {
     line-height: 1.45;
   }
 
-  .composer-card.focus-expanded .composer-textarea {
-    min-height: 82px;
-    max-height: none;
-  }
-
+  .composer-card.focus-expanded .composer-textarea,
   .composer-card.focus-expanded .translation-preview-textarea {
-    min-height: 76px;
+    flex: 1;
+    height: 100%;
+    min-height: 95px;
+    max-height: none;
+    font-size: 13px;
+    line-height: 1.5;
   }
 
   /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet */
