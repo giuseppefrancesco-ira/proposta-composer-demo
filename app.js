@@ -4,11 +4,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1048',
     bookingStatus: 'Aperta - Soggiorno in corso',
     guestName: 'Adam Nowak',
+    initials: 'AN',
     dates: '06/10/26 - 11/10/26',
     unit: 'App. Duomo Suite - S04',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'AIRBNB',
+    channel: 'Airbnb',
     msgCount: 9,
     handover: {
       motivo: 'Richiesta posto auto cortile + biancheria extra',
@@ -29,11 +30,9 @@ const CONVERSATIONS = {
       {
         id: 'm1',
         sender: 'guest',
-        author: 'ADAM - 11:20',
-        badges: [
-          { text: 'AIRBNB', cls: 'channel' },
-          { text: 'EN -> IT', cls: 'booking' }
-        ],
+        author: 'Adam Nowak',
+        time: '11:20',
+        badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Good morning! The Nuki code worked right away, the apartment is great. Quick question: is there a dedicated parking spot in the courtyard for guests?',
         textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
       },
@@ -41,24 +40,18 @@ const CONVERSATIONS = {
         id: 'm2',
         sender: 'host',
         scheduled: true,
-        author: 'TU - Programmato per Domani 09:00',
-        badges: [
-          { text: 'PROGRAMMATO', cls: 'channel' },
-          { text: 'TEMPLATE CHECK-OUT', cls: 'ai' },
-          { text: 'DOPPIA VERIFICA OK', cls: 'pms' }
-        ],
+        author: 'Tu',
+        time: 'Programmato Domani 09:00',
+        badge: { text: 'Programmato', cls: 'channel' },
         textOriginal: 'Good morning Adam! Just a friendly reminder that check-out tomorrow is by 10:30 AM. You can leave the keys on the living room table.',
-        textTranslated: 'Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
+        textTranslated: 'Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
       },
       {
         id: 'm3',
         sender: 'guest',
-        author: 'ADAM - 11:45',
-        badges: [
-          { text: 'AIRBNB', cls: 'channel' },
-          { text: 'EN -> IT', cls: 'booking' },
-          { text: 'SENTIMENT POSITIVO', cls: 'pms' }
-        ],
+        author: 'Adam Nowak',
+        time: '11:45',
+        badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Great, thank you! I just read the recycling instructions. If I need extra towels I will message you here. Thanks for the city sightseeing tips!',
         textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
       }
@@ -69,11 +62,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1051',
     bookingStatus: 'Da leggere - Check-in Oggi',
     guestName: 'Sophie Laurent',
+    initials: 'SL',
     dates: '07/10/26 - 10/10/26',
     unit: 'Suite Brera - S02',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'BOOKING.COM',
+    channel: 'Booking.com',
     msgCount: 4,
     handover: {
       motivo: 'Richiesta deposito bagagli anticipato ore 11:30',
@@ -93,11 +87,9 @@ const CONVERSATIONS = {
       {
         id: 's1',
         sender: 'guest',
-        author: 'SOPHIE - 10:15',
-        badges: [
-          { text: 'BOOKING.COM', cls: 'booking' },
-          { text: 'EN -> IT', cls: 'ai' }
-        ],
+        author: 'Sophie Laurent',
+        time: '10:15',
+        badge: { text: 'Booking.com', cls: 'booking' },
         textOriginal: 'Hello! Our train arrives in Milan at 11:15 AM. Would it be possible to drop off our luggage before the official check-in time?',
         textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. È possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
       }
@@ -108,11 +100,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1042',
     bookingStatus: 'Chiusa - Check-out effettuato',
     guestName: 'Francesco Ira',
+    initials: 'FI',
     dates: '02/10/26 - 06/10/26',
     unit: 'Casa Aurora - Attico',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'WHATSAPP',
+    channel: 'WhatsApp',
     msgCount: 6,
     handover: {
       motivo: 'Invio ricevuta tassa di soggiorno e ringraziamenti',
@@ -132,12 +125,11 @@ const CONVERSATIONS = {
       {
         id: 'f1',
         sender: 'guest',
-        author: 'FRANCESCO - Ieri 18:20',
-        badges: [
-          { text: 'WHATSAPP', cls: 'pms' }
-        ],
+        author: 'Francesco Ira',
+        time: 'Ieri 18:20',
+        badge: { text: 'WhatsApp', cls: 'pms' },
         textOriginal: 'Grazie di tutto ragazzi, soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno quando avete un attimo?',
-        textTranslated: 'Messaggio già in Italiano (nessuna traduzione necessaria).'
+        textTranslated: ''
       }
     ]
   }
@@ -243,6 +235,14 @@ function togglePromptBar() {
   }
 }
 
+function updateMobileCompactTransPreview() {
+  const enArea = document.getElementById('translationPreviewTextarea');
+  const compactEl = document.getElementById('mobileCompactTransText');
+  if (compactEl && enArea) {
+    compactEl.textContent = enArea.value.replace(/\s+/g, ' ').trim();
+  }
+}
+
 function applyAiPrompt() {
   const promptVal = document.getElementById('promptInput').value.trim();
   const itArea = document.getElementById('composerTextarea');
@@ -250,6 +250,7 @@ function applyAiPrompt() {
   if (!promptVal) return;
   itArea.value = itArea.value + "\n\n[Modifica AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
   enArea.value = enArea.value + "\n\n[AI update: " + promptVal + "] We remain at your full disposal on WhatsApp or right here in the chat!";
+  updateMobileCompactTransPreview();
   document.getElementById('promptInput').value = '';
   state.promptOpen = false;
   document.getElementById('promptInlineBar').classList.remove('open');
@@ -281,6 +282,7 @@ function insertProposal(type) {
     closeMobileDrawers();
   }
   syncAllUI(true);
+  updateMobileCompactTransPreview();
   flashSyncBadge('Bozza inserita e tradotta');
 }
 
@@ -302,11 +304,16 @@ function handleItalianInput() {
         ? conv.focusDraftTarget
         : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '');
     }
+    updateMobileCompactTransPreview();
     syncText.textContent = 'Sincronizzata';
   }, 280);
 }
 
 function toggleEditTranslation() {
+  if (isMobileViewport() && !state.focusExpanded) {
+    state.focusExpanded = true;
+    syncAllUI(true);
+  }
   state.editingTranslation = !state.editingTranslation;
   const enArea = document.getElementById('translationPreviewTextarea');
   const btn = document.getElementById('btnEditPl');
@@ -340,8 +347,9 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       internalNote: true,
-      author: 'TU - Nota Interna Team - Ora',
-      badges: [{ text: 'NOTA INTERNA PRIVATA', cls: 'channel' }],
+      author: 'Tu',
+      time: 'Ora',
+      badge: { text: 'Nota interna', cls: 'channel' },
       textOriginal: itText,
       textTranslated: ''
     });
@@ -350,25 +358,21 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       scheduled: true,
-      author: 'TU - Programmato per ' + scheduledTime,
-      badges: [
-        { text: 'PROGRAMMATO', cls: 'channel' },
-        { text: 'TRADOTTO IN ' + conv.langCode, cls: 'pms' }
-      ],
+      author: 'Tu',
+      time: 'Programmato ' + scheduledTime,
+      badge: { text: 'Programmato', cls: 'channel' },
       textOriginal: targetText || itText,
-      textTranslated: 'Testo originale (IT): ' + itText
+      textTranslated: itText
     });
   } else {
     conv.messages.push({
       id: 'm_' + Date.now(),
       sender: 'host',
-      author: 'TU - Inviato ora',
-      badges: [
-        { text: 'INVIATO IN ' + conv.langCode, cls: 'pms' },
-        { text: 'DOPPIA VERIFICA OK', cls: 'booking' }
-      ],
+      author: 'Tu',
+      time: 'Ora',
+      badge: { text: 'Inviato in ' + conv.langCode, cls: 'pms' },
       textOriginal: targetText || itText,
-      textTranslated: 'Testo originale (IT): ' + itText
+      textTranslated: itText
     });
   }
 
@@ -407,51 +411,55 @@ function renderMessages() {
   const conv = getConv();
   const stream = document.getElementById('messagesStream');
 
-  const mobileHandoverHtml = `
-    <div class="mobile-handover-inline">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE &amp; SINTESI</span>
-        <span class="mini-badge pms">4 punti chiave</span>
-      </div>
-      <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
-        <strong>1. Motivo:</strong> ${conv.handover.motivo}<br/>
-        <strong>2. Priorit&agrave;:</strong> ${conv.handover.urgenza} &middot; <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
-      </div>
+  const dateDividerHtml = `
+    <div class="chat-date-divider">
+      <span>Oggi &middot; Conversazione ${conv.channel}</span>
     </div>
   `;
 
   const messagesHtml = conv.messages.map(m => {
+    const isGuest = m.sender === 'guest';
     const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
-    const badgesHtml = (m.badges || []).map(b => `<span class="mini-badge ${b.cls}">${b.text}</span>`).join('');
-    const transHtml = m.textTranslated ? `
-      <div class="msg-translation-card">
-        <div class="msg-translation-header">
-          <span>${m.sender === 'guest' ? `Traduzione automatica (${conv.langCode} -> IT)` : 'Originale scritto in Italiano'}</span>
-          <span>Sincronizzata</span>
-        </div>
-        <div class="msg-translation-body">${m.textTranslated}</div>
+    const badgeHtml = m.badge ? `<span class="mini-badge ${m.badge.cls}">${m.badge.text}</span>` : '';
+
+    const inlineTranslationHtml = m.textTranslated ? `
+      <div class="msg-inline-translation">
+        <span class="msg-inline-trans-label">${isGuest ? `IT &middot; Traduzione` : `IT &middot; Originale`}</span>
+        <div class="msg-inline-trans-text">${m.textTranslated}</div>
       </div>
     ` : '';
+
     const actionsHtml = m.scheduled ? `
       <div class="msg-actions-bar">
         <button class="msg-action-tiny" onclick="sendCurrentMessage()">Invia subito</button>
-        <button class="msg-action-tiny danger" onclick="deleteScheduledMsg('${m.id}')">Annulla programmazione</button>
+        <button class="msg-action-tiny danger" onclick="deleteScheduledMsg('${m.id}')">Annulla</button>
       </div>
     ` : '';
+
+    const avatarHtml = isGuest
+      ? `<div class="chat-avatar guest-avatar">${conv.initials || 'OS'}</div>`
+      : '';
+
     return `
       <div class="${rowCls}">
-        <div class="msg-meta">
-          <span>${m.author}</span>
-          ${badgesHtml}
+        ${avatarHtml}
+        <div class="msg-content-col">
+          <div class="msg-meta">
+            <span class="msg-author-name">${m.author}</span>
+            <span class="msg-time-label">${m.time || ''}</span>
+            ${badgeHtml}
+          </div>
+          <div class="msg-bubble">
+            <div class="msg-primary-text">${m.textOriginal}</div>
+            ${inlineTranslationHtml}
+          </div>
+          ${actionsHtml}
         </div>
-        <div class="msg-bubble">${m.textOriginal}</div>
-        ${transHtml}
-        ${actionsHtml}
       </div>
     `;
   }).join('');
 
-  stream.innerHTML = mobileHandoverHtml + messagesHtml;
+  stream.innerHTML = dateDividerHtml + messagesHtml;
 }
 
 function syncAllUI(preserveText = false) {
@@ -462,7 +470,7 @@ function syncAllUI(preserveText = false) {
   document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadMsgCount').textContent = conv.msgCount;
   document.getElementById('mobileMsgCount').textContent = conv.msgCount;
-  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} -> IT`;
+  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} <-> IT`;
   document.getElementById('threadStayDates').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
 
@@ -503,7 +511,7 @@ function syncAllUI(preserveText = false) {
 
   const sendBtn = document.getElementById('mainSendBtn');
   if (state.channelMode === 'note') {
-    sendBtn.innerHTML = '<span>Salva nota interna</span>';
+    sendBtn.innerHTML = '<span>Salva nota</span>';
   } else if (mobile) {
     sendBtn.innerHTML = `<span>Invia in ${conv.langCode}</span>`;
   } else {
@@ -516,6 +524,7 @@ function syncAllUI(preserveText = false) {
     itArea.value = state.focusExpanded ? conv.focusDraftIT : conv.standardDraftIT;
     enArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
   }
+  updateMobileCompactTransPreview();
 
   document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
   document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');

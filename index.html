@@ -260,7 +260,7 @@ button {
 }
 
 .search-box {
-  padding: 0 14px 10px;
+  padding: 0 14px 8px;
   display: none;
 }
 
@@ -330,7 +330,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
@@ -409,14 +409,14 @@ button {
 }
 
 .conv-item {
-  padding: 11px 14px 11px 22px;
+  padding: 12px 14px 12px 22px;
   border-bottom: 1px solid var(--border);
   border-left: 3px solid transparent;
   background: var(--bg-surface);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .conv-item:hover {
@@ -466,9 +466,8 @@ button {
 .mini-badge {
   font-size: 10px;
   font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
+  padding: 2px 7px;
+  border-radius: 99px;
 }
 
 .mini-badge.channel { background: var(--rose-bg); color: var(--rose-text); }
@@ -499,12 +498,11 @@ button {
   position: relative;
 }
 
-/* Desktop Thread Header: proper vertical padding and clean wrapping so nothing touches the top or bottom border */
 .thread-header {
   min-height: 64px;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
-  padding: 12px 20px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -624,29 +622,48 @@ button {
 
 /* MOBILE SUB-BARS & PINNED CARDS (Hidden on Desktop) */
 .mobile-conv-statusbar,
-.mobile-handover-inline,
 .mobile-pinned-guest-context,
 .mobile-sheet-drag-handle,
 .mobile-copilot-inline-section,
-.mobile-close-drawer-btn {
+.mobile-close-drawer-btn,
+.mobile-compact-trans-bar {
   display: none;
 }
 
-/* MESSAGES STREAM */
+/* ==========================================================================
+   TRUE CHAT TIMELINE & BUBBLES (LEFT FOR GUEST, RIGHT FOR HOST)
+   ========================================================================== */
 .messages-stream {
   flex: 1;
   overflow-y: auto;
-  padding: 18px 24px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
+}
+
+.chat-date-divider {
+  display: flex;
+   justify-content: center;
+  margin-bottom: 2px;
+}
+
+.chat-date-divider span {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 99px;
+  box-shadow: 0 1px 2px rgba(14, 20, 36, 0.03);
 }
 
 .msg-row {
   display: flex;
-  flex-direction: column;
-  max-width: 620px;
-  gap: 6px;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: 70%;
 }
 
 .msg-row.guest {
@@ -655,6 +672,36 @@ button {
 
 .msg-row.host {
   align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #DBEAFE;
+  color: #1E40AF;
+  font-size: 11.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid #BFDBFE;
+}
+
+.msg-content-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.msg-row.guest .msg-content-col {
+  align-items: flex-start;
+}
+
+.msg-row.host .msg-content-col {
   align-items: flex-end;
 }
 
@@ -663,29 +710,41 @@ button {
   align-items: center;
   gap: 6px;
   font-size: 11.5px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.msg-author-name {
+  font-weight: 600;
   color: var(--text-secondary);
-  flex-wrap: wrap;
+}
+
+.msg-time-label {
+  color: var(--text-muted);
 }
 
 .msg-bubble {
   padding: 12px 16px;
   font-size: 13.5px;
   line-height: 1.5;
-  border-radius: 14px;
-  width: 100%;
+  border-radius: 18px;
+  width: fit-content;
+  max-width: 100%;
+  box-shadow: 0 2px 6px rgba(14, 20, 36, 0.04);
 }
 
 .msg-row.guest .msg-bubble {
   background: var(--bg-surface);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .msg-row.host .msg-bubble {
   background: var(--brand);
   color: #FFFFFF;
-  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 3px 10px rgba(36, 87, 230, 0.16);
 }
 
 .msg-row.host.scheduled .msg-bubble {
@@ -699,44 +758,63 @@ button {
   color: #78350F;
 }
 
-.msg-translation-card {
-  width: 100%;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--brand);
-  border-radius: 10px;
-  padding: 8px 12px;
+/* Integrated translation inside the same chat bubble (no separate stacked card!) */
+.msg-inline-translation {
+  margin-top: 9px;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
-.msg-translation-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-muted);
+.msg-row.guest .msg-inline-translation {
+  border-top: 1px solid #EEF1F7;
 }
 
-.msg-translation-body {
+.msg-row.host .msg-inline-translation {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.msg-inline-trans-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.msg-row.guest .msg-inline-trans-label {
+  color: var(--brand);
+}
+
+.msg-row.host .msg-inline-trans-label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.msg-inline-trans-text {
   font-size: 12.5px;
   line-height: 1.45;
+}
+
+.msg-row.guest .msg-inline-trans-text {
   color: var(--text-secondary);
+}
+
+.msg-row.host .msg-inline-trans-text {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .msg-actions-bar {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-top: 2px;
 }
 
 .msg-action-tiny {
   font-size: 11px;
   font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 5px;
+  padding: 3px 9px;
+  border-radius: 6px;
   background: var(--bg-surface);
   border: 1px solid var(--border-strong);
   color: var(--text-secondary);
@@ -750,9 +828,8 @@ button {
 
 /* CENTRAL COMPOSER (V2 SPLIT BILINGUAL EDITOR) */
 .composer-wrapper {
-  background: var(--bg-subtle);
-  border-top: 1px solid var(--border);
-  padding: 12px 18px 14px;
+  background: transparent;
+  padding: 0 24px 16px;
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
@@ -760,7 +837,7 @@ button {
 .composer-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-strong);
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
@@ -778,8 +855,8 @@ button {
 }
 
 .composer-topbar {
-  min-height: 46px;
-  padding: 8px 14px;
+  min-height: 44px;
+  padding: 6px 14px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -835,8 +912,8 @@ button {
 }
 
 .ai-action-btn {
-  height: 30px;
-  padding: 0 11px;
+  height: 28px;
+  padding: 0 10px;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 600;
@@ -860,8 +937,8 @@ button {
 }
 
 .focus-toggle-btn {
-  height: 30px;
-  padding: 0 11px;
+  height: 28px;
+  padding: 0 10px;
   border-radius: 6px;
   border: 1px solid var(--border-strong);
   background: var(--bg-surface);
@@ -914,7 +991,7 @@ button {
   font-weight: 600;
 }
 
-/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT ON DESKTOP, STACKED ON MOBILE) */
+/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT ON DESKTOP) */
 .composer-split-surface {
   width: 100%;
   display: grid;
@@ -927,23 +1004,24 @@ button {
   background: #FFFBEB;
 }
 
-.composer-card.note-mode .composer-col-target {
-  display: none;
+.composer-card.note-mode .composer-col-target,
+.composer-card.note-mode .mobile-compact-trans-bar {
+  display: none !important;
 }
 
 .composer-col-origin {
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
 }
 
 .composer-card.focus-expanded .composer-col-origin,
 .composer-card.focus-expanded .composer-col-target {
-  padding: 16px 18px;
-  gap: 10px;
+  padding: 14px 18px;
+  gap: 8px;
 }
 
 .composer-card.note-mode .composer-col-origin {
@@ -952,10 +1030,10 @@ button {
 }
 
 .composer-col-target {
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background: var(--bg-subtle);
 }
 
@@ -963,7 +1041,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 22px;
+  min-height: 20px;
   gap: 8px;
 }
 
@@ -1000,10 +1078,10 @@ button {
 .composer-textarea,
 .translation-preview-textarea {
   width: 100%;
-  min-height: 64px;
+  min-height: 58px;
   resize: none;
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--text-primary);
   outline: none;
   border: none;
@@ -1013,13 +1091,13 @@ button {
 
 .composer-card.focus-expanded .composer-textarea,
 .composer-card.focus-expanded .translation-preview-textarea {
-  min-height: 136px;
+  min-height: 130px;
 }
 
 /* COMPOSER BOTTOM BAR */
 .composer-bottombar {
-  min-height: 48px;
-  padding: 8px 14px;
+  min-height: 46px;
+  padding: 6px 14px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -1055,7 +1133,7 @@ button {
 }
 
 .schedule-btn {
-  height: 34px;
+  height: 32px;
   padding: 0 12px;
   border-radius: 7px;
   background: var(--amber-bg);
@@ -1070,8 +1148,8 @@ button {
 }
 
 .send-btn {
-  height: 34px;
-  padding: 0 16px;
+  height: 32px;
+  padding: 0 15px;
   border-radius: 7px;
   background: var(--brand);
   color: #FFFFFF;
@@ -1087,9 +1165,9 @@ button {
   background: var(--brand-hover);
 }
 
-/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (370px) */
+/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (360px) */
 .ai-sidebar {
-  width: 370px;
+  width: 360px;
   background: var(--bg-surface);
   border-left: 1px solid var(--border);
   display: flex;
@@ -1452,8 +1530,8 @@ button {
   .thread-header {
     background: var(--bg-mobile-header);
     color: #FFFFFF;
-    min-height: 58px;
-    padding: 10px 14px;
+    min-height: 56px;
+    padding: 8px 14px;
     border-bottom: none;
     gap: 10px;
     flex-wrap: nowrap;
@@ -1526,12 +1604,12 @@ button {
     font-weight: 600;
   }
 
-  /* Mobile Conversation Status Sub-bar (Stato conversazione) */
+  /* Mobile Conversation Status Sub-bar: slim & airy */
   .mobile-conv-statusbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 14px;
+    padding: 6px 14px;
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
@@ -1580,33 +1658,29 @@ button {
     display: none;
   }
 
-  /* Messages Stream & Inline Handover Card on Mobile Standard View */
+  /* True Chat Messages Stream on Mobile: clear Left (Guest) vs Right (Host) bubbles! */
   .messages-stream {
-    padding: 12px 14px;
-    gap: 12px;
-  }
-
-  .mobile-handover-inline {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: #FFFFFF;
-    border: 1px solid var(--border-strong);
-    border-radius: 10px;
-    padding: 10px 12px;
-    flex-shrink: 0;
+    padding: 16px 14px;
+    gap: 16px;
   }
 
   .msg-row {
-    max-width: 100%;
+    max-width: 84%;
+    gap: 8px;
+  }
+
+  .chat-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 10.5px;
   }
 
   .msg-bubble {
-    padding: 10px 13px;
+    padding: 10px 14px;
     font-size: 13px;
   }
 
-  /* Mobile Standard Composer */
+  /* Mobile Standard Composer: compact chat bar so the conversation dominates the screen */
   .composer-wrapper {
     padding: 0;
     background: transparent;
@@ -1614,10 +1688,11 @@ button {
   }
 
   .composer-card {
-    border-radius: 0;
+    border-radius: 14px 14px 0 0;
     border-left: none;
     border-right: none;
     border-bottom: none;
+    box-shadow: 0 -4px 18px rgba(14, 20, 36, 0.06);
   }
 
   /* Mobile Bottom Sheet Focus Expanded */
@@ -1654,10 +1729,10 @@ button {
     background: #CBD5E1;
   }
 
-  /* Mobile Composer Topbar: clean single row for Channel Switch + Espandi, and dedicated row for AI buttons when expanded */
+  /* Mobile Composer Topbar */
   .composer-topbar {
-    min-height: 44px;
-    padding: 8px 12px;
+    min-height: 40px;
+    padding: 6px 12px;
     gap: 8px;
     flex-wrap: wrap;
   }
@@ -1681,7 +1756,7 @@ button {
   }
 
   .composer-card.focus-expanded .composer-topbar {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
   }
 
   .composer-card.focus-expanded .composer-ai-buttons-group {
@@ -1706,6 +1781,60 @@ button {
     grid-template-columns: 1fr;
   }
 
+  /* In compact mobile view (not expanded): hide origin header & full target textarea, show sleek 1-line translation bar */
+  .composer-card:not(.focus-expanded) .composer-col-origin .editor-header-row {
+    display: none;
+  }
+
+  .composer-card:not(.focus-expanded) .composer-col-target {
+    display: none;
+  }
+
+  .composer-card:not(.focus-expanded) .mobile-compact-trans-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-subtle);
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .mobile-compact-trans-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mobile-compact-trans-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+
+  .mobile-compact-trans-text {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .mobile-compact-trans-action {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+
   .composer-card.focus-expanded .composer-split-surface {
     margin: 10px 12px;
     width: calc(100% - 24px);
@@ -1719,6 +1848,10 @@ button {
     padding: 8px 12px;
     gap: 4px;
     border-right: none;
+    border-bottom: none;
+  }
+
+  .composer-card.focus-expanded .composer-col-origin {
     border-bottom: 1px solid var(--border);
   }
 
@@ -1735,22 +1868,18 @@ button {
 
   .composer-textarea {
     min-height: 44px;
-    font-size: 12.5px;
-    line-height: 1.45;
-  }
-
-  .translation-preview-textarea {
-    min-height: 38px;
-    font-size: 12px;
+    max-height: 62px;
+    font-size: 13px;
     line-height: 1.45;
   }
 
   .composer-card.focus-expanded .composer-textarea {
-    min-height: 74px;
+    min-height: 82px;
+    max-height: none;
   }
 
   .composer-card.focus-expanded .translation-preview-textarea {
-    min-height: 66px;
+    min-height: 76px;
   }
 
   /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet */
@@ -1780,10 +1909,10 @@ button {
     font-size: 11px;
   }
 
-  /* Thumb Zone Bottom Bar: clean and uncluttered on mobile (no # Tag, / Pronti, KB (2)) */
+  /* Thumb Zone Bottom Bar: clean and uncluttered on mobile */
   .composer-bottombar {
-    min-height: 48px;
-    padding: 8px 12px;
+    min-height: 46px;
+    padding: 6px 12px;
     margin-top: auto;
     gap: 8px;
     flex-wrap: nowrap;
@@ -1853,7 +1982,7 @@ button {
         </div>
       </nav>
 
-      <!-- 2. LISTA MESSAGGI (340px Desktop / Drawer Navigazione su Mobile) -->
+      <!-- 2. LISTA MESSAGGI (330px Desktop / Drawer Navigazione su Mobile) -->
       <aside class="inbox-panel" id="inboxPanel">
         <div class="inbox-header">
           <span class="inbox-title">Messaggi</span>
@@ -1999,7 +2128,7 @@ button {
         </div>
       </aside>
 
-      <!-- 3. COLONNA CENTRALE: THREAD + COMPOSER SPLIT BILINGUE -->
+      <!-- 3. COLONNA CENTRALE: THREAD CHAT + COMPOSER SPLIT BILINGUE -->
       <section class="thread-column" id="threadColumn">
         <!-- Intestazione Thread (Bianca su Desktop, Navy #131C4D su Mobile come da Figma) -->
         <header class="thread-header">
@@ -2030,20 +2159,17 @@ button {
           </div>
         </header>
 
-        <!-- Barra Stato Conversazione Mobile (1:467 Stato conversazione - visibile su mobile in vista standard) -->
+        <!-- Barra Stato Conversazione Mobile (Sottile e pulita) -->
         <div class="mobile-conv-statusbar">
           <span class="msg-count-pill"><span id="mobileMsgCount">9</span> messaggi</span>
           <span class="pms-badge">
             <span class="pms-dot"></span>
             <span>Aggancio PMS Certo</span>
           </span>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <button class="icon-btn" style="width:26px;height:26px;font-size:11px;font-weight:700;" onclick="flashSyncBadge('Dati aggiornati')">Sync</button>
-            <span class="mini-badge booking" id="mobileLangBadge">EN -&gt; IT</span>
-          </div>
+          <span class="mini-badge booking" id="mobileLangBadge">EN &lt;-&gt; IT</span>
         </div>
 
-        <!-- Contesto Ospite Fissato Mobile (1:341 Contesto Ospite Fissato - visibile su mobile quando Bottom Sheet Focus è espanso) -->
+        <!-- Contesto Ospite Fissato Mobile (Visibile su mobile quando Bottom Sheet Focus è espanso) -->
         <div class="mobile-pinned-guest-context" id="mobilePinnedGuestContext">
           <div class="mobile-pinned-header">
             <span>CONTESTO OSPITE FISSATO - DOMANDE DA EVADERE</span>
@@ -2052,10 +2178,10 @@ button {
           <div class="mobile-pinned-card" id="mobilePinnedContextCard"></div>
         </div>
 
-        <!-- Flusso Messaggi -->
+        <!-- Flusso Messaggi Chat (Fumetti a sinistra per Ospite, a destra per Host) -->
         <div class="messages-stream" id="messagesStream"></div>
 
-        <!-- COMPOSER CENTRALE SPLIT BILINGUE (Desktop: 2 colonne affiancate IT + EN | Mobile: Standard o Bottom Sheet Focus Espanso) -->
+        <!-- COMPOSER CENTRALE SPLIT BILINGUE -->
         <div class="composer-wrapper">
           <div class="composer-card" id="composerCard">
 
@@ -2120,7 +2246,16 @@ button {
                 ></textarea>
               </div>
 
-              <!-- Colonna Destinazione - Traduzione Live -->
+              <!-- Anteprima Compatta 1 Riga su Mobile Standard (tocca per aprire traduzione completa) -->
+              <div class="mobile-compact-trans-bar" onclick="toggleFocusView()" title="Tocca per vedere o modificare la traduzione completa">
+                <div class="mobile-compact-trans-left">
+                  <span class="mobile-compact-trans-badge">EN -&gt;</span>
+                  <span class="mobile-compact-trans-text" id="mobileCompactTransText">Hi Adam, thank you! For parking, spot #14 is reserved for you...</span>
+                </div>
+                <span class="mobile-compact-trans-action">Modifica EN</span>
+              </div>
+
+              <!-- Colonna Destinazione - Traduzione Live (Sempre visibile a fianco su Desktop, visibile nel Bottom Sheet Espanso su Mobile) -->
               <div class="composer-col-target">
                 <div class="editor-header-row">
                   <div class="translation-target-selector">
@@ -2146,7 +2281,7 @@ button {
               </div>
             </div>
 
-            <!-- Sezione Copilot e Autonomia Mobile (1:406 - Visibile nel Bottom Sheet Focus Mobile) -->
+            <!-- Sezione Copilot e Autonomia Mobile (Visibile nel Bottom Sheet Focus Mobile) -->
             <div class="mobile-copilot-inline-section">
               <div class="mobile-copilot-card">
                 <div class="mobile-copilot-row">
@@ -2163,7 +2298,7 @@ button {
               </div>
             </div>
 
-            <!-- Barra Inferiore Strumenti e Invio (Thumb Zone su Mobile: pulita, senza # Tag, / Pronti o KB (2)) -->
+            <!-- Barra Inferiore Strumenti e Invio (Thumb Zone su Mobile: solo + Allega, Vocale, Programma, Invia in EN) -->
             <div class="composer-bottombar">
               <div class="composer-tools-left">
                 <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega</button>
@@ -2185,7 +2320,7 @@ button {
         </div>
       </section>
 
-      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (370px Desktop / Drawer su Mobile) -->
+      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (360px Desktop / Drawer su Mobile) -->
       <aside class="ai-sidebar" id="aiSidebar">
         <!-- Intestazione Tabs -->
         <div class="ai-sidebar-header">
@@ -2402,11 +2537,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1048',
     bookingStatus: 'Aperta - Soggiorno in corso',
     guestName: 'Adam Nowak',
+    initials: 'AN',
     dates: '06/10/26 - 11/10/26',
     unit: 'App. Duomo Suite - S04',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'AIRBNB',
+    channel: 'Airbnb',
     msgCount: 9,
     handover: {
       motivo: 'Richiesta posto auto cortile + biancheria extra',
@@ -2427,11 +2563,9 @@ const CONVERSATIONS = {
       {
         id: 'm1',
         sender: 'guest',
-        author: 'ADAM - 11:20',
-        badges: [
-          { text: 'AIRBNB', cls: 'channel' },
-          { text: 'EN -> IT', cls: 'booking' }
-        ],
+        author: 'Adam Nowak',
+        time: '11:20',
+        badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Good morning! The Nuki code worked right away, the apartment is great. Quick question: is there a dedicated parking spot in the courtyard for guests?',
         textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
       },
@@ -2439,24 +2573,18 @@ const CONVERSATIONS = {
         id: 'm2',
         sender: 'host',
         scheduled: true,
-        author: 'TU - Programmato per Domani 09:00',
-        badges: [
-          { text: 'PROGRAMMATO', cls: 'channel' },
-          { text: 'TEMPLATE CHECK-OUT', cls: 'ai' },
-          { text: 'DOPPIA VERIFICA OK', cls: 'pms' }
-        ],
+        author: 'Tu',
+        time: 'Programmato Domani 09:00',
+        badge: { text: 'Programmato', cls: 'channel' },
         textOriginal: 'Good morning Adam! Just a friendly reminder that check-out tomorrow is by 10:30 AM. You can leave the keys on the living room table.',
-        textTranslated: 'Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
+        textTranslated: 'Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
       },
       {
         id: 'm3',
         sender: 'guest',
-        author: 'ADAM - 11:45',
-        badges: [
-          { text: 'AIRBNB', cls: 'channel' },
-          { text: 'EN -> IT', cls: 'booking' },
-          { text: 'SENTIMENT POSITIVO', cls: 'pms' }
-        ],
+        author: 'Adam Nowak',
+        time: '11:45',
+        badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Great, thank you! I just read the recycling instructions. If I need extra towels I will message you here. Thanks for the city sightseeing tips!',
         textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
       }
@@ -2467,11 +2595,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1051',
     bookingStatus: 'Da leggere - Check-in Oggi',
     guestName: 'Sophie Laurent',
+    initials: 'SL',
     dates: '07/10/26 - 10/10/26',
     unit: 'Suite Brera - S02',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'BOOKING.COM',
+    channel: 'Booking.com',
     msgCount: 4,
     handover: {
       motivo: 'Richiesta deposito bagagli anticipato ore 11:30',
@@ -2491,11 +2620,9 @@ const CONVERSATIONS = {
       {
         id: 's1',
         sender: 'guest',
-        author: 'SOPHIE - 10:15',
-        badges: [
-          { text: 'BOOKING.COM', cls: 'booking' },
-          { text: 'EN -> IT', cls: 'ai' }
-        ],
+        author: 'Sophie Laurent',
+        time: '10:15',
+        badge: { text: 'Booking.com', cls: 'booking' },
         textOriginal: 'Hello! Our train arrives in Milan at 11:15 AM. Would it be possible to drop off our luggage before the official check-in time?',
         textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. È possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
       }
@@ -2506,11 +2633,12 @@ const CONVERSATIONS = {
     bookingCode: 'DEMO-1042',
     bookingStatus: 'Chiusa - Check-out effettuato',
     guestName: 'Francesco Ira',
+    initials: 'FI',
     dates: '02/10/26 - 06/10/26',
     unit: 'Casa Aurora - Attico',
     langCode: 'EN',
     langName: 'Inglese',
-    channel: 'WHATSAPP',
+    channel: 'WhatsApp',
     msgCount: 6,
     handover: {
       motivo: 'Invio ricevuta tassa di soggiorno e ringraziamenti',
@@ -2530,12 +2658,11 @@ const CONVERSATIONS = {
       {
         id: 'f1',
         sender: 'guest',
-        author: 'FRANCESCO - Ieri 18:20',
-        badges: [
-          { text: 'WHATSAPP', cls: 'pms' }
-        ],
+        author: 'Francesco Ira',
+        time: 'Ieri 18:20',
+        badge: { text: 'WhatsApp', cls: 'pms' },
         textOriginal: 'Grazie di tutto ragazzi, soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno quando avete un attimo?',
-        textTranslated: 'Messaggio già in Italiano (nessuna traduzione necessaria).'
+        textTranslated: ''
       }
     ]
   }
@@ -2641,6 +2768,14 @@ function togglePromptBar() {
   }
 }
 
+function updateMobileCompactTransPreview() {
+  const enArea = document.getElementById('translationPreviewTextarea');
+  const compactEl = document.getElementById('mobileCompactTransText');
+  if (compactEl && enArea) {
+    compactEl.textContent = enArea.value.replace(/\s+/g, ' ').trim();
+  }
+}
+
 function applyAiPrompt() {
   const promptVal = document.getElementById('promptInput').value.trim();
   const itArea = document.getElementById('composerTextarea');
@@ -2648,6 +2783,7 @@ function applyAiPrompt() {
   if (!promptVal) return;
   itArea.value = itArea.value + "\n\n[Modifica AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
   enArea.value = enArea.value + "\n\n[AI update: " + promptVal + "] We remain at your full disposal on WhatsApp or right here in the chat!";
+  updateMobileCompactTransPreview();
   document.getElementById('promptInput').value = '';
   state.promptOpen = false;
   document.getElementById('promptInlineBar').classList.remove('open');
@@ -2679,6 +2815,7 @@ function insertProposal(type) {
     closeMobileDrawers();
   }
   syncAllUI(true);
+  updateMobileCompactTransPreview();
   flashSyncBadge('Bozza inserita e tradotta');
 }
 
@@ -2700,11 +2837,16 @@ function handleItalianInput() {
         ? conv.focusDraftTarget
         : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '');
     }
+    updateMobileCompactTransPreview();
     syncText.textContent = 'Sincronizzata';
   }, 280);
 }
 
 function toggleEditTranslation() {
+  if (isMobileViewport() && !state.focusExpanded) {
+    state.focusExpanded = true;
+    syncAllUI(true);
+  }
   state.editingTranslation = !state.editingTranslation;
   const enArea = document.getElementById('translationPreviewTextarea');
   const btn = document.getElementById('btnEditPl');
@@ -2738,8 +2880,9 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       internalNote: true,
-      author: 'TU - Nota Interna Team - Ora',
-      badges: [{ text: 'NOTA INTERNA PRIVATA', cls: 'channel' }],
+      author: 'Tu',
+      time: 'Ora',
+      badge: { text: 'Nota interna', cls: 'channel' },
       textOriginal: itText,
       textTranslated: ''
     });
@@ -2748,25 +2891,21 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       scheduled: true,
-      author: 'TU - Programmato per ' + scheduledTime,
-      badges: [
-        { text: 'PROGRAMMATO', cls: 'channel' },
-        { text: 'TRADOTTO IN ' + conv.langCode, cls: 'pms' }
-      ],
+      author: 'Tu',
+      time: 'Programmato ' + scheduledTime,
+      badge: { text: 'Programmato', cls: 'channel' },
       textOriginal: targetText || itText,
-      textTranslated: 'Testo originale (IT): ' + itText
+      textTranslated: itText
     });
   } else {
     conv.messages.push({
       id: 'm_' + Date.now(),
       sender: 'host',
-      author: 'TU - Inviato ora',
-      badges: [
-        { text: 'INVIATO IN ' + conv.langCode, cls: 'pms' },
-        { text: 'DOPPIA VERIFICA OK', cls: 'booking' }
-      ],
+      author: 'Tu',
+      time: 'Ora',
+      badge: { text: 'Inviato in ' + conv.langCode, cls: 'pms' },
       textOriginal: targetText || itText,
-      textTranslated: 'Testo originale (IT): ' + itText
+      textTranslated: itText
     });
   }
 
@@ -2805,51 +2944,55 @@ function renderMessages() {
   const conv = getConv();
   const stream = document.getElementById('messagesStream');
 
-  const mobileHandoverHtml = `
-    <div class="mobile-handover-inline">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE &amp; SINTESI</span>
-        <span class="mini-badge pms">4 punti chiave</span>
-      </div>
-      <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
-        <strong>1. Motivo:</strong> ${conv.handover.motivo}<br/>
-        <strong>2. Priorit&agrave;:</strong> ${conv.handover.urgenza} &middot; <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
-      </div>
+  const dateDividerHtml = `
+    <div class="chat-date-divider">
+      <span>Oggi &middot; Conversazione ${conv.channel}</span>
     </div>
   `;
 
   const messagesHtml = conv.messages.map(m => {
+    const isGuest = m.sender === 'guest';
     const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
-    const badgesHtml = (m.badges || []).map(b => `<span class="mini-badge ${b.cls}">${b.text}</span>`).join('');
-    const transHtml = m.textTranslated ? `
-      <div class="msg-translation-card">
-        <div class="msg-translation-header">
-          <span>${m.sender === 'guest' ? `Traduzione automatica (${conv.langCode} -> IT)` : 'Originale scritto in Italiano'}</span>
-          <span>Sincronizzata</span>
-        </div>
-        <div class="msg-translation-body">${m.textTranslated}</div>
+    const badgeHtml = m.badge ? `<span class="mini-badge ${m.badge.cls}">${m.badge.text}</span>` : '';
+
+    const inlineTranslationHtml = m.textTranslated ? `
+      <div class="msg-inline-translation">
+        <span class="msg-inline-trans-label">${isGuest ? `IT &middot; Traduzione` : `IT &middot; Originale`}</span>
+        <div class="msg-inline-trans-text">${m.textTranslated}</div>
       </div>
     ` : '';
+
     const actionsHtml = m.scheduled ? `
       <div class="msg-actions-bar">
         <button class="msg-action-tiny" onclick="sendCurrentMessage()">Invia subito</button>
-        <button class="msg-action-tiny danger" onclick="deleteScheduledMsg('${m.id}')">Annulla programmazione</button>
+        <button class="msg-action-tiny danger" onclick="deleteScheduledMsg('${m.id}')">Annulla</button>
       </div>
     ` : '';
+
+    const avatarHtml = isGuest
+      ? `<div class="chat-avatar guest-avatar">${conv.initials || 'OS'}</div>`
+      : '';
+
     return `
       <div class="${rowCls}">
-        <div class="msg-meta">
-          <span>${m.author}</span>
-          ${badgesHtml}
+        ${avatarHtml}
+        <div class="msg-content-col">
+          <div class="msg-meta">
+            <span class="msg-author-name">${m.author}</span>
+            <span class="msg-time-label">${m.time || ''}</span>
+            ${badgeHtml}
+          </div>
+          <div class="msg-bubble">
+            <div class="msg-primary-text">${m.textOriginal}</div>
+            ${inlineTranslationHtml}
+          </div>
+          ${actionsHtml}
         </div>
-        <div class="msg-bubble">${m.textOriginal}</div>
-        ${transHtml}
-        ${actionsHtml}
       </div>
     `;
   }).join('');
 
-  stream.innerHTML = mobileHandoverHtml + messagesHtml;
+  stream.innerHTML = dateDividerHtml + messagesHtml;
 }
 
 function syncAllUI(preserveText = false) {
@@ -2860,7 +3003,7 @@ function syncAllUI(preserveText = false) {
   document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadMsgCount').textContent = conv.msgCount;
   document.getElementById('mobileMsgCount').textContent = conv.msgCount;
-  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} -> IT`;
+  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} <-> IT`;
   document.getElementById('threadStayDates').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
 
@@ -2901,7 +3044,7 @@ function syncAllUI(preserveText = false) {
 
   const sendBtn = document.getElementById('mainSendBtn');
   if (state.channelMode === 'note') {
-    sendBtn.innerHTML = '<span>Salva nota interna</span>';
+    sendBtn.innerHTML = '<span>Salva nota</span>';
   } else if (mobile) {
     sendBtn.innerHTML = `<span>Invia in ${conv.langCode}</span>`;
   } else {
@@ -2914,6 +3057,7 @@ function syncAllUI(preserveText = false) {
     itArea.value = state.focusExpanded ? conv.focusDraftIT : conv.standardDraftIT;
     enArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
   }
+  updateMobileCompactTransPreview();
 
   document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
   document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');
