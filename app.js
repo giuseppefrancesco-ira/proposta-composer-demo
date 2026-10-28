@@ -2,64 +2,64 @@ const CONVERSATIONS = {
   adam: {
     id: 'adam',
     bookingCode: 'DEMO-1048',
-    bookingStatus: 'Aperta · Soggiorno in corso',
+    bookingStatus: 'Aperta - Soggiorno in corso',
     guestName: 'Adam Nowak',
-    dates: '06/10/26 – 11/10/26',
-    unit: 'App. Duomo Suite · S04',
-    langCode: 'PL',
-    langName: 'Polacco',
+    dates: '06/10/26 - 11/10/26',
+    unit: 'App. Duomo Suite - S04',
+    langCode: 'EN',
+    langName: 'Inglese',
     channel: 'AIRBNB',
     msgCount: 9,
     handover: {
       motivo: 'Richiesta posto auto cortile + biancheria extra',
-      urgenza: 'Media · Ospite in struttura',
+      urgenza: 'Media - Ospite in struttura',
       sentiment: 'Positivo (Codice Nuki OK)',
       statoAI: 'Bozza pronta da KB (94%)'
     },
     pinnedQuestions: [
-      { time: '11:20 · Parcheggio', text: '"Il codice Nuki funziona! C\'è un posto auto riservato nel cortile?"' },
-      { time: '11:45 · Biancheria Extra', text: '"Super, grazie! Se avrò bisogno di asciugamani vi scriverò."' }
+      { time: '11:20 - Parcheggio', text: '"Il codice Nuki funziona! C\'è un posto auto riservato nel cortile?"' },
+      { time: '11:45 - Biancheria Extra', text: '"Super, grazie! Se avrò bisogno di asciugamani vi scriverò."' }
     ],
     tags: ['#Parcheggio', '#Check-in', '#Biancheria', '#AccessoCodice'],
     standardDraftIT: 'Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile interno, per aprire il cancello puoi usare lo stesso codice 000000. Per gli asciugamani extra scrivici pure qui quando vuoi e te li portiamo subito.',
-    standardDraftTarget: 'Cześć Adam, dziękuję! Na wewnętrznym dziedzińcu czeka miejsce parkingowe nr 14, bramę otworzysz tym samym kodem 000000. W sprawie dodatkowych ręczników napisz do nas tutaj w każdej chwili, a od razu je przyniesiemy.',
+    standardDraftTarget: 'Hi Adam, thank you! For parking, spot #14 is reserved for you in the inner courtyard - you can open the gate using the same code 000000. For extra towels, just message us here anytime and we will bring them right over.',
     focusDraftIT: "Ciao Adam, siamo felici che il codice abbia funzionato subito e che ti stia trovando bene!\n\nPer il parcheggio puoi usare il posto auto n. 14 nel cortile interno: il cancello automatico si apre con lo stesso codice 000000 sulla tastiera esterna.\n\nSe ti serviranno altri asciugamani scrivici pure qui e te li faremo avere in appartamento in mezz'ora. Ti ricordiamo solo che domenica il check-out è entro le 10:30 e potrai lasciare le chiavi sul tavolo. A presto!",
-    focusDraftTarget: 'Cześć Adam, cieszymy się, że kod zadziałał od razu i że dobrze się u nas czujesz! Jeśli chodzi o parking, możesz skorzystać z miejsca nr 14 na wewnętrznym dziedzińcu, brama automatyczna otwiera się tym samym kodem 000000 na zewnętrznej klawiaturze. Gdybyś potrzebował dodatkowych ręczników, napisz do nas tutaj, a dostarczymy je do apartamentu w pół godziny. Przypominamy tylko, że w niedzielę wymeldowanie jest do 10:30, a klucze możesz zostawić na stole. Do zobaczenia!',
+    focusDraftTarget: "Hi Adam, we are glad the code worked right away and that you are enjoying the apartment!\n\nFor parking, you can use spot #14 in the inner courtyard: the automatic gate opens with the same code 000000 on the external keypad.\n\nIf you need extra towels, just message us here and we will deliver them to your apartment within 30 minutes. Just a quick reminder that Sunday check-out is by 10:30 AM and you can leave the keys on the table. See you soon!",
     messages: [
       {
         id: 'm1',
         sender: 'guest',
-        author: 'ADAM · 11:20',
+        author: 'ADAM - 11:20',
         badges: [
           { text: 'AIRBNB', cls: 'channel' },
-          { text: 'PL -> IT', cls: 'booking' }
+          { text: 'EN -> IT', cls: 'booking' }
         ],
-        textOriginal: 'Dzień dobry! Kod Nuki zadziałał od razu, mieszkanie jest świetne. Mam pytanie: czy na podwórku jest dedykowane miejsce parkingowe dla gości?',
+        textOriginal: 'Good morning! The Nuki code worked right away, the apartment is great. Quick question: is there a dedicated parking spot in the courtyard for guests?',
         textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
       },
       {
         id: 'm2',
         sender: 'host',
         scheduled: true,
-        author: 'TU · Programmato per Domani 09:00',
+        author: 'TU - Programmato per Domani 09:00',
         badges: [
           { text: 'PROGRAMMATO', cls: 'channel' },
           { text: 'TEMPLATE CHECK-OUT', cls: 'ai' },
           { text: 'DOPPIA VERIFICA OK', cls: 'pms' }
         ],
-        textOriginal: 'Dzień dobry Adam! Przypominamy, że jutro wymeldowanie jest do godziny 10:30. Klucze możesz zostawić na stole w salonie.',
+        textOriginal: 'Good morning Adam! Just a friendly reminder that check-out tomorrow is by 10:30 AM. You can leave the keys on the living room table.',
         textTranslated: 'Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
       },
       {
         id: 'm3',
         sender: 'guest',
-        author: 'ADAM · 11:45',
+        author: 'ADAM - 11:45',
         badges: [
           { text: 'AIRBNB', cls: 'channel' },
-          { text: 'PL -> IT', cls: 'booking' },
+          { text: 'EN -> IT', cls: 'booking' },
           { text: 'SENTIMENT POSITIVO', cls: 'pms' }
         ],
-        textOriginal: 'Super, dziękuję! Właśnie przeczytałem instrukcję segregacji. Jeśli będę potrzebował ręczników, napiszę do Was. Dziękuję za wskazówki na zwiedzanie miasta.',
+        textOriginal: 'Great, thank you! I just read the recycling instructions. If I need extra towels I will message you here. Thanks for the city sightseeing tips!',
         textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
       }
     ]
@@ -67,38 +67,38 @@ const CONVERSATIONS = {
   sophie: {
     id: 'sophie',
     bookingCode: 'DEMO-1051',
-    bookingStatus: 'Da leggere · Check-in Oggi',
+    bookingStatus: 'Da leggere - Check-in Oggi',
     guestName: 'Sophie Laurent',
-    dates: '07/10/26 – 10/10/26',
-    unit: 'Suite Brera · S02',
-    langCode: 'FR',
-    langName: 'Francese',
+    dates: '07/10/26 - 10/10/26',
+    unit: 'Suite Brera - S02',
+    langCode: 'EN',
+    langName: 'Inglese',
     channel: 'BOOKING.COM',
     msgCount: 4,
     handover: {
       motivo: 'Richiesta deposito bagagli anticipato ore 11:30',
-      urgenza: 'Alta · Arrivo tra 2 ore',
+      urgenza: 'Alta - Arrivo tra 2 ore',
       sentiment: 'Cordiale',
       statoAI: 'Bozza pronta da KB (91%)'
     },
     pinnedQuestions: [
-      { time: '10:15 · Deposito Bagagli', text: '"Il nostro treno arriva alle 11:15. È possibile lasciare le valigie prima del check-in?"' }
+      { time: '10:15 - Deposito Bagagli', text: '"Il nostro treno arriva alle 11:15. È possibile lasciare le valigie prima del check-in?"' }
     ],
     tags: ['#EarlyCheckIn', '#Bagagli', '#CodiciAccesso'],
     standardDraftIT: 'Ciao Sophie! Puoi lasciare i bagagli già dalle 11:30 negli armadietti smart al piano terra usando il codice 4490. Appena la camera sarà pronta ti avviseremo qui.',
-    standardDraftTarget: 'Bonjour Sophie ! Vous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents au rez-de-chaussée avec le code 4490. Dès que la chambre sera prête, nous vous préviendrons ici.',
+    standardDraftTarget: 'Hi Sophie! You can drop off your luggage starting at 11:30 AM in the smart lockers on the ground floor using code 4490. As soon as your room is ready, we will let you know right here.',
     focusDraftIT: 'Ciao Sophie, benvenuta a Milano!\n\nPuoi lasciare comodamente i bagagli già dalle 11:30 negli armadietti smart al piano terra (Locker n. 2 e n. 3) inserendo il codice 4490.\n\nIl nostro team di pulizie darà priorità alla tua Suite Brera e ti invieremo un messaggio non appena sarà pronta per il check-in anticipato.',
-    focusDraftTarget: 'Bonjour Sophie, bienvenue à Milan !\n\nVous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents du rez-de-chaussée (Casiers n°2 et n°3) en tapant le code 4490.\n\nNotre équipe de ménage donnera la priorité à votre Suite Brera et nous vous enverrons un message dès qu’elle sera prête.',
+    focusDraftTarget: 'Hi Sophie, welcome to Milan!\n\nYou can comfortably leave your luggage starting at 11:30 AM in the ground-floor smart lockers (Lockers #2 and #3) by entering code 4490.\n\nOur housekeeping team will prioritize your Brera Suite and we will message you as soon as it is ready for early check-in.',
     messages: [
       {
         id: 's1',
         sender: 'guest',
-        author: 'SOPHIE · 10:15',
+        author: 'SOPHIE - 10:15',
         badges: [
           { text: 'BOOKING.COM', cls: 'booking' },
-          { text: 'FR -> IT', cls: 'ai' }
+          { text: 'EN -> IT', cls: 'ai' }
         ],
-        textOriginal: 'Bonjour ! Notre train arrive à Milan à 11h15. Est-il possible de déposer nos valises avant l’heure officielle du check-in ?',
+        textOriginal: 'Hello! Our train arrives in Milan at 11:15 AM. Would it be possible to drop off our luggage before the official check-in time?',
         textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. È possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
       }
     ]
@@ -106,22 +106,22 @@ const CONVERSATIONS = {
   francesco: {
     id: 'francesco',
     bookingCode: 'DEMO-1042',
-    bookingStatus: 'Chiusa · Check-out effettuato',
+    bookingStatus: 'Chiusa - Check-out effettuato',
     guestName: 'Francesco Ira',
-    dates: '02/10/26 – 06/10/26',
-    unit: 'Casa Aurora · Attico',
+    dates: '02/10/26 - 06/10/26',
+    unit: 'Casa Aurora - Attico',
     langCode: 'EN',
     langName: 'Inglese',
     channel: 'WHATSAPP',
     msgCount: 6,
     handover: {
       motivo: 'Invio ricevuta tassa di soggiorno e ringraziamenti',
-      urgenza: 'Bassa · Post soggiorno',
+      urgenza: 'Bassa - Post soggiorno',
       sentiment: 'Eccellente (5 stelle)',
       statoAI: 'Completato'
     },
     pinnedQuestions: [
-      { time: 'Ieri 18:20 · Ricevuta', text: '"Soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno?"' }
+      { time: 'Ieri 18:20 - Ricevuta', text: '"Soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno?"' }
     ],
     tags: ['#Fattura', '#Check-out', '#Recensione'],
     standardDraftIT: 'Ciao Francesco, grazie ancora per essere stato nostro ospite! Trovi in allegato la ricevuta richiesta. Ti aspettiamo presto a Casa Aurora!',
@@ -132,7 +132,7 @@ const CONVERSATIONS = {
       {
         id: 'f1',
         sender: 'guest',
-        author: 'FRANCESCO · Ieri 18:20',
+        author: 'FRANCESCO - Ieri 18:20',
         badges: [
           { text: 'WHATSAPP', cls: 'pms' }
         ],
@@ -246,10 +246,10 @@ function togglePromptBar() {
 function applyAiPrompt() {
   const promptVal = document.getElementById('promptInput').value.trim();
   const itArea = document.getElementById('composerTextarea');
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   if (!promptVal) return;
   itArea.value = itArea.value + "\n\n[Modifica AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
-  plArea.value = plArea.value + "\n\n[AI: " + promptVal + "] Jesteśmy do Twojej dyspozycji na WhatsAppie lub tutaj na czacie!";
+  enArea.value = enArea.value + "\n\n[AI update: " + promptVal + "] We remain at your full disposal on WhatsApp or right here in the chat!";
   document.getElementById('promptInput').value = '';
   state.promptOpen = false;
   document.getElementById('promptInlineBar').classList.remove('open');
@@ -259,23 +259,23 @@ function applyAiPrompt() {
 function insertProposal(type) {
   const conv = getConv();
   const itArea = document.getElementById('composerTextarea');
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   if (type === 'full') {
     state.focusExpanded = true;
     itArea.value = conv.focusDraftIT;
-    plArea.value = conv.focusDraftTarget;
+    enArea.value = conv.focusDraftTarget;
   } else if (type === 'short') {
     itArea.value = conv.standardDraftIT;
-    plArea.value = conv.standardDraftTarget;
+    enArea.value = conv.standardDraftTarget;
   } else if (type === 'kb-parking') {
     itArea.value = "Ciao " + conv.guestName.split(' ')[0] + "! Il posto auto riservato è il n. 14 nel cortile interno. Il cancello automatico si apre con il codice 000000.";
-    plArea.value = "Cześć! Dedykowane miejsce parkingowe to nr 14 na wewnętrznym dziedzińcu. Brama otwiera się kodem 000000.";
+    enArea.value = "Hi " + conv.guestName.split(' ')[0] + "! Reserved parking spot #14 is in the inner courtyard. The automatic gate opens with code 000000.";
   } else if (type === 'kb-towels') {
     itArea.value = "Per il set di asciugamani extra, scrivici pure qui l'orario che preferisci e la governante te li consegnerà in 30 minuti.";
-    plArea.value = "W sprawie dodatkowych ręczników napisz, która godzina Ci odpowiada, a dostarczymy je w 30 minut.";
+    enArea.value = "For the extra towel set, just let us know your preferred time here and housekeeping will deliver them within 30 minutes.";
   } else if (type === 'sched-checkin') {
     itArea.value = "Ciao! Ti confermiamo che il self check-in è attivo dalle ore 15:00 con il codice Nuki 000000.";
-    plArea.value = "Cześć! Potwierdzamy, że zameldowanie samodzielne jest aktywne od 15:00 z kodem Nuki 000000.";
+    enArea.value = "Hi! We confirm that self check-in is active from 3:00 PM using Nuki code 000000.";
   }
   if (isMobileViewport()) {
     closeMobileDrawers();
@@ -286,7 +286,7 @@ function insertProposal(type) {
 
 function handleItalianInput() {
   const itText = document.getElementById('composerTextarea').value;
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   const syncText = document.getElementById('syncStatusText');
   syncText.textContent = 'Traduzione live...';
 
@@ -294,13 +294,13 @@ function handleItalianInput() {
   window.__transTimer = setTimeout(() => {
     const conv = getConv();
     if (itText.trim() === conv.standardDraftIT.trim()) {
-      plArea.value = conv.standardDraftTarget;
+      enArea.value = conv.standardDraftTarget;
     } else if (itText.trim() === conv.focusDraftIT.trim()) {
-      plArea.value = conv.focusDraftTarget;
+      enArea.value = conv.focusDraftTarget;
     } else {
-      plArea.value = state.focusExpanded
+      enArea.value = state.focusExpanded
         ? conv.focusDraftTarget
-        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Zaktualizowano na żywo]' : '');
+        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '');
     }
     syncText.textContent = 'Sincronizzata';
   }, 280);
@@ -308,13 +308,13 @@ function handleItalianInput() {
 
 function toggleEditTranslation() {
   state.editingTranslation = !state.editingTranslation;
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   const btn = document.getElementById('btnEditPl');
-  plArea.readOnly = !state.editingTranslation;
+  enArea.readOnly = !state.editingTranslation;
   btn.classList.toggle('editing', state.editingTranslation);
   btn.textContent = state.editingTranslation ? 'Salva ' + getConv().langCode : ('Modifica ' + getConv().langCode);
   if (state.editingTranslation) {
-    plArea.focus();
+    enArea.focus();
   }
 }
 
@@ -330,9 +330,9 @@ function flashSyncBadge(msg) {
 function sendCurrentMessage(scheduledTime = null) {
   const conv = getConv();
   const itArea = document.getElementById('composerTextarea');
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   const itText = itArea.value.trim();
-  const targetText = plArea.value.trim();
+  const targetText = enArea.value.trim();
   if (!itText) return;
 
   if (state.channelMode === 'note') {
@@ -340,7 +340,7 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       internalNote: true,
-      author: 'TU · Nota Interna Team · Ora',
+      author: 'TU - Nota Interna Team - Ora',
       badges: [{ text: 'NOTA INTERNA PRIVATA', cls: 'channel' }],
       textOriginal: itText,
       textTranslated: ''
@@ -350,7 +350,7 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       scheduled: true,
-      author: 'TU · Programmato per ' + scheduledTime,
+      author: 'TU - Programmato per ' + scheduledTime,
       badges: [
         { text: 'PROGRAMMATO', cls: 'channel' },
         { text: 'TRADOTTO IN ' + conv.langCode, cls: 'pms' }
@@ -362,7 +362,7 @@ function sendCurrentMessage(scheduledTime = null) {
     conv.messages.push({
       id: 'm_' + Date.now(),
       sender: 'host',
-      author: 'TU · Inviato ora',
+      author: 'TU - Inviato ora',
       badges: [
         { text: 'INVIATO IN ' + conv.langCode, cls: 'pms' },
         { text: 'DOPPIA VERIFICA OK', cls: 'booking' }
@@ -410,12 +410,12 @@ function renderMessages() {
   const mobileHandoverHtml = `
     <div class="mobile-handover-inline">
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE & SINTESI</span>
+        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE &amp; SINTESI</span>
         <span class="mini-badge pms">4 punti chiave</span>
       </div>
       <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
         <strong>1. Motivo:</strong> ${conv.handover.motivo}<br/>
-        <strong>2. Priorità:</strong> ${conv.handover.urgenza} · <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
+        <strong>2. Priorit&agrave;:</strong> ${conv.handover.urgenza} &middot; <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
       </div>
     </div>
   `;
@@ -459,11 +459,11 @@ function syncAllUI(preserveText = false) {
   const mobile = isMobileViewport();
 
   document.getElementById('threadGuestName').textContent = conv.guestName;
-  document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} · ${conv.unit}`;
+  document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadMsgCount').textContent = conv.msgCount;
   document.getElementById('mobileMsgCount').textContent = conv.msgCount;
   document.getElementById('mobileLangBadge').textContent = `${conv.langCode} -> IT`;
-  document.getElementById('threadStayDates').textContent = `${conv.dates} · ${conv.unit}`;
+  document.getElementById('threadStayDates').textContent = `${conv.dates} - ${conv.unit}`;
   document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
 
   document.getElementById('hoMotivo').textContent = conv.handover.motivo;
@@ -471,10 +471,9 @@ function syncAllUI(preserveText = false) {
   document.getElementById('hoSentiment').textContent = conv.handover.sentiment;
   document.getElementById('hoStato').textContent = conv.handover.statoAI;
 
-  // Mobile Pinned Guest Context (shown when Focus Bottom Sheet is expanded on mobile)
   const pinnedChannelBadge = document.getElementById('mobilePinnedChannelBadge');
   if (pinnedChannelBadge) {
-    pinnedChannelBadge.textContent = `${conv.channel} · ${conv.langCode}→IT`;
+    pinnedChannelBadge.textContent = `${conv.channel} - ${conv.langCode}->IT`;
   }
   const pinnedCard = document.getElementById('mobilePinnedContextCard');
   if (pinnedCard) {
@@ -496,8 +495,8 @@ function syncAllUI(preserveText = false) {
   const focusBtn = document.getElementById('focusToggleBtn');
   focusBtn.classList.toggle('active', state.focusExpanded);
   focusBtn.innerHTML = state.focusExpanded
-    ? '<span>⤡</span><span>Riduci vista</span>'
-    : '<span>⤢</span><span>Espandi</span>';
+    ? '<span>Riduci vista</span>'
+    : '<span>Espandi</span>';
 
   document.getElementById('tabChannelGuest').classList.toggle('active', state.channelMode === 'guest');
   document.getElementById('tabChannelNote').classList.toggle('active', state.channelMode === 'note');
@@ -508,14 +507,14 @@ function syncAllUI(preserveText = false) {
   } else if (mobile) {
     sendBtn.innerHTML = `<span>Invia in ${conv.langCode}</span>`;
   } else {
-    sendBtn.innerHTML = `<span>Invia in ${conv.langName} (${conv.langCode})</span><span style="background:#1D4ED8;color:#DBEAFE;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:500;">⌘↵</span>`;
+    sendBtn.innerHTML = `<span>Invia in ${conv.langName} (${conv.langCode})</span>`;
   }
 
   const itArea = document.getElementById('composerTextarea');
-  const plArea = document.getElementById('translationPreviewTextarea');
+  const enArea = document.getElementById('translationPreviewTextarea');
   if (!preserveText) {
     itArea.value = state.focusExpanded ? conv.focusDraftIT : conv.standardDraftIT;
-    plArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
+    enArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
   }
 
   document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
