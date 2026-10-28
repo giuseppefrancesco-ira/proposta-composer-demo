@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -52,9 +52,10 @@
 
 body {
   font-family: var(--font);
-  background: #0F172A;
+  background: var(--bg-app);
   color: var(--text-primary);
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -73,68 +74,6 @@ button {
   transition: all 0.15s ease;
 }
 
-/* TOP DEMO SWITCHER BAR */
-.demo-topbar {
-  height: 44px;
-  background: #0B1120;
-  border-bottom: 1px solid #1E293B;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  color: #F8FAFC;
-  font-size: 12px;
-  flex-shrink: 0;
-  z-index: 100;
-}
-
-.demo-topbar-left, .demo-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.demo-brand-badge {
-  background: rgba(36, 87, 230, 0.25);
-  border: 1px solid rgba(96, 165, 250, 0.35);
-  color: #93C5FD;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 6px;
-  font-size: 11px;
-  letter-spacing: 0.2px;
-}
-
-.demo-mode-tabs {
-  display: flex;
-  background: #1E293B;
-  padding: 3px;
-  border-radius: 8px;
-  gap: 3px;
-}
-
-.demo-mode-tab {
-  color: #94A3B8;
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 4px 11px;
-  border-radius: 6px;
-}
-
-.demo-mode-tab:hover {
-  color: #F8FAFC;
-}
-
-.demo-mode-tab.active {
-  background: var(--brand);
-  color: #FFFFFF;
-}
-
-.demo-hint {
-  color: #94A3B8;
-  font-size: 11px;
-}
-
 /* WORKSPACE CONTAINER */
 .demo-stage {
   flex: 1;
@@ -142,15 +81,31 @@ button {
   overflow: hidden;
   position: relative;
   background: var(--bg-app);
+  width: 100%;
+  height: 100%;
 }
 
-/* DESKTOP APP SHELL */
+/* DESKTOP & MOBILE UNIFIED APP SHELL */
 .app-shell {
   display: flex;
   width: 100%;
   height: 100%;
   background: var(--bg-app);
   overflow: hidden;
+  position: relative;
+}
+
+/* MOBILE SCRIM BACKDROP (Hidden on desktop) */
+.mobile-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 20, 36, 0.55);
+  z-index: 90;
+}
+
+.mobile-backdrop.open {
+  display: block;
 }
 
 /* 1. FAR LEFT RAIL (64px) */
@@ -227,7 +182,7 @@ button {
   justify-content: center;
 }
 
-/* 2. LEFT COLUMN: LISTA MESSAGGI (340px) */
+/* 2. LEFT COLUMN: LISTA MESSAGGI (340px on Desktop, Slide-over Drawer on Mobile) */
 .inbox-panel {
   width: 340px;
   background: var(--bg-surface);
@@ -235,7 +190,7 @@ button {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: width 0.2s ease;
+  transition: width 0.2s ease, transform 0.25s ease;
 }
 
 .inbox-panel.collapsed {
@@ -538,6 +493,7 @@ button {
   background: var(--bg-app);
   min-width: 0;
   height: 100%;
+  position: relative;
 }
 
 .thread-header {
@@ -560,10 +516,20 @@ button {
   flex-wrap: wrap;
 }
 
+.thread-guest-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .thread-guest-name {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.thread-guest-sub-mobile {
+  display: none;
 }
 
 .msg-count-pill {
@@ -634,6 +600,15 @@ button {
 
 .header-chip-btn:hover {
   background: #E2E8F0;
+}
+
+/* MOBILE SUB-BARS & PINNED CARDS (Hidden on Desktop) */
+.mobile-conv-statusbar,
+.mobile-handover-inline,
+.mobile-pinned-guest-context,
+.mobile-sheet-drag-handle,
+.mobile-copilot-inline-section {
+  display: none;
 }
 
 /* MESSAGES STREAM */
@@ -752,7 +727,7 @@ button {
   color: #B91C1C;
 }
 
-/* CENTRAL COMPOSER (V2 FULL-WIDTH ITALIAN EDITOR) */
+/* CENTRAL COMPOSER (V2 SPLIT BILINGUAL EDITOR) */
 .composer-wrapper {
   background: var(--bg-subtle);
   border-top: 1px solid var(--border);
@@ -797,6 +772,12 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.composer-ai-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .channel-switch {
@@ -909,12 +890,21 @@ button {
   font-weight: 600;
 }
 
-/* BILINGUAL SPLIT COMPOSER SURFACE (COL ORIGIN IT + COL TARGET LIVE TRANSLATION) */
+/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT ON DESKTOP, STACKED ON MOBILE) */
 .composer-split-surface {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   background: var(--bg-surface);
+}
+
+.composer-card.note-mode .composer-split-surface {
+  grid-template-columns: 1fr;
+  background: #FFFBEB;
+}
+
+.composer-card.note-mode .composer-col-target {
+  display: none;
 }
 
 .composer-col-origin {
@@ -923,6 +913,18 @@ button {
   flex-direction: column;
   gap: 8px;
   background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+}
+
+.composer-card.focus-expanded .composer-col-origin,
+.composer-card.focus-expanded .composer-col-target {
+  padding: 16px 20px;
+  gap: 10px;
+}
+
+.composer-card.note-mode .composer-col-origin {
+  background: #FFFBEB;
+  border-right: none;
 }
 
 .composer-col-target {
@@ -930,20 +932,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: #F8FAFC;
-  border-left: 1px solid var(--border);
-}
-
-.composer-card.note-mode .composer-split-surface {
-  grid-template-columns: 1fr;
-}
-
-.composer-card.note-mode .composer-col-origin {
-  background: #FFFBEB;
-}
-
-.composer-card.note-mode .composer-col-target {
-  display: none;
+  background: var(--bg-subtle);
 }
 
 .editor-header-row {
@@ -951,6 +940,7 @@ button {
   align-items: center;
   justify-content: space-between;
   min-height: 22px;
+  gap: 8px;
 }
 
 .editor-lang-group {
@@ -972,7 +962,7 @@ button {
 }
 
 .editor-title-label {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -983,11 +973,12 @@ button {
   color: var(--text-muted);
 }
 
-.composer-textarea {
+.composer-textarea,
+.translation-preview-textarea {
   width: 100%;
   min-height: 64px;
   resize: none;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.55;
   color: var(--text-primary);
   outline: none;
@@ -996,25 +987,9 @@ button {
   transition: min-height 0.2s ease;
 }
 
-.composer-card.focus-expanded .composer-textarea {
-  min-height: 136px;
-}
-
-.composer-col-target .translation-preview-textarea {
-  width: 100%;
-  min-height: 64px;
-  resize: none;
-  font-size: 13px;
-  line-height: 1.55;
-  color: #1E293B;
-  background: transparent;
-  outline: none;
-  border: none;
-  transition: min-height 0.2s ease;
-}
-
-.composer-card.focus-expanded .composer-col-target .translation-preview-textarea {
-  min-height: 136px;
+.composer-card.focus-expanded .composer-textarea,
+.composer-card.focus-expanded .translation-preview-textarea {
+  min-height: 140px;
 }
 
 /* COMPOSER BOTTOM BAR */
@@ -1053,6 +1028,10 @@ button {
   color: var(--text-primary);
 }
 
+.mobile-only-tool {
+  display: none;
+}
+
 .schedule-btn {
   height: 34px;
   padding: 0 12px;
@@ -1084,7 +1063,7 @@ button {
   background: var(--brand-hover);
 }
 
-/* 4. RIGHT SIDEBAR: PANNELLO AI & PREVIEW TRADUZIONE IN USCITA (384px) */
+/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (384px) */
 .ai-sidebar {
   width: 384px;
   background: var(--bg-surface);
@@ -1093,7 +1072,7 @@ button {
   flex-direction: column;
   flex-shrink: 0;
   height: 100%;
-  transition: width 0.2s ease;
+  transition: width 0.2s ease, transform 0.25s ease;
 }
 
 .ai-sidebar.collapsed {
@@ -1281,24 +1260,6 @@ button {
   font-weight: 600;
 }
 
-/* PINNED BOTTOM SECTION IN RIGHT SIDEBAR: SEZIONE TRADUZIONE IN USCITA */
-.translation-preview-section {
-  background: var(--bg-subtle);
-  border-top: 1px solid var(--border-strong);
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.translation-preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-
 .translation-target-selector {
   display: flex;
   align-items: center;
@@ -1343,111 +1304,22 @@ button {
 }
 
 .btn-edit-pl {
-  height: 20px;
-  padding: 0 6px;
+  height: 22px;
+  padding: 0 7px;
   border-radius: 4px;
-  background: #FFFFFF;
-  border: 1px solid var(--border-strong);
-  font-size: 10px;
+  background: transparent;
+  font-size: 11px;
   font-weight: 600;
-  color: #475569;
+  color: var(--brand);
+}
+
+.btn-edit-pl:hover {
+  background: var(--brand-soft);
 }
 
 .btn-edit-pl.editing {
   background: var(--brand);
   color: #FFFFFF;
-  border-color: var(--brand);
-}
-
-.translation-preview-box {
-  background: #FFFFFF;
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
-.translation-preview-textarea {
-  width: 100%;
-  min-height: 76px;
-  resize: none;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #1E293B;
-  background: transparent;
-  outline: none;
-}
-
-.composer-Expanded-sync .translation-preview-textarea {
-  min-height: 126px;
-}
-
-/* MOBILE 3-SCREENS OVERVIEW & SIMULATOR */
-.mobile-overview-stage {
-  display: none;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background: #0F172A;
-  padding: 24px;
-  gap: 28px;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.mobile-stage-active .app-shell {
-  display: none;
-}
-
-.mobile-stage-active .mobile-overview-stage {
-  display: flex;
-}
-
-.phone-frame {
-  width: 390px;
-  height: 844px;
-  background: var(--bg-muted);
-  border-radius: 28px;
-  border: 6px solid #1E293B;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.phone-caption {
-  color: #94A3B8;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.mobile-top-header {
-  background: var(--bg-mobile-header);
-  color: #FFFFFF;
-  padding: 10px 16px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.mobile-status-bar {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-.mobile-nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
 }
 
 /* MODAL FOR PROGRAMMABLE MESSAGES */
@@ -1479,67 +1351,430 @@ button {
   gap: 14px;
 }
 
-/* NATIVE RESPONSIVE MEDIA QUERY (< 1024px) */
-@media (max-width: 1024px) {
-  .nav-rail { display: none; }
+/* ==========================================================================
+   TRUE MOBILE V2 RESPONSIVE TRANSFORMATION (<= 900px)
+   Matches Figma Mobile V2 Screens:
+   - 1:27 (Chat Â· Drawer navigazione aperto)
+   - 1:446 (Chat Â· Conversazione Standard)
+   - 1:320 (Chat Â· Composer Focus Espanso & Copilot KB Bottom Sheet)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .nav-rail {
+    display: none;
+  }
+
+  /* Left Slide-over Drawer (1:90 Drawer navigazione) */
   .inbox-panel {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
-    z-index: 50;
-    box-shadow: var(--shadow-modal);
+    width: 335px;
+    max-width: 86vw;
+    z-index: 110;
+    box-shadow: 8px 0 32px rgba(14, 20, 36, 0.28);
+    transform: translateX(0);
   }
+
+  .inbox-panel.collapsed {
+    width: 335px;
+    transform: translateX(-105%);
+    pointer-events: none;
+  }
+
+  .inbox-header {
+    background: var(--bg-mobile-header);
+    border-bottom: none;
+    height: 60px;
+  }
+
+  .inbox-title {
+    color: #FFFFFF;
+    font-size: 18px;
+  }
+
+  .inbox-header .icon-btn {
+    background: rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+  }
+
+  /* Right Slide-over Drawer for full KB & AI */
   .ai-sidebar {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 50;
-    width: 340px;
-    box-shadow: var(--shadow-modal);
+    width: 350px;
+    max-width: 90vw;
+    z-index: 110;
+    box-shadow: -8px 0 32px rgba(14, 20, 36, 0.28);
+    transform: translateX(0);
   }
+
+  .ai-sidebar.collapsed {
+    width: 350px;
+    transform: translateX(105%);
+    pointer-events: none;
+  }
+
+  /* Mobile Top Header (#131C4D - Intestazione ospite 1:447) */
+  .thread-header {
+    background: var(--bg-mobile-header);
+    color: #FFFFFF;
+    height: 58px;
+    padding: 0 12px;
+    border-bottom: none;
+    gap: 8px;
+  }
+
+  .thread-header-left {
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .thread-header .icon-btn {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    flex-shrink: 0;
+  }
+
+  .thread-guest-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .thread-guest-name {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .thread-guest-sub-mobile {
+    display: block;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.78);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide desktop-only header pills inside the navy top bar */
+  .thread-header .msg-count-pill,
+  .thread-header .pms-badge,
+  .thread-header .stay-dates-pill,
+  .thread-header .desktop-only-chip {
+    display: none;
+  }
+
+  .thread-header-right .header-chip-btn {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #FFFFFF;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 11.5px;
+  }
+
+  /* Mobile Conversation Status Sub-bar (1:467 Stato conversazione) */
+  .mobile-conv-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  .thread-column.mobile-focus-mode .mobile-conv-statusbar {
+    display: none;
+  }
+
+  /* Mobile Pinned Guest Context in Focus Expanded Mode (1:341 Contesto Ospite Fissato) */
+  .thread-column.mobile-focus-mode .mobile-pinned-guest-context {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 12px;
+    background: var(--bg-app);
+    flex-shrink: 0;
+  }
+
+  .mobile-pinned-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.2px;
+  }
+
+  .mobile-pinned-card {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: #1E293B;
+  }
+
+  /* Collapse full messages stream when Bottom Sheet Focus is expanded on mobile (1:320) */
+  .thread-column.mobile-focus-mode .messages-stream {
+    display: none;
+  }
+
+  /* Messages Stream & Inline Handover Card on Mobile Standard View (1:482) */
+  .messages-stream {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .mobile-handover-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 9px 11px;
+    flex-shrink: 0;
+  }
+
+  .msg-row {
+    max-width: 100%;
+  }
+
+  .msg-bubble {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+
+  /* Mobile Standard Composer (1:520 Composer Mobile Â· Senior UI v2) */
+  .composer-wrapper {
+    padding: 0;
+    background: transparent;
+    border-top: none;
+  }
+
+  .composer-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  /* Mobile Bottom Sheet Focus Expanded (1:364 Bottom Sheet Focus Â· Senior Mobile UI v2) */
+  .thread-column.mobile-focus-mode .composer-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .composer-card.focus-expanded {
+    flex: 1;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top: 1px solid #CBD5E1;
+    box-shadow: 0 -8px 30px rgba(14, 20, 36, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .composer-card.focus-expanded .mobile-sheet-drag-handle {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 2px;
+    background: var(--bg-surface);
+    flex-shrink: 0;
+  }
+
+  .drag-pill {
+    width: 36px;
+    height: 4px;
+    border-radius: 99px;
+    background: #CBD5E1;
+  }
+
+  .composer-topbar {
+    height: auto;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .composer-topbar-left {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .composer-topbar .v-divider {
+    display: none;
+  }
+
+  /* Hide the 3 AI buttons in mobile compact standard mode; show them as a 3-column bar in Focus Bottom Sheet */
+  .composer-ai-buttons-group {
+    display: none;
+  }
+
+  .composer-card.focus-expanded .composer-ai-buttons-group {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+    order: 3;
+    padding-top: 4px;
+  }
+
+  .composer-card.focus-expanded .composer-ai-buttons-group .ai-action-btn {
+    flex: 1;
+    justify-content: center;
+    height: 30px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+
+  /* Stacked IT + Target Language Split Surface on Mobile */
   .composer-split-surface {
     grid-template-columns: 1fr;
   }
+
+  .composer-card.focus-expanded .composer-split-surface {
+    margin: 6px 12px;
+    width: calc(100% - 24px);
+    border: 1.5px solid var(--brand);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .composer-col-origin {
+    padding: 10px 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
   .composer-col-target {
-    border-left: none;
-    border-top: 1px solid var(--border);
+    padding: 8px 12px;
+  }
+
+  .composer-textarea {
+    min-height: 52px;
+    font-size: 12.5px;
+  }
+
+  .translation-preview-textarea {
+    min-height: 42px;
+    font-size: 12px;
+  }
+
+  .composer-card.focus-expanded .composer-textarea {
+    min-height: 76px;
+  }
+
+  .composer-card.focus-expanded .translation-preview-textarea {
+    min-height: 68px;
+  }
+
+  /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet (1:406) */
+  .composer-card.focus-expanded .mobile-copilot-inline-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 12px 8px;
+    flex-shrink: 0;
+  }
+
+  .mobile-copilot-card {
+    background: var(--bg-subtle);
+    border: 1px solid #E2E8F0;
+    border-radius: 9px;
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-copilot-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  /* Thumb Zone Bottom Bar (1:547 / 1:429) */
+  .composer-bottombar {
+    height: auto;
+    padding: 8px 12px;
+    margin-top: auto;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .composer-tools-left {
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .composer-tools-left .desktop-autosave-hint {
+    display: none;
+  }
+
+  .mobile-only-tool {
+    display: inline-flex;
+  }
+
+  .tool-chip-btn {
+    height: 30px;
+    padding: 0 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .schedule-btn {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .send-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 11.5px;
+    white-space: nowrap;
   }
 }
 
-</style>
+  </style>
 </head>
 <body>
-
-  <!-- BARRA SUPERIORE SWITCHER DEMO PER DARIO -->
-  <header class="demo-topbar">
-    <div class="demo-topbar-left">
-      <span class="demo-brand-badge">PROPOSTA V2 OTTIMIZZATA</span>
-      <div class="demo-mode-tabs">
-        <button class="demo-mode-tab active" data-mode="desktop-standard" onclick="setDemoStageMode('desktop-standard')">
-          Frame A · Vista Standard (Desktop)
-        </button>
-        <button class="demo-mode-tab" data-mode="desktop-focus" onclick="setDemoStageMode('desktop-focus')">
-          Frame B · Vista Focus Espansa (Desktop)
-        </button>
-        <button class="demo-mode-tab" data-mode="mobile-overview" onclick="setDemoStageMode('mobile-overview')">
-          Mobile · 3 Viste V2 Ottimizzate
-        </button>
-      </div>
-    </div>
-    <div class="demo-topbar-right">
-      <span class="demo-hint">Composer Centrale Split Bilingue (IT + Traduzione Live affiancata) · Sidebar Destra Assistente AI & KB</span>
-    </div>
-  </header>
-
   <!-- CONTENITORE PRINCIPALE -->
   <main class="demo-stage" id="demoStage">
 
-    <!-- ======================= DESKTOP RESPONSIVE SHELL ======================= -->
+    <!-- ======================= DESKTOP & MOBILE RESPONSIVE SHELL ======================= -->
     <div class="app-shell">
 
-      <!-- 1. NAVIGAZIONE LATERALE (64px) -->
+      <!-- Scrim Backdrop per Drawer Mobile -->
+      <div class="mobile-backdrop" id="mobileBackdrop" onclick="closeMobileDrawers()"></div>
+
+      <!-- 1. NAVIGAZIONE LATERALE DESKTOP (64px) -->
       <nav class="nav-rail">
         <div class="nav-rail-top">
           <div class="rail-logo">CA</div>
@@ -1562,7 +1797,7 @@ button {
         </div>
       </nav>
 
-      <!-- 2. LISTA MESSAGGI (340px) -->
+      <!-- 2. LISTA MESSAGGI (340px Desktop / Drawer Navigazione su Mobile) -->
       <aside class="inbox-panel" id="inboxPanel">
         <div class="inbox-header">
           <span class="inbox-title">Messaggi</span>
@@ -1596,7 +1831,7 @@ button {
 
         <div class="inbox-sort-row">
           <span style="font-weight:600;">ORDINA PER</span>
-          <span>↕ Ultimo messaggio</span>
+          <span>â†• Ultimo messaggio</span>
           <span style="background:#EEF1F7;padding:4px 9px;border-radius:14px;font-weight:600;">Avanzati</span>
         </div>
 
@@ -1613,7 +1848,7 @@ button {
               <span class="booking-code-badge">Chiusa</span>
             </div>
             <div class="booking-group-sub">
-              <span>Francesco Ira · 02/10 – 06/10</span>
+              <span>Francesco Ira Â· 02/10 â€“ 06/10</span>
               <span>Ieri</span>
             </div>
           </div>
@@ -1625,7 +1860,7 @@ button {
               <span class="mini-badge channel">Da leggere</span>
             </div>
             <div class="booking-group-sub">
-              <span>Sophie Laurent · Check-in Oggi</span>
+              <span>Sophie Laurent Â· Check-in Oggi</span>
               <span>10:15</span>
             </div>
           </div>
@@ -1634,21 +1869,21 @@ button {
               <span class="conv-guest-name">Sophie Laurent</span>
               <span class="conv-time">10:15</span>
             </div>
-            <div class="conv-preview">Est-il possible de déposer nos valises avant 11h30 ?</div>
+            <div class="conv-preview">Est-il possible de dÃ©poser nos valises avant 11h30 ?</div>
             <div class="conv-badges">
               <span class="mini-badge booking">BOOKING</span>
-              <span class="mini-badge ai">FR -> IT · AI 91%</span>
+              <span class="mini-badge ai">FR -> IT Â· AI 91%</span>
             </div>
           </div>
 
           <!-- Gruppo DEMO-1048 (Aperta e Selezionata) -->
           <div class="booking-group-header" onclick="selectConversation('adam')">
             <div class="booking-group-top">
-              <span>Prenotazione DEMO-1048 · Aperta</span>
+              <span>Prenotazione DEMO-1048 Â· Aperta</span>
               <span class="mini-badge pms">PMS Certo</span>
             </div>
             <div class="booking-group-sub">
-              <span>Adam Nowak · 06/10 – 11/10 · S04</span>
+              <span>Adam Nowak Â· 06/10 â€“ 11/10 Â· S04</span>
               <span>11:45</span>
             </div>
           </div>
@@ -1657,7 +1892,7 @@ button {
               <span class="conv-guest-name">Adam Nowak</span>
               <span class="conv-time">11:45</span>
             </div>
-            <div class="conv-preview">Super, dziękuję! Właśnie przeczytałem instrukcję...</div>
+            <div class="conv-preview">Super, dziÄ™kujÄ™! WÅ‚aÅ›nie przeczytaÅ‚em instrukcjÄ™...</div>
             <div class="conv-badges">
               <span class="mini-badge channel">AIRBNB</span>
               <span class="mini-badge booking">PL -> IT</span>
@@ -1683,7 +1918,7 @@ button {
               <span class="booking-code-badge">Programmato</span>
             </div>
             <div class="booking-group-sub">
-              <span>Lukas Weber · Check-in Domani</span>
+              <span>Lukas Weber Â· Check-in Domani</span>
               <span>Domani 09:00</span>
             </div>
           </div>
@@ -1693,25 +1928,28 @@ button {
               <span class="booking-code-badge">Chiusa</span>
             </div>
             <div class="booking-group-sub">
-              <span>Elena Rossi · Suite Navigli</span>
+              <span>Elena Rossi Â· Suite Navigli</span>
               <span>04/10</span>
             </div>
           </div>
         </div>
 
         <div class="inbox-footer">
-          <span>Casa Aurora · Demo</span>
+          <span>Casa Aurora Â· Demo</span>
           <span style="font-weight:600;color:var(--brand);">Sincronizzato PMS</span>
         </div>
       </aside>
 
-      <!-- 3. COLONNA CENTRALE: THREAD + COMPOSER A TUTTA LARGHEZZA -->
-      <section class="thread-column">
-        <!-- Intestazione Thread -->
+      <!-- 3. COLONNA CENTRALE: THREAD + COMPOSER SPLIT BILINGUE -->
+      <section class="thread-column" id="threadColumn">
+        <!-- Intestazione Thread (Bianca su Desktop, Navy #131C4D su Mobile come da Figma) -->
         <header class="thread-header">
           <div class="thread-header-left">
-            <button class="icon-btn" title="Mostra/Nascondi Lista" onclick="toggleLeftSidebar()">☰</button>
-            <span class="thread-guest-name" id="threadGuestName">Adam Nowak</span>
+            <button class="icon-btn" title="Mostra/Nascondi Lista" onclick="toggleLeftSidebar()">â˜°</button>
+            <div class="thread-guest-block">
+              <span class="thread-guest-name" id="threadGuestName">Adam Nowak</span>
+              <span class="thread-guest-sub-mobile" id="threadGuestSubMobile">06/10/26 â€“ 11/10/26 Â· App. Duomo Suite Â· S04</span>
+            </div>
             <span class="msg-count-pill">
               <span id="threadMsgCount">9</span> messaggi
             </span>
@@ -1719,24 +1957,51 @@ button {
               <span class="pms-dot"></span>
               <span>Aggancio PMS Certo</span>
             </span>
-            <span class="stay-dates-pill" id="threadStayDates">06/10/26 – 11/10/26 · App. Duomo Suite · S04</span>
+            <span class="stay-dates-pill" id="threadStayDates">06/10/26 â€“ 11/10/26 Â· App. Duomo Suite Â· S04</span>
           </div>
           <div class="thread-header-right">
-            <button class="header-chip-btn outline">Scheda Soggiorno S04</button>
-            <button class="header-chip-btn" onclick="flashSyncBadge('Dati PMS aggiornati')">Aggiorna dati</button>
-            <button class="header-chip-btn" id="threadLangChip">Lingua ospite: PL (Polacco)</button>
+            <button class="header-chip-btn outline desktop-only-chip">Scheda Soggiorno S04</button>
+            <button class="header-chip-btn desktop-only-chip" onclick="flashSyncBadge('Dati PMS aggiornati')">Aggiorna dati</button>
+            <button class="header-chip-btn desktop-only-chip" id="threadLangChip">Lingua ospite: PL (Polacco)</button>
             <button class="header-chip-btn outline" onclick="toggleRightSidebar()" title="Mostra/Nascondi Pannello AI">
-              Pannello AI ⇄
+              AI & KB â‡„
             </button>
           </div>
         </header>
 
-        <!-- Flusso Messaggi (Rimane sempre visibile anche in Vista Focus Espansa) -->
+        <!-- Barra Stato Conversazione Mobile (1:467 Stato conversazione - visibile su mobile in vista standard) -->
+        <div class="mobile-conv-statusbar">
+          <span class="msg-count-pill"><span id="mobileMsgCount">9</span> messaggi</span>
+          <span class="pms-badge">
+            <span class="pms-dot"></span>
+            <span>Aggancio PMS Certo</span>
+          </span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="icon-btn" style="width:26px;height:26px;font-size:12px;" onclick="flashSyncBadge('Dati aggiornati')">â†»</button>
+            <span class="mini-badge booking" id="mobileLangBadge">PL -> IT</span>
+          </div>
+        </div>
+
+        <!-- Contesto Ospite Fissato Mobile (1:341 Contesto Ospite Fissato - visibile su mobile quando Bottom Sheet Focus Ã¨ espanso) -->
+        <div class="mobile-pinned-guest-context" id="mobilePinnedGuestContext">
+          <div class="mobile-pinned-header">
+            <span>CONTESTO OSPITE FISSATO Â· DOMANDE DA EVADERE</span>
+            <span class="mini-badge channel" id="mobilePinnedChannelBadge">AIRBNB Â· PLâ†’IT</span>
+          </div>
+          <div class="mobile-pinned-card" id="mobilePinnedContextCard"></div>
+        </div>
+
+        <!-- Flusso Messaggi -->
         <div class="messages-stream" id="messagesStream"></div>
 
-        <!-- COMPOSER CENTRALE · TESTO ORIGINALE ITALIANO A TUTTA LARGHEZZA (100%) -->
+        <!-- COMPOSER CENTRALE SPLIT BILINGUE (Desktop: 2 colonne affiancate IT + PL | Mobile: Standard o Bottom Sheet Focus Espanso) -->
         <div class="composer-wrapper">
           <div class="composer-card" id="composerCard">
+
+            <!-- Drag Handle per Bottom Sheet Mobile Focus -->
+            <div class="mobile-sheet-drag-handle" onclick="toggleFocusView()">
+              <div class="drag-pill"></div>
+            </div>
 
             <!-- Barra Superiore Controlli -->
             <div class="composer-topbar">
@@ -1750,40 +2015,42 @@ button {
                   </button>
                 </div>
                 <div class="v-divider"></div>
-                <button class="ai-action-btn primary-soft" onclick="insertProposal(state.focusExpanded ? 'full' : 'short')">
-                  ✦ Genera risposta AI
-                </button>
-                <button class="ai-action-btn" onclick="togglePromptBar()">
-                  ✎ Scrivi Prompt
-                </button>
-                <button class="ai-action-btn" onclick="document.getElementById('composerTextarea').focus()">
-                  Scrivi manualmente
-                </button>
+                <div class="composer-ai-buttons-group">
+                  <button class="ai-action-btn primary-soft" onclick="insertProposal(state.focusExpanded ? 'full' : 'short')">
+                    âœ¦ Genera AI
+                  </button>
+                  <button class="ai-action-btn" onclick="togglePromptBar()">
+                    âœŽ Scrivi Prompt
+                  </button>
+                  <button class="ai-action-btn" onclick="document.getElementById('composerTextarea').focus()">
+                    Manuale
+                  </button>
+                </div>
               </div>
               <div class="composer-topbar-right">
                 <button class="focus-toggle-btn" id="focusToggleBtn" onclick="toggleFocusView()">
-                  <span>⤢</span>
-                  <span>Espandi vista</span>
+                  <span>â¤¢</span>
+                  <span>Espandi</span>
                 </button>
               </div>
             </div>
 
             <!-- Barra Inline Prompt AI (quando clicchi "Scrivi Prompt") -->
             <div class="prompt-inline-bar" id="promptInlineBar">
-              <input type="text" id="promptInput" class="prompt-input" placeholder="Es: Aggiungi istruzioni orario check-out 10:30 o rendi il tono più formale..." onkeydown="if(event.key==='Enter') applyAiPrompt()" />
-              <button class="prompt-apply-btn" onclick="applyAiPrompt()">Applica alla bozza</button>
+              <input type="text" id="promptInput" class="prompt-input" placeholder="Es: Aggiungi istruzioni orario check-out 10:30 o rendi il tono piÃ¹ formale..." onkeydown="if(event.key==='Enter') applyAiPrompt()" />
+              <button class="prompt-apply-btn" onclick="applyAiPrompt()">Applica</button>
             </div>
 
-            <!-- Superficie Split Scrittura e Traduzione (Colonna Origine IT + Colonna Destinazione Traduzione Live nel Composer) -->
+            <!-- Superficie Split Scrittura e Traduzione (IT + Traduzione Live) -->
             <div class="composer-split-surface">
-              <!-- Colonna Origine · Italiano -->
+              <!-- Colonna Origine Â· Italiano -->
               <div class="composer-col-origin">
                 <div class="editor-header-row">
                   <div class="editor-lang-group">
                     <span class="lang-badge-it">IT</span>
                     <span class="editor-title-label">Testo originale (Italiano)</span>
                   </div>
-                  <span class="editor-status-label">Editor attivo</span>
+                  <span class="editor-status-label">2 fonti KB attive</span>
                 </div>
                 <textarea
                   id="composerTextarea"
@@ -1793,16 +2060,16 @@ button {
                 ></textarea>
               </div>
 
-              <!-- Colonna Destinazione · Traduzione Live -->
+              <!-- Colonna Destinazione Â· Traduzione Live -->
               <div class="composer-col-target">
                 <div class="editor-header-row">
                   <div class="translation-target-selector">
-                    <span>→ Traduzione in uscita:</span>
+                    <span>â†’ Traduzione:</span>
                     <select id="langSelectDropdown" class="lang-select-dropdown" onchange="flashSyncBadge('Lingua aggiornata')">
-                      <option value="PL">PL · Polacco</option>
-                      <option value="FR">FR · Francese</option>
-                      <option value="EN">EN · Inglese</option>
-                      <option value="DE">DE · Tedesco</option>
+                      <option value="PL">PL Â· Polacco</option>
+                      <option value="FR">FR Â· Francese</option>
+                      <option value="EN">EN Â· Inglese</option>
+                      <option value="DE">DE Â· Tedesco</option>
                     </select>
                   </div>
                   <div class="translation-sync-actions">
@@ -1821,20 +2088,39 @@ button {
               </div>
             </div>
 
-            <!-- Barra Inferiore Strumenti e Invio -->
+            <!-- Sezione Copilot e Autonomia Mobile (1:406 - Visibile nel Bottom Sheet Focus Mobile) -->
+            <div class="mobile-copilot-inline-section">
+              <div class="mobile-copilot-card">
+                <div class="mobile-copilot-row">
+                  <span style="font-weight:600;color:var(--text-primary);">Autonomia: Suggerimento (Confidenza 94%)</span>
+                  <div style="display:flex;gap:4px;">
+                    <button class="msg-action-tiny" style="color:var(--success-text);border-color:var(--success-border);background:var(--success-bg);" onclick="flashSyncBadge('Feedback registrato')">Utile</button>
+                    <button class="msg-action-tiny" onclick="insertProposal('short')">Alt. Sintetica</button>
+                  </div>
+                </div>
+                <div class="mobile-copilot-row" style="border-top:1px solid #E2E8F0;padding-top:5px;">
+                  <button class="tool-chip-btn" style="flex:1;justify-content:center;height:26px;" onclick="flashSyncBadge('Analisi OCR pronta')">Da screenshot (OCR)</button>
+                  <button class="tool-chip-btn" style="flex:1;justify-content:center;height:26px;" onclick="insertProposal('full')">Recensione</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra Inferiore Strumenti e Invio (Thumb Zone su Mobile) -->
             <div class="composer-bottombar">
               <div class="composer-tools-left">
-                <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega file</button>
-                <button class="tool-chip-btn" onclick="setRightTab('kb')">Salva in KB</button>
-                <button class="tool-chip-btn" onclick="flashSyncBadge('Dettatura vocale pronta')">Dettatura vocale</button>
-                <span style="font-size:11px;font-weight:500;color:var(--text-muted);margin-left:4px;">Bozza salvata automaticamente</span>
+                <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega</button>
+                <button class="tool-chip-btn mobile-only-tool" onclick="setRightTab('kb')"># Tag</button>
+                <button class="tool-chip-btn mobile-only-tool" onclick="setRightTab('kb')">/ Pronti</button>
+                <button class="tool-chip-btn" onclick="setRightTab('kb')">KB (2)</button>
+                <button class="tool-chip-btn" onclick="flashSyncBadge('Dettatura vocale pronta')">Vocale</button>
+                <span class="desktop-autosave-hint" style="font-size:11px;font-weight:500;color:var(--text-muted);margin-left:4px;">Bozza salvata automaticamente</span>
               </div>
               <div class="composer-actions-right">
-                <button class="schedule-btn" onclick="openScheduleModal()">
-                  Programma invio · Orario OK
+                <button class="schedule-btn" onclick="openScheduleModal()" title="Programma invio">
+                  Programma
                 </button>
                 <button class="send-btn" id="mainSendBtn" onclick="sendCurrentMessage()">
-                  Invia in Polacco (PL) ⌘↵
+                  Invia in Polacco (PL) âŒ˜â†µ
                 </button>
               </div>
             </div>
@@ -1843,7 +2129,7 @@ button {
         </div>
       </section>
 
-      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (384px) -->
+      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (384px Desktop / Drawer su Mobile) -->
       <aside class="ai-sidebar" id="aiSidebar">
         <!-- Intestazione Tabs -->
         <div class="ai-sidebar-header">
@@ -1869,8 +2155,8 @@ button {
                 <span class="handover-val" id="hoMotivo">Richiesta posto auto cortile + biancheria extra</span>
               </div>
               <div class="handover-row">
-                <span class="handover-label">Priorità operativa:</span>
-                <span class="handover-val" id="hoUrgenza">Media · Ospite in struttura</span>
+                <span class="handover-label">PrioritÃ  operativa:</span>
+                <span class="handover-val" id="hoUrgenza">Media Â· Ospite in struttura</span>
               </div>
               <div class="handover-row">
                 <span class="handover-label">Sentiment ospite:</span>
@@ -1898,11 +2184,11 @@ button {
 
             <div class="proposal-card selected" onclick="insertProposal('short')">
               <div class="proposal-top">
-                <span>Proposta 1 · Completa (Parcheggio + Biancheria)</span>
+                <span>Proposta 1 Â· Completa (Parcheggio + Biancheria)</span>
                 <span class="mini-badge booking">KB Verificata</span>
               </div>
               <div class="proposal-text">
-                Conferma posto auto n. 14 nel cortile interno (codice cancello 000000) e disponibilità consegna asciugamani extra.
+                Conferma posto auto n. 14 nel cortile interno (codice cancello 000000) e disponibilitÃ  consegna asciugamani extra.
               </div>
               <div class="proposal-footer">
                 <span style="font-size:10.5px;color:var(--text-muted);">Fonte: FAQ Struttura S04</span>
@@ -1912,7 +2198,7 @@ button {
 
             <div class="proposal-card" onclick="insertProposal('full')">
               <div class="proposal-top">
-                <span>Proposta 2 · Estesa + Promemoria Check-out</span>
+                <span>Proposta 2 Â· Estesa + Promemoria Check-out</span>
                 <span class="mini-badge ai">Multi-paragrafo</span>
               </div>
               <div class="proposal-text">
@@ -1939,7 +2225,7 @@ button {
           </div>
         </div>
 
-        <!-- Contenuto Scorrevole Superiore: Tab 2 (Risorse e KB - come in Frame B) -->
+        <!-- Contenuto Scorrevole Superiore: Tab 2 (Risorse e KB) -->
         <div class="ai-sidebar-scroll" id="rightContentKb" style="display:none;">
           <!-- Sezione Knowledge Base -->
           <div class="ai-section">
@@ -1949,14 +2235,14 @@ button {
             </div>
             <div class="proposal-card" onclick="insertProposal('kb-parking')">
               <div class="proposal-top">
-                <span>KB · Parcheggio Cortile Interno S04</span>
+                <span>KB Â· Parcheggio Cortile Interno S04</span>
                 <button class="btn-use-proposal">Inserisci</button>
               </div>
               <div class="proposal-text">Posto auto n. 14 riservato nel cortile. Apertura cancello con codice 000000.</div>
             </div>
             <div class="proposal-card" onclick="insertProposal('kb-towels')">
               <div class="proposal-top">
-                <span>KB · Biancheria e Asciugamani Extra</span>
+                <span>KB Â· Biancheria e Asciugamani Extra</span>
                 <button class="btn-use-proposal">Inserisci</button>
               </div>
               <div class="proposal-text">Consegna set extra in appartamento entro 30 minuti su richiesta in chat.</div>
@@ -1964,7 +2250,7 @@ button {
             <div class="handover-card" style="background:var(--bg-muted);">
               <div style="font-weight:600;font-size:11.5px;">Nuova FAQ Rilevata dalla conversazione</div>
               <div style="font-size:11px;color:var(--text-secondary);">Salvare la risposta sul codice cancello cortile + posto n. 14 nella Knowledge Base di Casa Aurora?</div>
-              <button class="ai-action-btn primary-soft" style="justify-content:center;margin-top:2px;" onclick="this.textContent='✓ Salvata in Knowledge Base'">
+              <button class="ai-action-btn primary-soft" style="justify-content:center;margin-top:2px;" onclick="this.textContent='âœ“ Salvata in Knowledge Base'">
                 + Salva risposta in Knowledge Base
               </button>
             </div>
@@ -2017,189 +2303,17 @@ button {
 
     </div>
 
-    <!-- ======================= VISTA MOBILE (3 SCHERMATE V2 OTTIMIZZATA) ======================= -->
-    <div class="mobile-overview-stage">
-
-      <!-- SCHERMATA MOBILE 1: DRAWER NAVIGAZIONE APERTO -->
-      <div>
-        <div class="phone-caption">1. Mobile · Drawer Navigazione & Prenotazioni</div>
-        <div class="phone-frame">
-          <div class="mobile-top-header">
-            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
-            <div class="mobile-nav-row">
-              <span style="font-weight:700;font-size:16px;">Messaggi · Casa Aurora</span>
-              <span class="mini-badge booking">5 Attive</span>
-            </div>
-          </div>
-          <div style="padding:10px 12px;background:#FFF;border-bottom:1px solid var(--border);display:flex;gap:6px;">
-            <span class="filter-pill active" style="height:30px;font-size:11px;">Soggiorno in corso (5)</span>
-            <span class="filter-pill" style="height:30px;font-size:11px;">Archiviate (12)</span>
-          </div>
-          <div style="flex:1;overflow-y:auto;background:#FFF;">
-            <div class="booking-group-header">
-              <div class="booking-group-top"><span>DEMO-1048 · Aperta</span><span class="mini-badge pms">PMS Certo</span></div>
-              <div class="booking-group-sub"><span>Adam Nowak · 06/10 – 11/10</span><span>11:45</span></div>
-            </div>
-            <div class="conv-item active" onclick="setDemoStageMode('desktop-standard')">
-              <div class="conv-item-top"><span class="conv-guest-name">Adam Nowak</span><span class="conv-time">11:45</span></div>
-              <div class="conv-preview">Super, dziękuję! Właśnie przeczytałem...</div>
-              <div class="conv-badges"><span class="mini-badge channel">AIRBNB</span><span class="mini-badge booking">PL -> IT</span></div>
-            </div>
-            <div class="booking-group-header">
-              <div class="booking-group-top"><span>DEMO-1051 · Da leggere</span><span class="mini-badge channel">Oggi</span></div>
-              <div class="booking-group-sub"><span>Sophie Laurent · Suite Brera</span><span>10:15</span></div>
-            </div>
-            <div class="conv-item" onclick="selectConversation('sophie'); setDemoStageMode('desktop-standard')">
-              <div class="conv-item-top"><span class="conv-guest-name">Sophie Laurent</span><span class="conv-time">10:15</span></div>
-              <div class="conv-preview">Est-il possible de déposer nos valises...</div>
-              <div class="conv-badges"><span class="mini-badge booking">BOOKING</span><span class="mini-badge ai">FR -> IT</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SCHERMATA MOBILE 2: CHAT + COMPOSER COMPATTO -->
-      <div>
-        <div class="phone-caption">2. Mobile · Chat & Composer Standard</div>
-        <div class="phone-frame">
-          <div class="mobile-top-header">
-            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
-            <div class="mobile-nav-row">
-              <span>☰</span>
-              <div style="flex:1;">
-                <div style="font-weight:600;font-size:15px;">Adam Nowak</div>
-                <div style="font-size:11px;opacity:0.75;">06/10/26 – 11/10/26 · Aggancio PMS Certo</div>
-              </div>
-              <span>⋮</span>
-            </div>
-          </div>
-          <div style="padding:6px 12px;background:#FFF;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-            <span class="msg-count-pill">9 messaggi</span>
-            <span class="pms-badge"><span class="pms-dot"></span>Aggancio PMS Certo</span>
-            <span class="mini-badge booking">PL -> IT</span>
-          </div>
-          <div style="flex:1;padding:8px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--bg-app);">
-            <div class="handover-card" style="padding:8px 10px;">
-              <div style="font-size:10.5px;font-weight:700;color:var(--brand);">PASSAGGIO CONSEGNE · 2 DOMANDE</div>
-              <div style="font-size:11px;color:var(--text-secondary);">1. Posto auto cortile · 2. Asciugamani extra</div>
-            </div>
-            <div class="msg-row guest" style="max-width:100%;">
-              <div class="msg-bubble" style="font-size:12px;padding:9px 12px;">Super, dziękuję! Jeśli będę potrzebował ręczników, napiszę do Was.</div>
-              <div class="msg-translation-card" style="padding:6px 10px;">
-                <div class="msg-translation-header"><span>Traduzione PL -> IT</span></div>
-                <div class="msg-translation-body" style="font-size:11.5px;">Super, grazie! Se avrò bisogno di asciugamani extra vi scriverò.</div>
-              </div>
-            </div>
-          </div>
-          <!-- Mobile Compact Composer -->
-          <div style="padding:6px 8px;background:#F8FAFC;border-top:1px solid var(--border);">
-            <div class="composer-card" style="border-radius:10px;">
-              <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-                <span class="mini-badge booking">Risposta Ospite · IT</span>
-                <button class="ai-action-btn primary-soft" style="height:24px;font-size:10.5px;">✦ AI Pronta</button>
-              </div>
-              <div style="padding:8px 10px;font-size:12px;color:var(--text-primary);">
-                Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile...
-              </div>
-              <div style="padding:6px 10px;background:#F8FAFC;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:11px;">
-                <span style="color:#059669;font-weight:600;">● Traduzione PL Sincronizzata</span>
-                <span style="color:var(--brand);font-weight:600;">Vedi PL ▾</span>
-              </div>
-              <div style="padding:6px 10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-                <div style="display:flex;gap:4px;">
-                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;">+ Allega</span>
-                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;">KB</span>
-                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;" onclick="openScheduleModal()">Programma</span>
-                </div>
-                <button class="send-btn" style="height:28px;font-size:11px;padding:0 12px;">Invia (PL)</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SCHERMATA MOBILE 3: BOTTOM SHEET FOCUS ESPANSO & COPILOT KB -->
-      <div>
-        <div class="phone-caption">3. Mobile · Bottom Sheet Focus Espanso & Copilot</div>
-        <div class="phone-frame">
-          <div class="mobile-top-header">
-            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
-            <div class="mobile-nav-row">
-              <span>☰</span>
-              <div style="flex:1;">
-                <div style="font-weight:600;font-size:15px;">Adam Nowak</div>
-                <div style="font-size:11px;opacity:0.75;">06/10/26 – 11/10/26 · Aggancio PMS Certo</div>
-              </div>
-              <span>⋮</span>
-            </div>
-          </div>
-          <!-- Contesto Ospite Fissato in Alto -->
-          <div style="padding:6px 10px;background:var(--bg-app);display:flex;flex-direction:column;gap:4px;">
-            <div style="display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;color:#475569;">
-              <span>CONTESTO OSPITE FISSATO · 2 DOMANDE</span>
-              <span style="color:var(--rose-text);">AIRBNB · PL→IT</span>
-            </div>
-            <div style="background:#FFF;border:1px solid var(--border-strong);border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:4px;">
-              <div><strong>11:20:</strong> "Il codice Nuki funziona! C'è un posto auto riservato?"</div>
-              <div style="border-top:1px solid #F1F5F9;padding-top:4px;"><strong>11:45:</strong> "Super, grazie! Se avrò bisogno di asciugamani vi scriverò."</div>
-            </div>
-          </div>
-          <!-- Bottom Sheet Espanso -->
-          <div style="flex:1;background:#FFF;border-top-left-radius:18px;border-top-right-radius:18px;border-top:1px solid #CBD5E1;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 -6px 20px rgba(14,20,36,0.08);">
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="width:36px;height:4px;background:#CBD5E1;border-radius:99px;align-self:center;"></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span class="mini-badge booking">Risposta Ospite · Focus</span>
-                <span style="font-size:11px;font-weight:600;color:#475569;">⤡ Riduci vista</span>
-              </div>
-              <div style="display:flex;gap:4px;">
-                <button class="ai-action-btn primary-soft" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">✦ Genera AI</button>
-                <button class="ai-action-btn" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">✎ Prompt</button>
-                <button class="ai-action-btn" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">Manuale</button>
-              </div>
-              <div style="border:1.5px solid var(--brand);border-radius:10px;overflow:hidden;">
-                <div style="padding:8px 10px;background:#FFF;border-bottom:1px solid var(--border);font-size:11.5px;line-height:1.45;">
-                  <div style="font-size:10px;font-weight:700;color:var(--brand);margin-bottom:3px;">IT · TESTO ORIGINALE</div>
-                  Ciao Adam, siamo felici che il codice abbia funzionato! Per il parcheggio puoi usare il posto n. 14 nel cortile (codice 000000).
-                </div>
-                <div style="padding:8px 10px;background:#F8FAFC;font-size:11.5px;line-height:1.45;color:#1E293B;">
-                  <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#059669;margin-bottom:3px;">
-                    <span>PL · ANTEPRIMA TRADUZIONE IN USCITA</span>
-                    <span>● Sincronizzata</span>
-                  </div>
-                  Cześć Adam, cieszymy się, że kod zadziałał! Możesz skorzystać z miejsca nr 14 na dziedzińcu (kod 000000).
-                </div>
-              </div>
-              <div style="background:var(--bg-muted);border:1px solid var(--border-strong);border-radius:8px;padding:6px 8px;font-size:10.5px;display:flex;justify-content:space-between;align-items:center;">
-                <span>Copilot KB · Confidenza 94%</span>
-                <span style="color:var(--brand);font-weight:600;">2 Fonti attive</span>
-              </div>
-            </div>
-            <div style="padding-top:6px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-              <div style="display:flex;gap:4px;">
-                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;">+ Allega</span>
-                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;"># Tag</span>
-                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;">KB</span>
-              </div>
-              <button class="send-btn" style="height:30px;font-size:11px;padding:0 12px;" onclick="openScheduleModal()">Invia / Programma ▾</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
   </main>
 
-  <!-- MODALE MESSAGGI PROGRAMMABILI (P.S. DI DARIO) -->
+  <!-- MODALE MESSAGGI PROGRAMMABILI -->
   <div class="modal-backdrop" id="scheduleModal">
     <div class="modal-card">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:15px;font-weight:700;">Programma invio messaggio (Bilingue IT → Target)</span>
-        <button class="icon-btn" onclick="closeScheduleModal()">✕</button>
+        <span style="font-size:15px;font-weight:700;">Programma invio messaggio (Bilingue IT â†’ Target)</span>
+        <button class="icon-btn" onclick="closeScheduleModal()">âœ•</button>
       </div>
       <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.45;">
-        Il messaggio verrà inviato automaticamente nella lingua dell'ospite con verifica stato soggiorno PMS prima dell'invio.
+        Il messaggio verrÃ  inviato automaticamente nella lingua dell'ospite con verifica stato soggiorno PMS prima dell'invio.
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <button class="proposal-card" onclick="confirmScheduleMessage('Oggi ore 14:00 (Check-in)')">
@@ -2227,132 +2341,142 @@ const CONVERSATIONS = {
   adam: {
     id: 'adam',
     bookingCode: 'DEMO-1048',
-    bookingStatus: 'Aperta · Soggiorno in corso',
+    bookingStatus: 'Aperta Â· Soggiorno in corso',
     guestName: 'Adam Nowak',
-    dates: '06/10/26 – 11/10/26',
-    unit: 'App. Duomo Suite · S04',
+    dates: '06/10/26 â€“ 11/10/26',
+    unit: 'App. Duomo Suite Â· S04',
     langCode: 'PL',
     langName: 'Polacco',
     channel: 'AIRBNB',
     msgCount: 9,
     handover: {
       motivo: 'Richiesta posto auto cortile + biancheria extra',
-      urgenza: 'Media · Ospite in struttura',
+      urgenza: 'Media Â· Ospite in struttura',
       sentiment: 'Positivo (Codice Nuki OK)',
       statoAI: 'Bozza pronta da KB (94%)'
     },
+    pinnedQuestions: [
+      { time: '11:20 Â· Parcheggio', text: '"Il codice Nuki funziona! C\'Ã¨ un posto auto riservato nel cortile?"' },
+      { time: '11:45 Â· Biancheria Extra', text: '"Super, grazie! Se avrÃ² bisogno di asciugamani vi scriverÃ²."' }
+    ],
     tags: ['#Parcheggio', '#Check-in', '#Biancheria', '#AccessoCodice'],
     standardDraftIT: 'Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile interno, per aprire il cancello puoi usare lo stesso codice 000000. Per gli asciugamani extra scrivici pure qui quando vuoi e te li portiamo subito.',
-    standardDraftTarget: 'Cześć Adam, dziękuję! Na wewnętrznym dziedzińcu czeka miejsce parkingowe nr 14, bramę otworzysz tym samym kodem 000000. W sprawie dodatkowych ręczników napisz do nas tutaj w każdej chwili, a od razu je przyniesiemy.',
-    focusDraftIT: "Ciao Adam, siamo felici che il codice abbia funzionato subito e che ti stia trovando bene!\n\nPer il parcheggio puoi usare il posto auto n. 14 nel cortile interno: il cancello automatico si apre con lo stesso codice 000000 sulla tastiera esterna.\n\nSe ti serviranno altri asciugamani scrivici pure qui e te li faremo avere in appartamento in mezz'ora. Ti ricordiamo solo che domenica il check-out è entro le 10:30 e potrai lasciare le chiavi sul tavolo. A presto!",
-    focusDraftTarget: 'Cześć Adam, cieszymy się, że kod zadziałał od razu i że dobrze się u nas czujesz! Jeśli chodzi o parking, możesz skorzystać z miejsca nr 14 na wewnętrznym dziedzińcu, brama automatyczna otwiera się tym samym kodem 000000 na zewnętrznej klawiaturze. Gdybyś potrzebował dodatkowych ręczników, napisz do nas tutaj, a dostarczymy je do apartamentu w pół godziny. Przypominamy tylko, że w niedzielę wymeldowanie jest do 10:30, a klucze możesz zostawić na stole. Do zobaczenia!',
+    standardDraftTarget: 'CzeÅ›Ä‡ Adam, dziÄ™kujÄ™! Na wewnÄ™trznym dziedziÅ„cu czeka miejsce parkingowe nr 14, bramÄ™ otworzysz tym samym kodem 000000. W sprawie dodatkowych rÄ™cznikÃ³w napisz do nas tutaj w kaÅ¼dej chwili, a od razu je przyniesiemy.',
+    focusDraftIT: "Ciao Adam, siamo felici che il codice abbia funzionato subito e che ti stia trovando bene!\n\nPer il parcheggio puoi usare il posto auto n. 14 nel cortile interno: il cancello automatico si apre con lo stesso codice 000000 sulla tastiera esterna.\n\nSe ti serviranno altri asciugamani scrivici pure qui e te li faremo avere in appartamento in mezz'ora. Ti ricordiamo solo che domenica il check-out Ã¨ entro le 10:30 e potrai lasciare le chiavi sul tavolo. A presto!",
+    focusDraftTarget: 'CzeÅ›Ä‡ Adam, cieszymy siÄ™, Å¼e kod zadziaÅ‚aÅ‚ od razu i Å¼e dobrze siÄ™ u nas czujesz! JeÅ›li chodzi o parking, moÅ¼esz skorzystaÄ‡ z miejsca nr 14 na wewnÄ™trznym dziedziÅ„cu, brama automatyczna otwiera siÄ™ tym samym kodem 000000 na zewnÄ™trznej klawiaturze. GdybyÅ› potrzebowaÅ‚ dodatkowych rÄ™cznikÃ³w, napisz do nas tutaj, a dostarczymy je do apartamentu w pÃ³Å‚ godziny. Przypominamy tylko, Å¼e w niedzielÄ™ wymeldowanie jest do 10:30, a klucze moÅ¼esz zostawiÄ‡ na stole. Do zobaczenia!',
     messages: [
       {
         id: 'm1',
         sender: 'guest',
-        author: 'ADAM · 11:20',
+        author: 'ADAM Â· 11:20',
         badges: [
           { text: 'AIRBNB', cls: 'channel' },
           { text: 'PL -> IT', cls: 'booking' }
         ],
-        textOriginal: 'Dzień dobry! Kod Nuki zadziałał od razu, mieszkanie jest świetne. Mam pytanie: czy na podwórku jest dedykowane miejsce parkingowe dla gości?',
-        textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
+        textOriginal: 'DzieÅ„ dobry! Kod Nuki zadziaÅ‚aÅ‚ od razu, mieszkanie jest Å›wietne. Mam pytanie: czy na podwÃ³rku jest dedykowane miejsce parkingowe dla goÅ›ci?',
+        textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento Ã¨ ottimo. Ho una domanda: nel cortile c'Ã¨ un posto auto riservato per gli ospiti?"
       },
       {
         id: 'm2',
         sender: 'host',
         scheduled: true,
-        author: 'TU · Programmato per Domani 09:00',
+        author: 'TU Â· Programmato per Domani 09:00',
         badges: [
           { text: 'PROGRAMMATO', cls: 'channel' },
           { text: 'TEMPLATE CHECK-OUT', cls: 'ai' },
           { text: 'DOPPIA VERIFICA OK', cls: 'pms' }
         ],
-        textOriginal: 'Dzień dobry Adam! Przypominamy, że jutro wymeldowanie jest do godziny 10:30. Klucze możesz zostawić na stole w salonie.',
-        textTranslated: ' Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
+        textOriginal: 'DzieÅ„ dobry Adam! Przypominamy, Å¼e jutro wymeldowanie jest do godziny 10:30. Klucze moÅ¼esz zostawiÄ‡ na stole w salonie.',
+        textTranslated: 'Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out Ã¨ previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
       },
       {
         id: 'm3',
         sender: 'guest',
-        author: 'ADAM · 11:45',
+        author: 'ADAM Â· 11:45',
         badges: [
           { text: 'AIRBNB', cls: 'channel' },
           { text: 'PL -> IT', cls: 'booking' },
           { text: 'SENTIMENT POSITIVO', cls: 'pms' }
         ],
-        textOriginal: 'Super, dziękuję! Właśnie przeczytałem instrukcję segregacji. Jeśli będę potrzebował ręczników, napiszę do Was. Dziękuję za wskazówki na zwiedzanie miasta.',
-        textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
+        textOriginal: 'Super, dziÄ™kujÄ™! WÅ‚aÅ›nie przeczytaÅ‚em instrukcjÄ™ segregacji. JeÅ›li bÄ™dÄ™ potrzebowaÅ‚ rÄ™cznikÃ³w, napiszÄ™ do Was. DziÄ™kujÄ™ za wskazÃ³wki na zwiedzanie miasta.',
+        textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrÃ² bisogno di asciugamani extra vi scriverÃ². Grazie per i consigli su cosa visitare in cittÃ .'
       }
     ]
   },
   sophie: {
     id: 'sophie',
     bookingCode: 'DEMO-1051',
-    bookingStatus: 'Da leggere · Check-in Oggi',
+    bookingStatus: 'Da leggere Â· Check-in Oggi',
     guestName: 'Sophie Laurent',
-    dates: '07/10/26 – 10/10/26',
-    unit: 'Suite Brera · S02',
+    dates: '07/10/26 â€“ 10/10/26',
+    unit: 'Suite Brera Â· S02',
     langCode: 'FR',
     langName: 'Francese',
     channel: 'BOOKING.COM',
     msgCount: 4,
     handover: {
       motivo: 'Richiesta deposito bagagli anticipato ore 11:30',
-      urgenza: 'Alta · Arrivo tra 2 ore',
+      urgenza: 'Alta Â· Arrivo tra 2 ore',
       sentiment: 'Cordiale',
       statoAI: 'Bozza pronta da KB (91%)'
     },
+    pinnedQuestions: [
+      { time: '10:15 Â· Deposito Bagagli', text: '"Il nostro treno arriva alle 11:15. Ãˆ possibile lasciare le valigie prima del check-in?"' }
+    ],
     tags: ['#EarlyCheckIn', '#Bagagli', '#CodiciAccesso'],
-    standardDraftIT: 'Ciao Sophie! Puoi lasciare i bagagli già dalle 11:30 negli armadietti smart al piano terra usando il codice 4490. Appena la camera sarà pronta ti avviseremo qui.',
-    standardDraftTarget: 'Bonjour Sophie ! Vous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents au rez-de-chaussée avec le code 4490. Dès que la chambre sera prête, nous vous préviendrons ici.',
-    focusDraftIT: 'Ciao Sophie, benvenuta a Milano!\n\nPuoi lasciare comodamente i bagagli già dalle 11:30 negli armadietti smart al piano terra (Locker n. 2 e n. 3) inserendo il codice 4490.\n\nIl nostro team di pulizie darà priorità alla tua Suite Brera e ti invieremo un messaggio non appena sarà pronta per il check-in anticipato.',
-    focusDraftTarget: 'Bonjour Sophie, bienvenue à Milan !\n\nVous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents du rez-de-chaussée (Casiers n°2 et n°3) en tapant le code 4490.\n\nNotre équipe de ménage donnera la priorité à votre Suite Brera et nous vous enverrons un message dès qu’elle sera prête.',
+    standardDraftIT: 'Ciao Sophie! Puoi lasciare i bagagli giÃ  dalle 11:30 negli armadietti smart al piano terra usando il codice 4490. Appena la camera sarÃ  pronta ti avviseremo qui.',
+    standardDraftTarget: 'Bonjour Sophie ! Vous pouvez dÃ©poser vos bagages dÃ¨s 11h30 dans les casiers intelligents au rez-de-chaussÃ©e avec le code 4490. DÃ¨s que la chambre sera prÃªte, nous vous prÃ©viendrons ici.',
+    focusDraftIT: 'Ciao Sophie, benvenuta a Milano!\n\nPuoi lasciare comodamente i bagagli giÃ  dalle 11:30 negli armadietti smart al piano terra (Locker n. 2 e n. 3) inserendo il codice 4490.\n\nIl nostro team di pulizie darÃ  prioritÃ  alla tua Suite Brera e ti invieremo un messaggio non appena sarÃ  pronta per il check-in anticipato.',
+    focusDraftTarget: 'Bonjour Sophie, bienvenue Ã  Milan !\n\nVous pouvez dÃ©poser vos bagages dÃ¨s 11h30 dans les casiers intelligents du rez-de-chaussÃ©e (Casiers nÂ°2 et nÂ°3) en tapant le code 4490.\n\nNotre Ã©quipe de mÃ©nage donnera la prioritÃ© Ã  votre Suite Brera et nous vous enverrons un message dÃ¨s quâ€™elle sera prÃªte.',
     messages: [
       {
         id: 's1',
         sender: 'guest',
-        author: 'SOPHIE · 10:15',
+        author: 'SOPHIE Â· 10:15',
         badges: [
           { text: 'BOOKING.COM', cls: 'booking' },
           { text: 'FR -> IT', cls: 'ai' }
         ],
-        textOriginal: 'Bonjour ! Notre train arrive à Milan à 11h15. Est-il possible de déposer nos valises avant l’heure officielle du check-in ?',
-        textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. È possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
+        textOriginal: 'Bonjour ! Notre train arrive Ã  Milan Ã  11h15. Est-il possible de dÃ©poser nos valises avant lâ€™heure officielle du check-in ?',
+        textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. Ãˆ possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
       }
     ]
   },
   francesco: {
     id: 'francesco',
     bookingCode: 'DEMO-1042',
-    bookingStatus: 'Chiusa · Check-out effettuato',
+    bookingStatus: 'Chiusa Â· Check-out effettuato',
     guestName: 'Francesco Ira',
-    dates: '02/10/26 – 06/10/26',
-    unit: 'Casa Aurora · Attico',
+    dates: '02/10/26 â€“ 06/10/26',
+    unit: 'Casa Aurora Â· Attico',
     langCode: 'EN',
     langName: 'Inglese',
     channel: 'WHATSAPP',
     msgCount: 6,
     handover: {
       motivo: 'Invio ricevuta tassa di soggiorno e ringraziamenti',
-      urgenza: 'Bassa · Post soggiorno',
+      urgenza: 'Bassa Â· Post soggiorno',
       sentiment: 'Eccellente (5 stelle)',
       statoAI: 'Completato'
     },
+    pinnedQuestions: [
+      { time: 'Ieri 18:20 Â· Ricevuta', text: '"Soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno?"' }
+    ],
     tags: ['#Fattura', '#Check-out', '#Recensione'],
     standardDraftIT: 'Ciao Francesco, grazie ancora per essere stato nostro ospite! Trovi in allegato la ricevuta richiesta. Ti aspettiamo presto a Casa Aurora!',
     standardDraftTarget: 'Hi Francesco, thank you again for staying with us! Please find attached the requested receipt. We look forward to welcoming you back to Casa Aurora soon!',
-    focusDraftIT: 'Ciao Francesco, grazie mille per aver soggiornato a Casa Aurora!\n\nTi abbiamo allegato qui la ricevuta completa della tassa di soggiorno e del pernottamento.\n\nSe hai piacere di lasciarci una recensione, per noi è davvero preziosa. A presto!',
+    focusDraftIT: 'Ciao Francesco, grazie mille per aver soggiornato a Casa Aurora!\n\nTi abbiamo allegato qui la ricevuta completa della tassa di soggiorno e del pernottamento.\n\nSe hai piacere di lasciarci una recensione, per noi Ã¨ davvero preziosa. A presto!',
     focusDraftTarget: 'Hi Francesco, thank you so much for staying at Casa Aurora!\n\nWe have attached the full receipt for your stay and city tax.\n\nIf you would like to leave us a review, it means a lot to our team. See you soon!',
     messages: [
       {
         id: 'f1',
         sender: 'guest',
-        author: 'FRANCESCO · Ieri 18:20',
+        author: 'FRANCESCO Â· Ieri 18:20',
         badges: [
           { text: 'WHATSAPP', cls: 'pms' }
         ],
         textOriginal: 'Grazie di tutto ragazzi, soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno quando avete un attimo?',
-        textTranslated: 'Messaggio già in Italiano (nessuna traduzione necessaria).'
+        textTranslated: 'Messaggio giÃ  in Italiano (nessuna traduzione necessaria).'
       }
     ]
   }
@@ -2361,38 +2485,37 @@ const CONVERSATIONS = {
 let state = {
   activeConvId: 'adam',
   focusExpanded: false,
-  channelMode: 'guest', // 'guest' | 'note'
-  rightTab: 'ai', // 'ai' | 'kb'
-  demoStageMode: 'desktop-standard', // 'desktop-standard' | 'desktop-focus' | 'mobile-overview'
+  channelMode: 'guest',
+  rightTab: 'ai',
   editingTranslation: false,
   promptOpen: false,
-  leftCollapsed: false,
-  rightCollapsed: false
+  leftCollapsed: window.innerWidth <= 900,
+  rightCollapsed: window.innerWidth <= 900,
+  wasMobile: window.innerWidth <= 900
 };
+
+function isMobileViewport() {
+  return window.innerWidth <= 900;
+}
 
 function getConv() {
   return CONVERSATIONS[state.activeConvId];
 }
 
-function setDemoStageMode(mode) {
-  state.demoStageMode = mode;
-  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
-  });
-  const stage = document.getElementById('demoStage');
-  if (mode === 'mobile-overview') {
-    stage.classList.add('mobile-stage-active');
-  } else {
-    stage.classList.remove('mobile-stage-active');
-    if (mode === 'desktop-focus') {
-      state.focusExpanded = true;
-      state.rightTab = 'kb';
-    } else if (mode === 'desktop-standard') {
-      state.focusExpanded = false;
-      state.rightTab = 'ai';
-    }
-    syncAllUI();
-  }
+function syncDrawerBackdrop() {
+  const backdrop = document.getElementById('mobileBackdrop');
+  if (!backdrop) return;
+  const anyDrawerOpenOnMobile = isMobileViewport() && (!state.leftCollapsed || !state.rightCollapsed);
+  backdrop.classList.toggle('open', anyDrawerOpenOnMobile);
+}
+
+function closeMobileDrawers() {
+  if (!isMobileViewport()) return;
+  state.leftCollapsed = true;
+  state.rightCollapsed = true;
+  document.getElementById('inboxPanel').classList.add('collapsed');
+  document.getElementById('aiSidebar').classList.add('collapsed');
+  syncDrawerBackdrop();
 }
 
 function selectConversation(convId) {
@@ -2400,36 +2523,55 @@ function selectConversation(convId) {
   document.querySelectorAll('.conv-item').forEach(el => {
     el.classList.toggle('active', el.dataset.conv === convId);
   });
+  if (isMobileViewport()) {
+    closeMobileDrawers();
+  }
   syncAllUI();
 }
 
 function toggleFocusView() {
   state.focusExpanded = !state.focusExpanded;
-  state.demoStageMode = state.focusExpanded ? 'desktop-focus' : 'desktop-standard';
-  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === state.demoStageMode);
-  });
+  if (!isMobileViewport()) {
+    state.rightTab = state.focusExpanded ? 'kb' : 'ai';
+  }
   syncAllUI();
 }
 
 function setChannelMode(mode) {
   state.channelMode = mode;
-  syncAllUI();
+  syncAllUI(true);
 }
 
 function setRightTab(tab) {
   state.rightTab = tab;
-  syncAllUI();
+  if (isMobileViewport() && state.rightCollapsed) {
+    state.rightCollapsed = false;
+    state.leftCollapsed = true;
+    document.getElementById('inboxPanel').classList.add('collapsed');
+    document.getElementById('aiSidebar').classList.remove('collapsed');
+    syncDrawerBackdrop();
+  }
+  syncAllUI(true);
 }
 
 function toggleLeftSidebar() {
   state.leftCollapsed = !state.leftCollapsed;
+  if (isMobileViewport() && !state.leftCollapsed) {
+    state.rightCollapsed = true;
+    document.getElementById('aiSidebar').classList.add('collapsed');
+  }
   document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+  syncDrawerBackdrop();
 }
 
 function toggleRightSidebar() {
   state.rightCollapsed = !state.rightCollapsed;
+  if (isMobileViewport() && !state.rightCollapsed) {
+    state.leftCollapsed = true;
+    document.getElementById('inboxPanel').classList.add('collapsed');
+  }
   document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+  syncDrawerBackdrop();
 }
 
 function togglePromptBar() {
@@ -2442,12 +2584,11 @@ function togglePromptBar() {
 
 function applyAiPrompt() {
   const promptVal = document.getElementById('promptInput').value.trim();
-  const conv = getConv();
   const itArea = document.getElementById('composerTextarea');
   const plArea = document.getElementById('translationPreviewTextarea');
   if (!promptVal) return;
-  itArea.value = itArea.value + "\n\n[Nota AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
-  plArea.value = plArea.value + "\n\n[AI: " + promptVal + "] Jesteśmy do Twojej dyspozycji na WhatsAppie lub tutaj na czacie!";
+  itArea.value = itArea.value + "\n\n[Modifica AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
+  plArea.value = plArea.value + "\n\n[AI: " + promptVal + "] JesteÅ›my do Twojej dyspozycji na WhatsAppie lub tutaj na czacie!";
   document.getElementById('promptInput').value = '';
   state.promptOpen = false;
   document.getElementById('promptInlineBar').classList.remove('open');
@@ -2466,14 +2607,17 @@ function insertProposal(type) {
     itArea.value = conv.standardDraftIT;
     plArea.value = conv.standardDraftTarget;
   } else if (type === 'kb-parking') {
-    itArea.value = "Ciao " + conv.guestName.split(' ')[0] + "! Il posto auto riservato è il n. 14 nel cortile interno. Il cancello automatico si apre con il codice 000000.";
-    plArea.value = "Cześć! Dedykowane miejsce parkingowe to nr 14 na wewnętrznym dziedzińcu. Brama otwiera się kodem 000000.";
+    itArea.value = "Ciao " + conv.guestName.split(' ')[0] + "! Il posto auto riservato Ã¨ il n. 14 nel cortile interno. Il cancello automatico si apre con il codice 000000.";
+    plArea.value = "CzeÅ›Ä‡! Dedykowane miejsce parkingowe to nr 14 na wewnÄ™trznym dziedziÅ„cu. Brama otwiera siÄ™ kodem 000000.";
   } else if (type === 'kb-towels') {
-    itArea.value = "Per il set di asciugamani extra, scrivici pure qui l'orario che preferisci e la governante te li consegnerà in 30 minuti.";
-    plArea.value = "W sprawie dodatkowych ręczników napisz, która godzina Ci odpowiada, a dostarczymy je w 30 minut.";
+    itArea.value = "Per il set di asciugamani extra, scrivici pure qui l'orario che preferisci e la governante te li consegnerÃ  in 30 minuti.";
+    plArea.value = "W sprawie dodatkowych rÄ™cznikÃ³w napisz, ktÃ³ra godzina Ci odpowiada, a dostarczymy je w 30 minut.";
   } else if (type === 'sched-checkin') {
-    itArea.value = "Ciao! Ti confermiamo che il self check-in è attivo dalle ore 15:00 con il codice Nuki 000000.";
-    plArea.value = "Cześć! Potwierdzamy, że zameldowanie samodzielne jest aktywne od 15:00 z kodem Nuki 000000.";
+    itArea.value = "Ciao! Ti confermiamo che il self check-in Ã¨ attivo dalle ore 15:00 con il codice Nuki 000000.";
+    plArea.value = "CzeÅ›Ä‡! Potwierdzamy, Å¼e zameldowanie samodzielne jest aktywne od 15:00 z kodem Nuki 000000.";
+  }
+  if (isMobileViewport()) {
+    closeMobileDrawers();
   }
   syncAllUI(true);
   flashSyncBadge('Bozza inserita e tradotta');
@@ -2493,13 +2637,12 @@ function handleItalianInput() {
     } else if (itText.trim() === conv.focusDraftIT.trim()) {
       plArea.value = conv.focusDraftTarget;
     } else {
-      // Smart live translation simulation preserving edits
-      plArea.value = conv.focusExpanded
+      plArea.value = state.focusExpanded
         ? conv.focusDraftTarget
-        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Tekst zaktualizowany na żywo]' : '');
+        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Zaktualizowano na Å¼ywo]' : '');
     }
     syncText.textContent = 'Sincronizzata';
-  }, 320);
+  }, 280);
 }
 
 function toggleEditTranslation() {
@@ -2508,7 +2651,7 @@ function toggleEditTranslation() {
   const btn = document.getElementById('btnEditPl');
   plArea.readOnly = !state.editingTranslation;
   btn.classList.toggle('editing', state.editingTranslation);
-  btn.textContent = state.editingTranslation ? 'Salva PL' : ('Modifica ' + getConv().langCode);
+  btn.textContent = state.editingTranslation ? 'Salva ' + getConv().langCode : ('Modifica ' + getConv().langCode);
   if (state.editingTranslation) {
     plArea.focus();
   }
@@ -2536,7 +2679,7 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       internalNote: true,
-      author: 'TU · Nota Interna Team · Ora',
+      author: 'TU Â· Nota Interna Team Â· Ora',
       badges: [{ text: 'NOTA INTERNA PRIVATA', cls: 'channel' }],
       textOriginal: itText,
       textTranslated: ''
@@ -2546,7 +2689,7 @@ function sendCurrentMessage(scheduledTime = null) {
       id: 'm_' + Date.now(),
       sender: 'host',
       scheduled: true,
-      author: 'TU · Programmato per ' + scheduledTime,
+      author: 'TU Â· Programmato per ' + scheduledTime,
       badges: [
         { text: 'PROGRAMMATO', cls: 'channel' },
         { text: 'TRADOTTO IN ' + conv.langCode, cls: 'pms' }
@@ -2558,7 +2701,7 @@ function sendCurrentMessage(scheduledTime = null) {
     conv.messages.push({
       id: 'm_' + Date.now(),
       sender: 'host',
-      author: 'TU · Inviato ora',
+      author: 'TU Â· Inviato ora',
       badges: [
         { text: 'INVIATO IN ' + conv.langCode, cls: 'pms' },
         { text: 'DOPPIA VERIFICA OK', cls: 'booking' }
@@ -2569,7 +2712,10 @@ function sendCurrentMessage(scheduledTime = null) {
   }
 
   conv.msgCount = conv.messages.length;
-  renderMessages();
+  if (isMobileViewport() && state.focusExpanded) {
+    state.focusExpanded = false;
+  }
+  syncAllUI(true);
   const stream = document.getElementById('messagesStream');
   stream.scrollTop = stream.scrollHeight;
   flashSyncBadge(scheduledTime ? 'Messaggio programmato!' : 'Messaggio inviato!');
@@ -2599,7 +2745,21 @@ function deleteScheduledMsg(msgId) {
 function renderMessages() {
   const conv = getConv();
   const stream = document.getElementById('messagesStream');
-  stream.innerHTML = conv.messages.map(m => {
+
+  const mobileHandoverHtml = `
+    <div class="mobile-handover-inline">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE & SINTESI</span>
+        <span class="mini-badge pms">4 punti chiave</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
+        <strong>1. Motivo:</strong> ${conv.handover.motivo}<br/>
+        <strong>2. PrioritÃ :</strong> ${conv.handover.urgenza} Â· <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
+      </div>
+    </div>
+  `;
+
+  const messagesHtml = conv.messages.map(m => {
     const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
     const badgesHtml = (m.badges || []).map(b => `<span class="mini-badge ${b.cls}">${b.text}</span>`).join('');
     const transHtml = m.textTranslated ? `
@@ -2629,24 +2789,45 @@ function renderMessages() {
       </div>
     `;
   }).join('');
+
+  stream.innerHTML = mobileHandoverHtml + messagesHtml;
 }
 
 function syncAllUI(preserveText = false) {
   const conv = getConv();
+  const mobile = isMobileViewport();
 
-  // Thread header
   document.getElementById('threadGuestName').textContent = conv.guestName;
+  document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} Â· ${conv.unit}`;
   document.getElementById('threadMsgCount').textContent = conv.msgCount;
-  document.getElementById('threadStayDates').textContent = `${conv.dates} · ${conv.unit}`;
+  document.getElementById('mobileMsgCount').textContent = conv.msgCount;
+  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} -> IT`;
+  document.getElementById('threadStayDates').textContent = `${conv.dates} Â· ${conv.unit}`;
   document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
 
-  // Handover
   document.getElementById('hoMotivo').textContent = conv.handover.motivo;
   document.getElementById('hoUrgenza').textContent = conv.handover.urgenza;
   document.getElementById('hoSentiment').textContent = conv.handover.sentiment;
   document.getElementById('hoStato').textContent = conv.handover.statoAI;
 
-  // Composer focus & channel mode
+  // Mobile Pinned Guest Context (shown when Focus Bottom Sheet is expanded on mobile)
+  const pinnedChannelBadge = document.getElementById('mobilePinnedChannelBadge');
+  if (pinnedChannelBadge) {
+    pinnedChannelBadge.textContent = `${conv.channel} Â· ${conv.langCode}â†’IT`;
+  }
+  const pinnedCard = document.getElementById('mobilePinnedContextCard');
+  if (pinnedCard) {
+    pinnedCard.innerHTML = (conv.pinnedQuestions || []).map((q, idx) => `
+      <div style="${idx > 0 ? 'border-top:1px solid #F1F5F9;padding-top:5px;' : ''}">
+        <span style="font-size:10px;font-weight:700;color:var(--brand);margin-right:4px;">${q.time}</span>
+        <span>${q.text}</span>
+      </div>
+    `).join('');
+  }
+
+  const threadCol = document.getElementById('threadColumn');
+  threadCol.classList.toggle('mobile-focus-mode', mobile && state.focusExpanded);
+
   const card = document.getElementById('composerCard');
   card.classList.toggle('focus-expanded', state.focusExpanded);
   card.classList.toggle('note-mode', state.channelMode === 'note');
@@ -2654,18 +2835,21 @@ function syncAllUI(preserveText = false) {
   const focusBtn = document.getElementById('focusToggleBtn');
   focusBtn.classList.toggle('active', state.focusExpanded);
   focusBtn.innerHTML = state.focusExpanded
-    ? '<span>⤡</span><span>Riduci vista</span>'
-    : '<span>⤢</span><span>Espandi vista</span>';
+    ? '<span>â¤¡</span><span>Riduci vista</span>'
+    : '<span>â¤¢</span><span>Espandi</span>';
 
   document.getElementById('tabChannelGuest').classList.toggle('active', state.channelMode === 'guest');
   document.getElementById('tabChannelNote').classList.toggle('active', state.channelMode === 'note');
 
   const sendBtn = document.getElementById('mainSendBtn');
-  sendBtn.textContent = state.channelMode === 'note'
-    ? 'Salva nota interna'
-    : `Invia in ${conv.langName} (${conv.langCode}) ⌘↵`;
+  if (state.channelMode === 'note') {
+    sendBtn.innerHTML = '<span>Salva nota interna</span>';
+  } else if (mobile) {
+    sendBtn.innerHTML = `<span>Invia in ${conv.langCode}</span>`;
+  } else {
+    sendBtn.innerHTML = `<span>Invia in ${conv.langName} (${conv.langCode})</span><span style="background:#1D4ED8;color:#DBEAFE;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:500;">âŒ˜â†µ</span>`;
+  }
 
-  // Composer & Right Sidebar Translation texts
   const itArea = document.getElementById('composerTextarea');
   const plArea = document.getElementById('translationPreviewTextarea');
   if (!preserveText) {
@@ -2673,25 +2857,42 @@ function syncAllUI(preserveText = false) {
     plArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
   }
 
-  // Right sidebar tabs
   document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
   document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');
   document.getElementById('rightContentAi').style.display = state.rightTab === 'ai' ? 'flex' : 'none';
   document.getElementById('rightContentKb').style.display = state.rightTab === 'kb' ? 'flex' : 'none';
 
-  // Right sidebar translation preview header
   document.getElementById('langSelectDropdown').value = conv.langCode;
   document.getElementById('btnEditPl').textContent = state.editingTranslation ? 'Salva' : `Modifica ${conv.langCode}`;
-  document.getElementById('aiSidebar').classList.toggle('composer-Expanded-sync', state.focusExpanded);
 
   renderMessages();
 }
 
+window.addEventListener('resize', () => {
+  const nowMobile = isMobileViewport();
+  if (nowMobile !== state.wasMobile) {
+    state.wasMobile = nowMobile;
+    if (nowMobile) {
+      state.leftCollapsed = true;
+      state.rightCollapsed = true;
+    } else {
+      state.leftCollapsed = false;
+      state.rightCollapsed = false;
+    }
+    document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+    document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+    syncDrawerBackdrop();
+  }
+  syncAllUI(true);
+});
+
 window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+  document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+  syncDrawerBackdrop();
   syncAllUI();
 });
 
-</script>
+  </script>
 </body>
 </html>
-

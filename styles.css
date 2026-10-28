@@ -42,9 +42,10 @@
 
 body {
   font-family: var(--font);
-  background: #0F172A;
+  background: var(--bg-app);
   color: var(--text-primary);
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -63,68 +64,6 @@ button {
   transition: all 0.15s ease;
 }
 
-/* TOP DEMO SWITCHER BAR */
-.demo-topbar {
-  height: 44px;
-  background: #0B1120;
-  border-bottom: 1px solid #1E293B;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  color: #F8FAFC;
-  font-size: 12px;
-  flex-shrink: 0;
-  z-index: 100;
-}
-
-.demo-topbar-left, .demo-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.demo-brand-badge {
-  background: rgba(36, 87, 230, 0.25);
-  border: 1px solid rgba(96, 165, 250, 0.35);
-  color: #93C5FD;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 6px;
-  font-size: 11px;
-  letter-spacing: 0.2px;
-}
-
-.demo-mode-tabs {
-  display: flex;
-  background: #1E293B;
-  padding: 3px;
-  border-radius: 8px;
-  gap: 3px;
-}
-
-.demo-mode-tab {
-  color: #94A3B8;
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 4px 11px;
-  border-radius: 6px;
-}
-
-.demo-mode-tab:hover {
-  color: #F8FAFC;
-}
-
-.demo-mode-tab.active {
-  background: var(--brand);
-  color: #FFFFFF;
-}
-
-.demo-hint {
-  color: #94A3B8;
-  font-size: 11px;
-}
-
 /* WORKSPACE CONTAINER */
 .demo-stage {
   flex: 1;
@@ -132,15 +71,31 @@ button {
   overflow: hidden;
   position: relative;
   background: var(--bg-app);
+  width: 100%;
+  height: 100%;
 }
 
-/* DESKTOP APP SHELL */
+/* DESKTOP & MOBILE UNIFIED APP SHELL */
 .app-shell {
   display: flex;
   width: 100%;
   height: 100%;
   background: var(--bg-app);
   overflow: hidden;
+  position: relative;
+}
+
+/* MOBILE SCRIM BACKDROP (Hidden on desktop) */
+.mobile-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 20, 36, 0.55);
+  z-index: 90;
+}
+
+.mobile-backdrop.open {
+  display: block;
 }
 
 /* 1. FAR LEFT RAIL (64px) */
@@ -217,7 +172,7 @@ button {
   justify-content: center;
 }
 
-/* 2. LEFT COLUMN: LISTA MESSAGGI (340px) */
+/* 2. LEFT COLUMN: LISTA MESSAGGI (340px on Desktop, Slide-over Drawer on Mobile) */
 .inbox-panel {
   width: 340px;
   background: var(--bg-surface);
@@ -225,7 +180,7 @@ button {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: width 0.2s ease;
+  transition: width 0.2s ease, transform 0.25s ease;
 }
 
 .inbox-panel.collapsed {
@@ -528,6 +483,7 @@ button {
   background: var(--bg-app);
   min-width: 0;
   height: 100%;
+  position: relative;
 }
 
 .thread-header {
@@ -550,10 +506,20 @@ button {
   flex-wrap: wrap;
 }
 
+.thread-guest-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .thread-guest-name {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.thread-guest-sub-mobile {
+  display: none;
 }
 
 .msg-count-pill {
@@ -624,6 +590,15 @@ button {
 
 .header-chip-btn:hover {
   background: #E2E8F0;
+}
+
+/* MOBILE SUB-BARS & PINNED CARDS (Hidden on Desktop) */
+.mobile-conv-statusbar,
+.mobile-handover-inline,
+.mobile-pinned-guest-context,
+.mobile-sheet-drag-handle,
+.mobile-copilot-inline-section {
+  display: none;
 }
 
 /* MESSAGES STREAM */
@@ -742,7 +717,7 @@ button {
   color: #B91C1C;
 }
 
-/* CENTRAL COMPOSER (V2 FULL-WIDTH ITALIAN EDITOR) */
+/* CENTRAL COMPOSER (V2 SPLIT BILINGUAL EDITOR) */
 .composer-wrapper {
   background: var(--bg-subtle);
   border-top: 1px solid var(--border);
@@ -787,6 +762,12 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.composer-ai-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .channel-switch {
@@ -899,7 +880,7 @@ button {
   font-weight: 600;
 }
 
-/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT, AS IN FIGMA) */
+/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT ON DESKTOP, STACKED ON MOBILE) */
 .composer-split-surface {
   width: 100%;
   display: grid;
@@ -1037,6 +1018,10 @@ button {
   color: var(--text-primary);
 }
 
+.mobile-only-tool {
+  display: none;
+}
+
 .schedule-btn {
   height: 34px;
   padding: 0 12px;
@@ -1068,7 +1053,7 @@ button {
   background: var(--brand-hover);
 }
 
-/* 4. RIGHT SIDEBAR: PANNELLO AI & PREVIEW TRADUZIONE IN USCITA (384px) */
+/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (384px) */
 .ai-sidebar {
   width: 384px;
   background: var(--bg-surface);
@@ -1077,7 +1062,7 @@ button {
   flex-direction: column;
   flex-shrink: 0;
   height: 100%;
-  transition: width 0.2s ease;
+  transition: width 0.2s ease, transform 0.25s ease;
 }
 
 .ai-sidebar.collapsed {
@@ -1265,24 +1250,6 @@ button {
   font-weight: 600;
 }
 
-/* PINNED BOTTOM SECTION IN RIGHT SIDEBAR: SEZIONE TRADUZIONE IN USCITA */
-.translation-preview-section {
-  background: var(--bg-subtle);
-  border-top: 1px solid var(--border-strong);
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.translation-preview-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-
 .translation-target-selector {
   display: flex;
   align-items: center;
@@ -1345,86 +1312,6 @@ button {
   color: #FFFFFF;
 }
 
-.sidebar-footer-tools {
-  margin-top: auto;
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-surface);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* MOBILE 3-SCREENS OVERVIEW & SIMULATOR */
-.mobile-overview-stage {
-  display: none;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background: #0F172A;
-  padding: 24px;
-  gap: 28px;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.mobile-stage-active .app-shell {
-  display: none;
-}
-
-.mobile-stage-active .mobile-overview-stage {
-  display: flex;
-}
-
-.phone-frame {
-  width: 390px;
-  height: 844px;
-  background: var(--bg-muted);
-  border-radius: 28px;
-  border: 6px solid #1E293B;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.phone-caption {
-  color: #94A3B8;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.mobile-top-header {
-  background: var(--bg-mobile-header);
-  color: #FFFFFF;
-  padding: 10px 16px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.mobile-status-bar {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-.mobile-nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
 /* MODAL FOR PROGRAMMABLE MESSAGES */
 .modal-backdrop {
   position: fixed;
@@ -1454,60 +1341,413 @@ button {
   gap: 14px;
 }
 
-/* NATIVE RESPONSIVE MEDIA QUERY (< 1024px) */
-@media (max-width: 1024px) {
-  .demo-topbar {
-    height: auto;
-    padding: 8px 12px;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .demo-hint {
+/* ==========================================================================
+   TRUE MOBILE V2 RESPONSIVE TRANSFORMATION (<= 900px)
+   Matches Figma Mobile V2 Screens:
+   - 1:27 (Chat · Drawer navigazione aperto)
+   - 1:446 (Chat · Conversazione Standard)
+   - 1:320 (Chat · Composer Focus Espanso & Copilot KB Bottom Sheet)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .nav-rail {
     display: none;
   }
-  .demo-mode-tabs {
-    overflow-x: auto;
-    max-width: 100%;
-  }
-  .nav-rail { display: none; }
+
+  /* Left Slide-over Drawer (1:90 Drawer navigazione) */
   .inbox-panel {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
-    z-index: 50;
-    box-shadow: var(--shadow-modal);
+    width: 335px;
     max-width: 86vw;
+    z-index: 110;
+    box-shadow: 8px 0 32px rgba(14, 20, 36, 0.28);
+    transform: translateX(0);
   }
+
+  .inbox-panel.collapsed {
+    width: 335px;
+    transform: translateX(-105%);
+    pointer-events: none;
+  }
+
+  .inbox-header {
+    background: var(--bg-mobile-header);
+    border-bottom: none;
+    height: 60px;
+  }
+
+  .inbox-title {
+    color: #FFFFFF;
+    font-size: 18px;
+  }
+
+  .inbox-header .icon-btn {
+    background: rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+  }
+
+  /* Right Slide-over Drawer for full KB & AI */
   .ai-sidebar {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 50;
     width: 350px;
     max-width: 90vw;
-    box-shadow: var(--shadow-modal);
+    z-index: 110;
+    box-shadow: -8px 0 32px rgba(14, 20, 36, 0.28);
+    transform: translateX(0);
   }
+
+  .ai-sidebar.collapsed {
+    width: 350px;
+    transform: translateX(105%);
+    pointer-events: none;
+  }
+
+  /* Mobile Top Header (#131C4D - Intestazione ospite 1:447) */
   .thread-header {
-    height: auto;
-    padding: 8px 12px;
-    flex-wrap: wrap;
+    background: var(--bg-mobile-header);
+    color: #FFFFFF;
+    height: 58px;
+    padding: 0 12px;
+    border-bottom: none;
+    gap: 8px;
   }
-  .composer-topbar, .composer-bottombar {
-    height: auto;
-    padding: 8px 10px;
-    flex-wrap: wrap;
+
+  .thread-header-left {
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .thread-header .icon-btn {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    flex-shrink: 0;
+  }
+
+  .thread-guest-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .thread-guest-name {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .thread-guest-sub-mobile {
+    display: block;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.78);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hide desktop-only header pills inside the navy top bar */
+  .thread-header .msg-count-pill,
+  .thread-header .pms-badge,
+  .thread-header .stay-dates-pill,
+  .thread-header .desktop-only-chip {
+    display: none;
+  }
+
+  .thread-header-right .header-chip-btn {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #FFFFFF;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 11.5px;
+  }
+
+  /* Mobile Conversation Status Sub-bar (1:467 Stato conversazione) */
+  .mobile-conv-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
     gap: 6px;
   }
+
+  .thread-column.mobile-focus-mode .mobile-conv-statusbar {
+    display: none;
+  }
+
+  /* Mobile Pinned Guest Context in Focus Expanded Mode (1:341 Contesto Ospite Fissato) */
+  .thread-column.mobile-focus-mode .mobile-pinned-guest-context {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 12px;
+    background: var(--bg-app);
+    flex-shrink: 0;
+  }
+
+  .mobile-pinned-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.2px;
+  }
+
+  .mobile-pinned-card {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: #1E293B;
+  }
+
+  /* Collapse full messages stream when Bottom Sheet Focus is expanded on mobile (1:320) */
+  .thread-column.mobile-focus-mode .messages-stream {
+    display: none;
+  }
+
+  /* Messages Stream & Inline Handover Card on Mobile Standard View (1:482) */
+  .messages-stream {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .mobile-handover-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 9px 11px;
+    flex-shrink: 0;
+  }
+
+  .msg-row {
+    max-width: 100%;
+  }
+
+  .msg-bubble {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+
+  /* Mobile Standard Composer (1:520 Composer Mobile · Senior UI v2) */
+  .composer-wrapper {
+    padding: 0;
+    background: transparent;
+    border-top: none;
+  }
+
+  .composer-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  /* Mobile Bottom Sheet Focus Expanded (1:364 Bottom Sheet Focus · Senior Mobile UI v2) */
+  .thread-column.mobile-focus-mode .composer-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .composer-card.focus-expanded {
+    flex: 1;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top: 1px solid #CBD5E1;
+    box-shadow: 0 -8px 30px rgba(14, 20, 36, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .composer-card.focus-expanded .mobile-sheet-drag-handle {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 2px;
+    background: var(--bg-surface);
+    flex-shrink: 0;
+  }
+
+  .drag-pill {
+    width: 36px;
+    height: 4px;
+    border-radius: 99px;
+    background: #CBD5E1;
+  }
+
+  .composer-topbar {
+    height: auto;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .composer-topbar-left {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .composer-topbar .v-divider {
+    display: none;
+  }
+
+  /* Hide the 3 AI buttons in mobile compact standard mode; show them as a 3-column bar in Focus Bottom Sheet */
+  .composer-ai-buttons-group {
+    display: none;
+  }
+
+  .composer-card.focus-expanded .composer-ai-buttons-group {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+    order: 3;
+    padding-top: 4px;
+  }
+
+  .composer-card.focus-expanded .composer-ai-buttons-group .ai-action-btn {
+    flex: 1;
+    justify-content: center;
+    height: 30px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+
+  /* Stacked IT + Target Language Split Surface on Mobile */
   .composer-split-surface {
     grid-template-columns: 1fr;
   }
+
+  .composer-card.focus-expanded .composer-split-surface {
+    margin: 6px 12px;
+    width: calc(100% - 24px);
+    border: 1.5px solid var(--brand);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
   .composer-col-origin {
+    padding: 10px 12px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
-  .messages-stream {
-    padding: 12px;
+
+  .composer-col-target {
+    padding: 8px 12px;
+  }
+
+  .composer-textarea {
+    min-height: 52px;
+    font-size: 12.5px;
+  }
+
+  .translation-preview-textarea {
+    min-height: 42px;
+    font-size: 12px;
+  }
+
+  .composer-card.focus-expanded .composer-textarea {
+    min-height: 76px;
+  }
+
+  .composer-card.focus-expanded .translation-preview-textarea {
+    min-height: 68px;
+  }
+
+  /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet (1:406) */
+  .composer-card.focus-expanded .mobile-copilot-inline-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px 12px 8px;
+    flex-shrink: 0;
+  }
+
+  .mobile-copilot-card {
+    background: var(--bg-subtle);
+    border: 1px solid #E2E8F0;
+    border-radius: 9px;
+    padding: 7px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-copilot-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  /* Thumb Zone Bottom Bar (1:547 / 1:429) */
+  .composer-bottombar {
+    height: auto;
+    padding: 8px 12px;
+    margin-top: auto;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .composer-tools-left {
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .composer-tools-left .desktop-autosave-hint {
+    display: none;
+  }
+
+  .mobile-only-tool {
+    display: inline-flex;
+  }
+
+  .tool-chip-btn {
+    height: 30px;
+    padding: 0 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .schedule-btn {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .send-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 11.5px;
+    white-space: nowrap;
   }
 }

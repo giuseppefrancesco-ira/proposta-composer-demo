@@ -16,6 +16,10 @@ const CONVERSATIONS = {
       sentiment: 'Positivo (Codice Nuki OK)',
       statoAI: 'Bozza pronta da KB (94%)'
     },
+    pinnedQuestions: [
+      { time: '11:20 · Parcheggio', text: '"Il codice Nuki funziona! C\'è un posto auto riservato nel cortile?"' },
+      { time: '11:45 · Biancheria Extra', text: '"Super, grazie! Se avrò bisogno di asciugamani vi scriverò."' }
+    ],
     tags: ['#Parcheggio', '#Check-in', '#Biancheria', '#AccessoCodice'],
     standardDraftIT: 'Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile interno, per aprire il cancello puoi usare lo stesso codice 000000. Per gli asciugamani extra scrivici pure qui quando vuoi e te li portiamo subito.',
     standardDraftTarget: 'Cześć Adam, dziękuję! Na wewnętrznym dziedzińcu czeka miejsce parkingowe nr 14, bramę otworzysz tym samym kodem 000000. W sprawie dodatkowych ręczników napisz do nas tutaj w każdej chwili, a od razu je przyniesiemy.',
@@ -77,6 +81,9 @@ const CONVERSATIONS = {
       sentiment: 'Cordiale',
       statoAI: 'Bozza pronta da KB (91%)'
     },
+    pinnedQuestions: [
+      { time: '10:15 · Deposito Bagagli', text: '"Il nostro treno arriva alle 11:15. È possibile lasciare le valigie prima del check-in?"' }
+    ],
     tags: ['#EarlyCheckIn', '#Bagagli', '#CodiciAccesso'],
     standardDraftIT: 'Ciao Sophie! Puoi lasciare i bagagli già dalle 11:30 negli armadietti smart al piano terra usando il codice 4490. Appena la camera sarà pronta ti avviseremo qui.',
     standardDraftTarget: 'Bonjour Sophie ! Vous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents au rez-de-chaussée avec le code 4490. Dès que la chambre sera prête, nous vous préviendrons ici.',
@@ -113,6 +120,9 @@ const CONVERSATIONS = {
       sentiment: 'Eccellente (5 stelle)',
       statoAI: 'Completato'
     },
+    pinnedQuestions: [
+      { time: 'Ieri 18:20 · Ricevuta', text: '"Soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno?"' }
+    ],
     tags: ['#Fattura', '#Check-out', '#Recensione'],
     standardDraftIT: 'Ciao Francesco, grazie ancora per essere stato nostro ospite! Trovi in allegato la ricevuta richiesta. Ti aspettiamo presto a Casa Aurora!',
     standardDraftTarget: 'Hi Francesco, thank you again for staying with us! Please find attached the requested receipt. We look forward to welcoming you back to Casa Aurora soon!',
@@ -138,36 +148,35 @@ let state = {
   focusExpanded: false,
   channelMode: 'guest',
   rightTab: 'ai',
-  demoStageMode: 'desktop-standard',
   editingTranslation: false,
   promptOpen: false,
-  leftCollapsed: false,
-  rightCollapsed: false
+  leftCollapsed: window.innerWidth <= 900,
+  rightCollapsed: window.innerWidth <= 900,
+  wasMobile: window.innerWidth <= 900
 };
+
+function isMobileViewport() {
+  return window.innerWidth <= 900;
+}
 
 function getConv() {
   return CONVERSATIONS[state.activeConvId];
 }
 
-function setDemoStageMode(mode) {
-  state.demoStageMode = mode;
-  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
-  });
-  const stage = document.getElementById('demoStage');
-  if (mode === 'mobile-overview') {
-    stage.classList.add('mobile-stage-active');
-  } else {
-    stage.classList.remove('mobile-stage-active');
-    if (mode === 'desktop-focus') {
-      state.focusExpanded = true;
-      state.rightTab = 'kb';
-    } else if (mode === 'desktop-standard') {
-      state.focusExpanded = false;
-      state.rightTab = 'ai';
-    }
-    syncAllUI();
-  }
+function syncDrawerBackdrop() {
+  const backdrop = document.getElementById('mobileBackdrop');
+  if (!backdrop) return;
+  const anyDrawerOpenOnMobile = isMobileViewport() && (!state.leftCollapsed || !state.rightCollapsed);
+  backdrop.classList.toggle('open', anyDrawerOpenOnMobile);
+}
+
+function closeMobileDrawers() {
+  if (!isMobileViewport()) return;
+  state.leftCollapsed = true;
+  state.rightCollapsed = true;
+  document.getElementById('inboxPanel').classList.add('collapsed');
+  document.getElementById('aiSidebar').classList.add('collapsed');
+  syncDrawerBackdrop();
 }
 
 function selectConversation(convId) {
@@ -175,36 +184,55 @@ function selectConversation(convId) {
   document.querySelectorAll('.conv-item').forEach(el => {
     el.classList.toggle('active', el.dataset.conv === convId);
   });
+  if (isMobileViewport()) {
+    closeMobileDrawers();
+  }
   syncAllUI();
 }
 
 function toggleFocusView() {
   state.focusExpanded = !state.focusExpanded;
-  state.demoStageMode = state.focusExpanded ? 'desktop-focus' : 'desktop-standard';
-  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === state.demoStageMode);
-  });
+  if (!isMobileViewport()) {
+    state.rightTab = state.focusExpanded ? 'kb' : 'ai';
+  }
   syncAllUI();
 }
 
 function setChannelMode(mode) {
   state.channelMode = mode;
-  syncAllUI();
+  syncAllUI(true);
 }
 
 function setRightTab(tab) {
   state.rightTab = tab;
-  syncAllUI();
+  if (isMobileViewport() && state.rightCollapsed) {
+    state.rightCollapsed = false;
+    state.leftCollapsed = true;
+    document.getElementById('inboxPanel').classList.add('collapsed');
+    document.getElementById('aiSidebar').classList.remove('collapsed');
+    syncDrawerBackdrop();
+  }
+  syncAllUI(true);
 }
 
 function toggleLeftSidebar() {
   state.leftCollapsed = !state.leftCollapsed;
+  if (isMobileViewport() && !state.leftCollapsed) {
+    state.rightCollapsed = true;
+    document.getElementById('aiSidebar').classList.add('collapsed');
+  }
   document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+  syncDrawerBackdrop();
 }
 
 function toggleRightSidebar() {
   state.rightCollapsed = !state.rightCollapsed;
+  if (isMobileViewport() && !state.rightCollapsed) {
+    state.leftCollapsed = true;
+    document.getElementById('inboxPanel').classList.add('collapsed');
+  }
   document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+  syncDrawerBackdrop();
 }
 
 function togglePromptBar() {
@@ -248,6 +276,9 @@ function insertProposal(type) {
   } else if (type === 'sched-checkin') {
     itArea.value = "Ciao! Ti confermiamo che il self check-in è attivo dalle ore 15:00 con il codice Nuki 000000.";
     plArea.value = "Cześć! Potwierdzamy, że zameldowanie samodzielne jest aktywne od 15:00 z kodem Nuki 000000.";
+  }
+  if (isMobileViewport()) {
+    closeMobileDrawers();
   }
   syncAllUI(true);
   flashSyncBadge('Bozza inserita e tradotta');
@@ -342,7 +373,10 @@ function sendCurrentMessage(scheduledTime = null) {
   }
 
   conv.msgCount = conv.messages.length;
-  renderMessages();
+  if (isMobileViewport() && state.focusExpanded) {
+    state.focusExpanded = false;
+  }
+  syncAllUI(true);
   const stream = document.getElementById('messagesStream');
   stream.scrollTop = stream.scrollHeight;
   flashSyncBadge(scheduledTime ? 'Messaggio programmato!' : 'Messaggio inviato!');
@@ -372,7 +406,21 @@ function deleteScheduledMsg(msgId) {
 function renderMessages() {
   const conv = getConv();
   const stream = document.getElementById('messagesStream');
-  stream.innerHTML = conv.messages.map(m => {
+
+  const mobileHandoverHtml = `
+    <div class="mobile-handover-inline">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:10.5px;font-weight:700;color:var(--brand);letter-spacing:0.2px;">PASSAGGIO CONSEGNE & SINTESI</span>
+        <span class="mini-badge pms">4 punti chiave</span>
+      </div>
+      <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
+        <strong>1. Motivo:</strong> ${conv.handover.motivo}<br/>
+        <strong>2. Priorità:</strong> ${conv.handover.urgenza} · <strong>3. Sentiment:</strong> ${conv.handover.sentiment}
+      </div>
+    </div>
+  `;
+
+  const messagesHtml = conv.messages.map(m => {
     const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
     const badgesHtml = (m.badges || []).map(b => `<span class="mini-badge ${b.cls}">${b.text}</span>`).join('');
     const transHtml = m.textTranslated ? `
@@ -402,13 +450,19 @@ function renderMessages() {
       </div>
     `;
   }).join('');
+
+  stream.innerHTML = mobileHandoverHtml + messagesHtml;
 }
 
 function syncAllUI(preserveText = false) {
   const conv = getConv();
+  const mobile = isMobileViewport();
 
   document.getElementById('threadGuestName').textContent = conv.guestName;
+  document.getElementById('threadGuestSubMobile').textContent = `${conv.dates} · ${conv.unit}`;
   document.getElementById('threadMsgCount').textContent = conv.msgCount;
+  document.getElementById('mobileMsgCount').textContent = conv.msgCount;
+  document.getElementById('mobileLangBadge').textContent = `${conv.langCode} -> IT`;
   document.getElementById('threadStayDates').textContent = `${conv.dates} · ${conv.unit}`;
   document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
 
@@ -416,6 +470,24 @@ function syncAllUI(preserveText = false) {
   document.getElementById('hoUrgenza').textContent = conv.handover.urgenza;
   document.getElementById('hoSentiment').textContent = conv.handover.sentiment;
   document.getElementById('hoStato').textContent = conv.handover.statoAI;
+
+  // Mobile Pinned Guest Context (shown when Focus Bottom Sheet is expanded on mobile)
+  const pinnedChannelBadge = document.getElementById('mobilePinnedChannelBadge');
+  if (pinnedChannelBadge) {
+    pinnedChannelBadge.textContent = `${conv.channel} · ${conv.langCode}→IT`;
+  }
+  const pinnedCard = document.getElementById('mobilePinnedContextCard');
+  if (pinnedCard) {
+    pinnedCard.innerHTML = (conv.pinnedQuestions || []).map((q, idx) => `
+      <div style="${idx > 0 ? 'border-top:1px solid #F1F5F9;padding-top:5px;' : ''}">
+        <span style="font-size:10px;font-weight:700;color:var(--brand);margin-right:4px;">${q.time}</span>
+        <span>${q.text}</span>
+      </div>
+    `).join('');
+  }
+
+  const threadCol = document.getElementById('threadColumn');
+  threadCol.classList.toggle('mobile-focus-mode', mobile && state.focusExpanded);
 
   const card = document.getElementById('composerCard');
   card.classList.toggle('focus-expanded', state.focusExpanded);
@@ -425,15 +497,19 @@ function syncAllUI(preserveText = false) {
   focusBtn.classList.toggle('active', state.focusExpanded);
   focusBtn.innerHTML = state.focusExpanded
     ? '<span>⤡</span><span>Riduci vista</span>'
-    : '<span>⤢</span><span>Espandi vista</span>';
+    : '<span>⤢</span><span>Espandi</span>';
 
   document.getElementById('tabChannelGuest').classList.toggle('active', state.channelMode === 'guest');
   document.getElementById('tabChannelNote').classList.toggle('active', state.channelMode === 'note');
 
   const sendBtn = document.getElementById('mainSendBtn');
-  sendBtn.innerHTML = state.channelMode === 'note'
-    ? '<span>Salva nota interna</span>'
-    : `<span>Invia in ${conv.langName} (${conv.langCode})</span><span style="background:#1D4ED8;color:#DBEAFE;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:500;">⌘↵</span>`;
+  if (state.channelMode === 'note') {
+    sendBtn.innerHTML = '<span>Salva nota interna</span>';
+  } else if (mobile) {
+    sendBtn.innerHTML = `<span>Invia in ${conv.langCode}</span>`;
+  } else {
+    sendBtn.innerHTML = `<span>Invia in ${conv.langName} (${conv.langCode})</span><span style="background:#1D4ED8;color:#DBEAFE;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:500;">⌘↵</span>`;
+  }
 
   const itArea = document.getElementById('composerTextarea');
   const plArea = document.getElementById('translationPreviewTextarea');
@@ -449,17 +525,31 @@ function syncAllUI(preserveText = false) {
 
   document.getElementById('langSelectDropdown').value = conv.langCode;
   document.getElementById('btnEditPl').textContent = state.editingTranslation ? 'Salva' : `Modifica ${conv.langCode}`;
-  document.getElementById('aiSidebar').classList.toggle('composer-Expanded-sync', state.focusExpanded);
 
   renderMessages();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.innerWidth < 900) {
-    state.leftCollapsed = true;
-    state.rightCollapsed = true;
-    document.getElementById('inboxPanel').classList.add('collapsed');
-    document.getElementById('aiSidebar').classList.add('collapsed');
+window.addEventListener('resize', () => {
+  const nowMobile = isMobileViewport();
+  if (nowMobile !== state.wasMobile) {
+    state.wasMobile = nowMobile;
+    if (nowMobile) {
+      state.leftCollapsed = true;
+      state.rightCollapsed = true;
+    } else {
+      state.leftCollapsed = false;
+      state.rightCollapsed = false;
+    }
+    document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+    document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+    syncDrawerBackdrop();
   }
+  syncAllUI(true);
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+  document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+  syncDrawerBackdrop();
   syncAllUI();
 });
