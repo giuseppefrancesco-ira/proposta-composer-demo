@@ -1,0 +1,2648 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposta UI/UX · Composer Centrale & Copilot KB (Demo Interattiva)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg-app: #EDF0F6;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F8FAFC;
+  --bg-muted: #F4F6FA;
+  --bg-pill: #EEF1F7;
+  --bg-selected: #E4ECFF;
+  --bg-mobile-header: #131C4D;
+  --text-primary: #0E1424;
+  --text-secondary: #4A5467;
+  --text-muted: #737E93;
+  --brand: #2457E6;
+  --brand-hover: #1D4ED8;
+  --brand-soft: #EEF4FF;
+  --brand-border: #C7D7FE;
+  --border: #E7EAF0;
+  --border-strong: #D4D9E3;
+  --success-bg: #ECFDF3;
+  --success-border: #ABEFC6;
+  --success-text: #067647;
+  --success-dot: #12B76A;
+  --amber-bg: #FFF2D6;
+  --amber-border: #FDE68A;
+  --amber-text: #B45309;
+  --rose-bg: #FFF0F3;
+  --rose-text: #BE123C;
+  --purple-bg: #F0E7FF;
+  --purple-text: #6D28D9;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --shadow-card: 0 4px 20px rgba(14, 20, 36, 0.06);
+  --shadow-modal: 0 16px 40px rgba(14, 20, 36, 0.18);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: #0F172A;
+  color: var(--text-primary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* TOP DEMO SWITCHER BAR */
+.demo-topbar {
+  height: 44px;
+  background: #0B1120;
+  border-bottom: 1px solid #1E293B;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  color: #F8FAFC;
+  font-size: 12px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.demo-topbar-left, .demo-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.demo-brand-badge {
+  background: rgba(36, 87, 230, 0.25);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  color: #93C5FD;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+.demo-mode-tabs {
+  display: flex;
+  background: #1E293B;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 3px;
+}
+
+.demo-mode-tab {
+  color: #94A3B8;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 6px;
+}
+
+.demo-mode-tab:hover {
+  color: #F8FAFC;
+}
+
+.demo-mode-tab.active {
+  background: var(--brand);
+  color: #FFFFFF;
+}
+
+.demo-hint {
+  color: #94A3B8;
+  font-size: 11px;
+}
+
+/* WORKSPACE CONTAINER */
+.demo-stage {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-app);
+}
+
+/* DESKTOP APP SHELL */
+.app-shell {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-app);
+  overflow: hidden;
+}
+
+/* 1. FAR LEFT RAIL (64px) */
+.nav-rail {
+  width: 64px;
+  background: #131C4D;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 8px;
+  flex-shrink: 0;
+}
+
+.nav-rail-top, .nav-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.rail-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.rail-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.rail-btn:hover, .rail-btn.active {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+}
+
+.rail-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #EF4444;
+  color: #FFF;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 99px;
+}
+
+.rail-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #3B82F6;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. LEFT COLUMN: LISTA MESSAGGI (340px) */
+.inbox-panel {
+  width: 340px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.2s ease;
+}
+
+.inbox-panel.collapsed {
+  width: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+.inbox-header {
+  height: 64px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.inbox-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.inbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: var(--bg-pill);
+}
+
+.icon-btn:hover {
+  background: #E2E8F0;
+  color: var(--text-primary);
+}
+
+.btn-primary-square {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inbox-filters {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.search-box {
+  padding: 0 14px 8px;
+  display: none;
+}
+
+.search-box.open {
+  display: block;
+}
+
+.search-input {
+  width: 100%;
+  height: 34px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.filter-pill {
+  height: 36px;
+  padding: 0 11px;
+  border-radius: 20px;
+  background: var(--bg-pill);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.filter-pill.active {
+  background: var(--brand);
+  color: #FFFFFF;
+}
+
+.pill-count {
+  padding: 1px 6px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.9);
+  color: var(--text-primary);
+}
+
+.filter-pill:not(.active) .pill-count {
+  background: #F1A457;
+  color: #FFFFFF;
+}
+
+.inbox-sort-row {
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.inbox-group-row {
+  height: 38px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.toggle-switch {
+  width: 34px;
+  height: 20px;
+  border-radius: 99px;
+  background: var(--brand);
+  position: relative;
+  transition: background 0.15s;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FFF;
+  transition: transform 0.15s;
+}
+
+.toggle-switch.off {
+  background: #CBD5E1;
+}
+
+.toggle-switch.off::after {
+  transform: translateX(-14px);
+}
+
+.inbox-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.booking-group-header {
+  padding: 9px 14px;
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.booking-group-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.booking-code-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #E2E8F0;
+  color: #334155;
+}
+
+.booking-group-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conv-item {
+  padding: 10px 14px 10px 24px;
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  background: var(--bg-surface);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.conv-item:hover {
+  background: #F8FAFC;
+}
+
+.conv-item.active {
+  background: var(--bg-selected);
+  border-left-color: var(--brand);
+}
+
+.conv-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conv-guest-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.conv-time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.conv-preview {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-badges {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.mini-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.mini-badge.channel { background: var(--rose-bg); color: var(--rose-text); }
+.mini-badge.booking { background: #EEF4FF; color: var(--brand); }
+.mini-badge.ai { background: var(--purple-bg); color: var(--purple-text); }
+.mini-badge.pms { background: var(--success-bg); color: var(--success-text); }
+
+.inbox-footer {
+  height: 44px;
+  padding: 0 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* 3. CENTER COLUMN: THREAD & CENTRAL COMPOSER */
+.thread-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-app);
+  min-width: 0;
+  height: 100%;
+}
+
+.thread-header {
+  height: 64px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.thread-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.thread-guest-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.msg-count-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-pill);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.pms-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success-text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pms-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success-dot);
+}
+
+.stay-dates-pill {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.thread-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.header-chip-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--bg-pill);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-chip-btn.outline {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+}
+
+.header-chip-btn:hover {
+  background: #E2E8F0;
+}
+
+/* MESSAGES STREAM */
+.messages-stream {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.msg-row {
+  display: flex;
+  flex-direction: column;
+  max-width: 620px;
+  gap: 6px;
+}
+
+.msg-row.guest {
+  align-self: flex-start;
+}
+
+.msg-row.host {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.msg-bubble {
+  padding: 12px 16px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  border-radius: 14px;
+  width: 100%;
+}
+
+.msg-row.guest .msg-bubble {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-top-left-radius: 4px;
+}
+
+.msg-row.host .msg-bubble {
+  background: var(--brand);
+  color: #FFFFFF;
+  border-top-right-radius: 4px;
+}
+
+.msg-row.host.scheduled .msg-bubble {
+  background: #1E40AF;
+  border: 1.5px dashed #93C5FD;
+}
+
+.msg-row.host.internal-note .msg-bubble {
+  background: #FEF3C7;
+  border: 1px solid #F59E0B;
+  color: #78350F;
+}
+
+.msg-translation-card {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msg-translation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.msg-translation-body {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.msg-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.msg-action-tiny {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.msg-action-tiny.danger {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #B91C1C;
+}
+
+/* CENTRAL COMPOSER (V2 FULL-WIDTH ITALIAN EDITOR) */
+.composer-wrapper {
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border);
+  padding: 10px 16px 14px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.composer-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.composer-card.focus-expanded {
+  border-color: var(--brand);
+  box-shadow: 0 8px 28px rgba(36, 87, 230, 0.12);
+}
+
+.composer-card.note-mode {
+  border-color: #F59E0B;
+  background: #FFFBEB;
+}
+
+.composer-topbar {
+  height: 44px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+.composer-topbar-left, .composer-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.channel-switch {
+  display: flex;
+  background: #F1F5F9;
+  padding: 2px;
+  border-radius: 7px;
+  gap: 2px;
+}
+
+.channel-tab {
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.channel-tab.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.v-divider {
+  width: 1px;
+  height: 16px;
+  background: #E2E8F0;
+}
+
+.ai-action-btn {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ai-action-btn.primary-soft {
+  background: var(--brand-soft);
+  border-color: var(--brand-border);
+  color: var(--brand);
+}
+
+.ai-action-btn:hover {
+  border-color: var(--brand);
+}
+
+.focus-toggle-btn {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.focus-toggle-btn.active {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+/* PROMPT BAR (Optional inline when "Scrivi Prompt" clicked) */
+.prompt-inline-bar {
+  display: none;
+  padding: 8px 16px;
+  background: var(--brand-soft);
+  border-bottom: 1px solid var(--brand-border);
+  align-items: center;
+  gap: 8px;
+}
+
+.prompt-inline-bar.open {
+  display: flex;
+}
+
+.prompt-input {
+  flex: 1;
+  height: 30px;
+  background: #FFFFFF;
+  border: 1px solid var(--brand-border);
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.prompt-apply-btn {
+  height: 30px;
+  padding: 0 12px;
+  background: var(--brand);
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* FULL-WIDTH ITALIAN EDITOR SURFACE */
+.composer-editor-surface {
+  width: 100%;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-surface);
+}
+
+.composer-card.note-mode .composer-editor-surface {
+  background: #FFFBEB;
+}
+
+.editor-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.editor-lang-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-badge-it {
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+.editor-title-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editor-status-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.composer-textarea {
+  width: 100%;
+  min-height: 56px;
+  resize: none;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  outline: none;
+  border: none;
+  background: transparent;
+  transition: min-height 0.2s ease;
+}
+
+.composer-card.focus-expanded .composer-textarea {
+  min-height: 132px;
+}
+
+/* COMPOSER BOTTOM BAR */
+.composer-bottombar {
+  height: 48px;
+  padding: 0 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface);
+}
+
+.composer-tools-left, .composer-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-chip-btn {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tool-chip-btn:hover {
+  background: var(--bg-pill);
+  color: var(--text-primary);
+}
+
+.schedule-btn {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 7px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  color: var(--amber-text);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.send-btn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 7px;
+  background: var(--brand);
+  color: #FFFFFF;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.send-btn:hover {
+  background: var(--brand-hover);
+}
+
+/* 4. RIGHT SIDEBAR: PANNELLO AI & PREVIEW TRADUZIONE IN USCITA (384px) */
+.ai-sidebar {
+  width: 384px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  transition: width 0.2s ease;
+}
+
+.ai-sidebar.collapsed {
+  width: 0;
+  overflow: hidden;
+  border-left: none;
+}
+
+.ai-sidebar-header {
+  height: 64px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ai-tab-pill {
+  flex: 1;
+  height: 38px;
+  border-radius: 20px;
+  background: var(--bg-pill);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ai-tab-pill.active {
+  background: var(--brand);
+  color: #FFFFFF;
+}
+
+.ai-sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-section-banner {
+  height: 34px;
+  padding: 0 10px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ai-section-banner.amber {
+  background: var(--amber-bg);
+  border-color: var(--amber-border);
+  color: #92400E;
+}
+
+.handover-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.handover-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.handover-label {
+  color: var(--text-muted);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.handover-val {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.tag-chip.active {
+  background: var(--brand-soft);
+  border-color: var(--brand-border);
+  color: var(--brand);
+}
+
+.confidence-bar {
+  height: 28px;
+  padding: 0 10px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.proposal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.proposal-card.selected {
+  border: 1.5px solid var(--brand);
+  background: #F8FAFF;
+}
+
+.proposal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.proposal-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.proposal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.btn-use-proposal {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: var(--brand);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* PINNED BOTTOM SECTION IN RIGHT SIDEBAR: SEZIONE TRADUZIONE IN USCITA */
+.translation-preview-section {
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border-strong);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.translation-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.translation-target-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.lang-select-dropdown {
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 5px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.translation-sync-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #059669;
+}
+
+.sync-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.btn-edit-pl {
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-strong);
+  font-size: 10px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.btn-edit-pl.editing {
+  background: var(--brand);
+  color: #FFFFFF;
+  border-color: var(--brand);
+}
+
+.translation-preview-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.translation-preview-textarea {
+  width: 100%;
+  min-height: 76px;
+  resize: none;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1E293B;
+  background: transparent;
+  outline: none;
+}
+
+.composer-Expanded-sync .translation-preview-textarea {
+  min-height: 126px;
+}
+
+/* MOBILE 3-SCREENS OVERVIEW & SIMULATOR */
+.mobile-overview-stage {
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: #0F172A;
+  padding: 24px;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mobile-stage-active .app-shell {
+  display: none;
+}
+
+.mobile-stage-active .mobile-overview-stage {
+  display: flex;
+}
+
+.phone-frame {
+  width: 390px;
+  height: 844px;
+  background: var(--bg-muted);
+  border-radius: 28px;
+  border: 6px solid #1E293B;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.phone-caption {
+  color: #94A3B8;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.mobile-top-header {
+  background: var(--bg-mobile-header);
+  color: #FFFFFF;
+  padding: 10px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mobile-status-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.mobile-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* MODAL FOR PROGRAMMABLE MESSAGES */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 20, 36, 0.55);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-card {
+  width: 440px;
+  max-width: 92vw;
+  background: #FFFFFF;
+  border-radius: 14px;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-modal);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* NATIVE RESPONSIVE MEDIA QUERY (< 1024px) */
+@media (max-width: 1024px) {
+  .nav-rail { display: none; }
+  .inbox-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-modal);
+  }
+  .ai-sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 50;
+    width: 340px;
+    box-shadow: var(--shadow-modal);
+  }
+}
+
+</style>
+</head>
+<body>
+
+  <!-- BARRA SUPERIORE SWITCHER DEMO PER DARIO -->
+  <header class="demo-topbar">
+    <div class="demo-topbar-left">
+      <span class="demo-brand-badge">PROPOSTA V2 OTTIMIZZATA</span>
+      <div class="demo-mode-tabs">
+        <button class="demo-mode-tab active" data-mode="desktop-standard" onclick="setDemoStageMode('desktop-standard')">
+          Frame A · Vista Standard (Desktop)
+        </button>
+        <button class="demo-mode-tab" data-mode="desktop-focus" onclick="setDemoStageMode('desktop-focus')">
+          Frame B · Vista Focus Espansa (Desktop)
+        </button>
+        <button class="demo-mode-tab" data-mode="mobile-overview" onclick="setDemoStageMode('mobile-overview')">
+          Mobile · 3 Viste V2 Ottimizzate
+        </button>
+      </div>
+    </div>
+    <div class="demo-topbar-right">
+      <span class="demo-hint">Testo IT a tutta larghezza nel composer · Traduzione in uscita nella sidebar destra</span>
+    </div>
+  </header>
+
+  <!-- CONTENITORE PRINCIPALE -->
+  <main class="demo-stage" id="demoStage">
+
+    <!-- ======================= DESKTOP RESPONSIVE SHELL ======================= -->
+    <div class="app-shell">
+
+      <!-- 1. NAVIGAZIONE LATERALE (64px) -->
+      <nav class="nav-rail">
+        <div class="nav-rail-top">
+          <div class="rail-logo">CA</div>
+          <button class="rail-btn active" title="Messaggi" onclick="toggleLeftSidebar()">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span class="rail-badge">3</span>
+          </button>
+          <button class="rail-btn" title="Prenotazioni PMS">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </button>
+          <button class="rail-btn" title="Knowledge Base AI" onclick="setRightTab('kb')">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </button>
+          <button class="rail-btn" title="Messaggi Programmati" onclick="openScheduleModal()">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <div class="nav-rail-bottom">
+          <div class="rail-avatar" title="Operatore Front-Desk">FD</div>
+        </div>
+      </nav>
+
+      <!-- 2. LISTA MESSAGGI (340px) -->
+      <aside class="inbox-panel" id="inboxPanel">
+        <div class="inbox-header">
+          <span class="inbox-title">Messaggi</span>
+          <div class="inbox-actions">
+            <button class="icon-btn" title="Esporta conversazioni">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+            <button class="btn-primary-square" title="Nuovo messaggio" onclick="openScheduleModal()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="inbox-filters">
+          <button class="icon-btn" style="border-radius:20px;flex-shrink:0;" onclick="document.getElementById('searchBox').classList.toggle('open')">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <button class="filter-pill active">
+            <span>Soggiorno in corso</span>
+            <span class="pill-count">5</span>
+          </button>
+          <button class="filter-pill">
+            <span>Archiviate</span>
+            <span class="pill-count">12</span>
+          </button>
+        </div>
+
+        <div class="search-box" id="searchBox">
+          <input type="text" class="search-input" placeholder="Cerca ospite, codice DEMO o testo..." />
+        </div>
+
+        <div class="inbox-sort-row">
+          <span style="font-weight:600;">ORDINA PER</span>
+          <span>↕ Ultimo messaggio</span>
+          <span style="background:#EEF1F7;padding:4px 9px;border-radius:14px;font-weight:600;">Avanzati</span>
+        </div>
+
+        <div class="inbox-group-row">
+          <span>Raggruppa per prenotazione</span>
+          <button class="toggle-switch" onclick="this.classList.toggle('off')"></button>
+        </div>
+
+        <div class="inbox-list">
+          <!-- Gruppo DEMO-1042 -->
+          <div class="booking-group-header" onclick="selectConversation('francesco')">
+            <div class="booking-group-top">
+              <span>Prenotazione DEMO-1042</span>
+              <span class="booking-code-badge">Chiusa</span>
+            </div>
+            <div class="booking-group-sub">
+              <span>Francesco Ira · 02/10 – 06/10</span>
+              <span>Ieri</span>
+            </div>
+          </div>
+
+          <!-- Gruppo DEMO-1051 -->
+          <div class="booking-group-header" onclick="selectConversation('sophie')">
+            <div class="booking-group-top">
+              <span>Prenotazione DEMO-1051</span>
+              <span class="mini-badge channel">Da leggere</span>
+            </div>
+            <div class="booking-group-sub">
+              <span>Sophie Laurent · Check-in Oggi</span>
+              <span>10:15</span>
+            </div>
+          </div>
+          <div class="conv-item" data-conv="sophie" onclick="selectConversation('sophie')">
+            <div class="conv-item-top">
+              <span class="conv-guest-name">Sophie Laurent</span>
+              <span class="conv-time">10:15</span>
+            </div>
+            <div class="conv-preview">Est-il possible de déposer nos valises avant 11h30 ?</div>
+            <div class="conv-badges">
+              <span class="mini-badge booking">BOOKING</span>
+              <span class="mini-badge ai">FR -> IT · AI 91%</span>
+            </div>
+          </div>
+
+          <!-- Gruppo DEMO-1048 (Aperta e Selezionata) -->
+          <div class="booking-group-header" onclick="selectConversation('adam')">
+            <div class="booking-group-top">
+              <span>Prenotazione DEMO-1048 · Aperta</span>
+              <span class="mini-badge pms">PMS Certo</span>
+            </div>
+            <div class="booking-group-sub">
+              <span>Adam Nowak · 06/10 – 11/10 · S04</span>
+              <span>11:45</span>
+            </div>
+          </div>
+          <div class="conv-item active" data-conv="adam" onclick="selectConversation('adam')">
+            <div class="conv-item-top">
+              <span class="conv-guest-name">Adam Nowak</span>
+              <span class="conv-time">11:45</span>
+            </div>
+            <div class="conv-preview">Super, dziękuję! Właśnie przeczytałem instrukcję...</div>
+            <div class="conv-badges">
+              <span class="mini-badge channel">AIRBNB</span>
+              <span class="mini-badge booking">PL -> IT</span>
+              <span class="mini-badge ai">Bozza AI pronta</span>
+            </div>
+          </div>
+          <div class="conv-item" data-conv="francesco" onclick="selectConversation('francesco')">
+            <div class="conv-item-top">
+              <span class="conv-guest-name">Francesco Ira (WhatsApp)</span>
+              <span class="conv-time">Ieri</span>
+            </div>
+            <div class="conv-preview">Potete girarmi la ricevuta della tassa di soggiorno?</div>
+            <div class="conv-badges">
+              <span class="mini-badge pms">WHATSAPP</span>
+              <span class="mini-badge booking">IT</span>
+            </div>
+          </div>
+
+          <!-- Altre prenotazioni compatte -->
+          <div class="booking-group-header">
+            <div class="booking-group-top">
+              <span>Prenotazione DEMO-1063</span>
+              <span class="booking-code-badge">Programmato</span>
+            </div>
+            <div class="booking-group-sub">
+              <span>Lukas Weber · Check-in Domani</span>
+              <span>Domani 09:00</span>
+            </div>
+          </div>
+          <div class="booking-group-header">
+            <div class="booking-group-top">
+              <span>Prenotazione DEMO-1078</span>
+              <span class="booking-code-badge">Chiusa</span>
+            </div>
+            <div class="booking-group-sub">
+              <span>Elena Rossi · Suite Navigli</span>
+              <span>04/10</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inbox-footer">
+          <span>Casa Aurora · Demo</span>
+          <span style="font-weight:600;color:var(--brand);">Sincronizzato PMS</span>
+        </div>
+      </aside>
+
+      <!-- 3. COLONNA CENTRALE: THREAD + COMPOSER A TUTTA LARGHEZZA -->
+      <section class="thread-column">
+        <!-- Intestazione Thread -->
+        <header class="thread-header">
+          <div class="thread-header-left">
+            <button class="icon-btn" title="Mostra/Nascondi Lista" onclick="toggleLeftSidebar()">☰</button>
+            <span class="thread-guest-name" id="threadGuestName">Adam Nowak</span>
+            <span class="msg-count-pill">
+              <span id="threadMsgCount">9</span> messaggi
+            </span>
+            <span class="pms-badge">
+              <span class="pms-dot"></span>
+              <span>Aggancio PMS Certo</span>
+            </span>
+            <span class="stay-dates-pill" id="threadStayDates">06/10/26 – 11/10/26 · App. Duomo Suite · S04</span>
+          </div>
+          <div class="thread-header-right">
+            <button class="header-chip-btn outline">Scheda Soggiorno S04</button>
+            <button class="header-chip-btn" onclick="flashSyncBadge('Dati PMS aggiornati')">Aggiorna dati</button>
+            <button class="header-chip-btn" id="threadLangChip">Lingua ospite: PL (Polacco)</button>
+            <button class="header-chip-btn outline" onclick="toggleRightSidebar()" title="Mostra/Nascondi Pannello AI">
+              Pannello AI ⇄
+            </button>
+          </div>
+        </header>
+
+        <!-- Flusso Messaggi (Rimane sempre visibile anche in Vista Focus Espansa) -->
+        <div class="messages-stream" id="messagesStream"></div>
+
+        <!-- COMPOSER CENTRALE · TESTO ORIGINALE ITALIANO A TUTTA LARGHEZZA (100%) -->
+        <div class="composer-wrapper">
+          <div class="composer-card" id="composerCard">
+
+            <!-- Barra Superiore Controlli -->
+            <div class="composer-topbar">
+              <div class="composer-topbar-left">
+                <div class="channel-switch">
+                  <button class="channel-tab active" id="tabChannelGuest" onclick="setChannelMode('guest')">
+                    Risposta Ospite
+                  </button>
+                  <button class="channel-tab" id="tabChannelNote" onclick="setChannelMode('note')">
+                    Nota Interna
+                  </button>
+                </div>
+                <div class="v-divider"></div>
+                <button class="ai-action-btn primary-soft" onclick="insertProposal(state.focusExpanded ? 'full' : 'short')">
+                  ✦ Genera risposta AI
+                </button>
+                <button class="ai-action-btn" onclick="togglePromptBar()">
+                  ✎ Scrivi Prompt
+                </button>
+                <button class="ai-action-btn" onclick="document.getElementById('composerTextarea').focus()">
+                  Scrivi manualmente
+                </button>
+              </div>
+              <div class="composer-topbar-right">
+                <button class="focus-toggle-btn" id="focusToggleBtn" onclick="toggleFocusView()">
+                  <span>⤢</span>
+                  <span>Espandi vista</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Barra Inline Prompt AI (quando clicchi "Scrivi Prompt") -->
+            <div class="prompt-inline-bar" id="promptInlineBar">
+              <input type="text" id="promptInput" class="prompt-input" placeholder="Es: Aggiungi istruzioni orario check-out 10:30 o rendi il tono più formale..." onkeydown="if(event.key==='Enter') applyAiPrompt()" />
+              <button class="prompt-apply-btn" onclick="applyAiPrompt()">Applica alla bozza</button>
+            </div>
+
+            <!-- Superficie Scrittura · Testo Originale (Italiano) 100% Larghezza Orizzontale -->
+            <div class="composer-editor-surface">
+              <div class="editor-header-row">
+                <div class="editor-lang-group">
+                  <span class="lang-badge-it">IT</span>
+                  <span class="editor-title-label">Testo originale (Italiano) · Larghezza piena</span>
+                </div>
+                <span class="editor-status-label">Editor attivo · Traduzione in uscita nella sidebar destra →</span>
+              </div>
+              <textarea
+                id="composerTextarea"
+                class="composer-textarea"
+                oninput="handleItalianInput()"
+                placeholder="Scrivi qui la risposta in italiano..."
+              ></textarea>
+            </div>
+
+            <!-- Barra Inferiore Strumenti e Invio -->
+            <div class="composer-bottombar">
+              <div class="composer-tools-left">
+                <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega</button>
+                <button class="tool-chip-btn" onclick="setRightTab('kb')">KB · Inserisci da KB</button>
+                <button class="tool-chip-btn" onclick="setRightTab('kb')">Template · Messaggi pronti</button>
+                <button class="tool-chip-btn" onclick="setRightTab('kb')"># Tag</button>
+              </div>
+              <div class="composer-actions-right">
+                <button class="schedule-btn" onclick="openScheduleModal()">
+                  Programma invio
+                </button>
+                <button class="send-btn" id="mainSendBtn" onclick="sendCurrentMessage()">
+                  Invia risposta (PL)
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI + PREVIEW TRADUZIONE IN USCITA (384px) -->
+      <aside class="ai-sidebar" id="aiSidebar">
+        <!-- Intestazione Tabs -->
+        <div class="ai-sidebar-header">
+          <button class="ai-tab-pill active" id="rightTabAi" onclick="setRightTab('ai')">
+            Assistente AI
+          </button>
+          <button class="ai-tab-pill" id="rightTabKb" onclick="setRightTab('kb')">
+            Risorse e KB
+          </button>
+        </div>
+
+        <!-- Contenuto Scorrevole Superiore: Tab 1 (Assistente AI) -->
+        <div class="ai-sidebar-scroll" id="rightContentAi">
+          <!-- Sezione Passaggio Consegne -->
+          <div class="ai-section">
+            <div class="ai-section-banner">
+              <span>PASSAGGIO CONSEGNE & SINTESI</span>
+              <span class="mini-badge pms">Aggiornato</span>
+            </div>
+            <div class="handover-card">
+              <div class="handover-row">
+                <span class="handover-label">Motivo richiesta:</span>
+                <span class="handover-val" id="hoMotivo">Richiesta posto auto cortile + biancheria extra</span>
+              </div>
+              <div class="handover-row">
+                <span class="handover-label">Priorità operativa:</span>
+                <span class="handover-val" id="hoUrgenza">Media · Ospite in struttura</span>
+              </div>
+              <div class="handover-row">
+                <span class="handover-label">Sentiment ospite:</span>
+                <span class="handover-val" id="hoSentiment">Positivo (Codice Nuki OK)</span>
+              </div>
+              <div class="handover-row">
+                <span class="handover-label">Stato Copilot:</span>
+                <span class="handover-val" id="hoStato">Bozza pronta da KB (94%)</span>
+              </div>
+            </div>
+            <div class="tags-wrap">
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Parcheggio</span>
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Check-in</span>
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Biancheria</span>
+              <span class="tag-chip" onclick="this.classList.toggle('active')">#AccessoCodice</span>
+            </div>
+          </div>
+
+          <!-- Sezione Proposte AI -->
+          <div class="ai-section">
+            <div class="confidence-bar">
+              <span>Autonomia AI: Supervisionata</span>
+              <span style="color:var(--success-text);">Confidenza 94%</span>
+            </div>
+
+            <div class="proposal-card selected" onclick="insertProposal('short')">
+              <div class="proposal-top">
+                <span>Proposta 1 · Completa (Parcheggio + Biancheria)</span>
+                <span class="mini-badge booking">KB Verificata</span>
+              </div>
+              <div class="proposal-text">
+                Conferma posto auto n. 14 nel cortile interno (codice cancello 000000) e disponibilità consegna asciugamani extra.
+              </div>
+              <div class="proposal-footer">
+                <span style="font-size:10.5px;color:var(--text-muted);">Fonte: FAQ Struttura S04</span>
+                <button class="btn-use-proposal" onclick="event.stopPropagation(); insertProposal('short')">Usa bozza standard</button>
+              </div>
+            </div>
+
+            <div class="proposal-card" onclick="insertProposal('full')">
+              <div class="proposal-top">
+                <span>Proposta 2 · Estesa + Promemoria Check-out</span>
+                <span class="mini-badge ai">Multi-paragrafo</span>
+              </div>
+              <div class="proposal-text">
+                Include dettagli tastiera esterna cancello, tempistica consegna 30 min e promemoria check-out domenica entro le 10:30.
+              </div>
+              <div class="proposal-footer">
+                <span style="font-size:10.5px;color:var(--text-muted);">Ideale per Vista Espansa</span>
+                <button class="btn-use-proposal" onclick="event.stopPropagation(); insertProposal('full')">Usa in Focus Espanso</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Strumenti Contestuali -->
+          <div class="ai-section" style="border-bottom:none;">
+            <span style="font-size:10.5px;font-weight:700;color:var(--text-secondary);letter-spacing:0.5px;">STRUMENTI CONTESTUALI</span>
+            <div style="display:flex;gap:8px;">
+              <button class="tool-chip-btn" style="flex:1;justify-content:center;height:34px;" onclick="flashSyncBadge('Analisi OCR Screenshot pronta')">
+                Da screenshot (OCR)
+              </button>
+              <button class="tool-chip-btn" style="flex:1;justify-content:center;height:34px;" onclick="insertProposal('full')">
+                Bozza recensione
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenuto Scorrevole Superiore: Tab 2 (Risorse e KB - come in Frame B) -->
+        <div class="ai-sidebar-scroll" id="rightContentKb" style="display:none;">
+          <!-- Sezione Knowledge Base -->
+          <div class="ai-section">
+            <div class="ai-section-banner">
+              <span>FONTI KNOWLEDGE BASE RILEVATE</span>
+              <span class="mini-badge booking">2 Fonti</span>
+            </div>
+            <div class="proposal-card" onclick="insertProposal('kb-parking')">
+              <div class="proposal-top">
+                <span>KB · Parcheggio Cortile Interno S04</span>
+                <button class="btn-use-proposal">Inserisci</button>
+              </div>
+              <div class="proposal-text">Posto auto n. 14 riservato nel cortile. Apertura cancello con codice 000000.</div>
+            </div>
+            <div class="proposal-card" onclick="insertProposal('kb-towels')">
+              <div class="proposal-top">
+                <span>KB · Biancheria e Asciugamani Extra</span>
+                <button class="btn-use-proposal">Inserisci</button>
+              </div>
+              <div class="proposal-text">Consegna set extra in appartamento entro 30 minuti su richiesta in chat.</div>
+            </div>
+            <div class="handover-card" style="background:var(--bg-muted);">
+              <div style="font-weight:600;font-size:11.5px;">Nuova FAQ Rilevata dalla conversazione</div>
+              <div style="font-size:11px;color:var(--text-secondary);">Salvare la risposta sul codice cancello cortile + posto n. 14 nella Knowledge Base di Casa Aurora?</div>
+              <button class="ai-action-btn primary-soft" style="justify-content:center;margin-top:2px;" onclick="this.textContent='✓ Salvata in Knowledge Base'">
+                + Salva risposta in Knowledge Base
+              </button>
+            </div>
+          </div>
+
+          <!-- Schede Programmate / Messaggi Pronti -->
+          <div class="ai-section">
+            <div class="ai-section-banner amber">
+              <span>MESSAGGI PRONTI & PROGRAMMABILI</span>
+              <span>3 Template</span>
+            </div>
+            <div class="proposal-card" style="border-color:var(--amber-border);" onclick="insertProposal('sched-checkin')">
+              <div class="proposal-top">
+                <span>1. Istruzioni Self Check-in Nuki</span>
+                <span class="mini-badge channel">Auto 14:00</span>
+              </div>
+            </div>
+            <div class="proposal-card" style="border-color:var(--amber-border);" onclick="insertProposal('kb-parking')">
+              <div class="proposal-top">
+                <span>2. Regole Parcheggio e Accesso Cortile</span>
+                <span class="mini-badge booking">Rapido</span>
+              </div>
+            </div>
+            <div class="proposal-card" style="border-color:var(--amber-border);" onclick="openScheduleModal()">
+              <div class="proposal-top">
+                <span>3. Promemoria Check-out 10:30 (Programmabile)</span>
+                <span class="mini-badge pms">Programma</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tag Disponibili -->
+          <div class="ai-section" style="border-bottom:none;">
+            <div class="ai-section-banner">
+              <span>TAG DISPONIBILI CONVERSAZIONE</span>
+              <span>6 Tag</span>
+            </div>
+            <div class="tags-wrap">
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Parcheggio</span>
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Check-in</span>
+              <span class="tag-chip active" onclick="this.classList.toggle('active')">#Biancheria</span>
+              <span class="tag-chip" onclick="this.classList.toggle('active')">#AccessoCodice</span>
+              <span class="tag-chip" onclick="this.classList.toggle('active')">#LateCheckOut</span>
+              <span class="tag-chip" onclick="this.classList.toggle('active')">#VIP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE FISSA IN BASSO: ANTEPRIMA TRADUZIONE IN USCITA (SPOSTATA NELLA SIDEBAR DESTRA) -->
+        <div class="translation-preview-section">
+          <div class="translation-preview-header">
+            <div class="translation-target-selector">
+              <span>Traduzione in uscita:</span>
+              <select id="langSelectDropdown" class="lang-select-dropdown" onchange="flashSyncBadge('Lingua aggiornata')">
+                <option value="PL">PL · Polacco</option>
+                <option value="FR">FR · Francese</option>
+                <option value="EN">EN · Inglese</option>
+                <option value="DE">DE · Tedesco</option>
+              </select>
+            </div>
+            <div class="translation-sync-actions">
+              <span class="sync-indicator">
+                <span class="sync-dot"></span>
+                <span id="syncStatusText">Sincronizzata</span>
+              </span>
+              <button class="btn-edit-pl" id="btnEditPl" onclick="toggleEditTranslation()">Modifica PL</button>
+            </div>
+          </div>
+          <div class="translation-preview-box">
+            <textarea
+              id="translationPreviewTextarea"
+              class="translation-preview-textarea"
+              readonly
+            ></textarea>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- ======================= VISTA MOBILE (3 SCHERMATE V2 OTTIMIZZATA) ======================= -->
+    <div class="mobile-overview-stage">
+
+      <!-- SCHERMATA MOBILE 1: DRAWER NAVIGAZIONE APERTO -->
+      <div>
+        <div class="phone-caption">1. Mobile · Drawer Navigazione & Prenotazioni</div>
+        <div class="phone-frame">
+          <div class="mobile-top-header">
+            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
+            <div class="mobile-nav-row">
+              <span style="font-weight:700;font-size:16px;">Messaggi · Casa Aurora</span>
+              <span class="mini-badge booking">5 Attive</span>
+            </div>
+          </div>
+          <div style="padding:10px 12px;background:#FFF;border-bottom:1px solid var(--border);display:flex;gap:6px;">
+            <span class="filter-pill active" style="height:30px;font-size:11px;">Soggiorno in corso (5)</span>
+            <span class="filter-pill" style="height:30px;font-size:11px;">Archiviate (12)</span>
+          </div>
+          <div style="flex:1;overflow-y:auto;background:#FFF;">
+            <div class="booking-group-header">
+              <div class="booking-group-top"><span>DEMO-1048 · Aperta</span><span class="mini-badge pms">PMS Certo</span></div>
+              <div class="booking-group-sub"><span>Adam Nowak · 06/10 – 11/10</span><span>11:45</span></div>
+            </div>
+            <div class="conv-item active" onclick="setDemoStageMode('desktop-standard')">
+              <div class="conv-item-top"><span class="conv-guest-name">Adam Nowak</span><span class="conv-time">11:45</span></div>
+              <div class="conv-preview">Super, dziękuję! Właśnie przeczytałem...</div>
+              <div class="conv-badges"><span class="mini-badge channel">AIRBNB</span><span class="mini-badge booking">PL -> IT</span></div>
+            </div>
+            <div class="booking-group-header">
+              <div class="booking-group-top"><span>DEMO-1051 · Da leggere</span><span class="mini-badge channel">Oggi</span></div>
+              <div class="booking-group-sub"><span>Sophie Laurent · Suite Brera</span><span>10:15</span></div>
+            </div>
+            <div class="conv-item" onclick="selectConversation('sophie'); setDemoStageMode('desktop-standard')">
+              <div class="conv-item-top"><span class="conv-guest-name">Sophie Laurent</span><span class="conv-time">10:15</span></div>
+              <div class="conv-preview">Est-il possible de déposer nos valises...</div>
+              <div class="conv-badges"><span class="mini-badge booking">BOOKING</span><span class="mini-badge ai">FR -> IT</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCHERMATA MOBILE 2: CHAT + COMPOSER COMPATTO -->
+      <div>
+        <div class="phone-caption">2. Mobile · Chat & Composer Standard</div>
+        <div class="phone-frame">
+          <div class="mobile-top-header">
+            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
+            <div class="mobile-nav-row">
+              <span>☰</span>
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:15px;">Adam Nowak</div>
+                <div style="font-size:11px;opacity:0.75;">06/10/26 – 11/10/26 · Aggancio PMS Certo</div>
+              </div>
+              <span>⋮</span>
+            </div>
+          </div>
+          <div style="padding:6px 12px;background:#FFF;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <span class="msg-count-pill">9 messaggi</span>
+            <span class="pms-badge"><span class="pms-dot"></span>Aggancio PMS Certo</span>
+            <span class="mini-badge booking">PL -> IT</span>
+          </div>
+          <div style="flex:1;padding:8px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--bg-app);">
+            <div class="handover-card" style="padding:8px 10px;">
+              <div style="font-size:10.5px;font-weight:700;color:var(--brand);">PASSAGGIO CONSEGNE · 2 DOMANDE</div>
+              <div style="font-size:11px;color:var(--text-secondary);">1. Posto auto cortile · 2. Asciugamani extra</div>
+            </div>
+            <div class="msg-row guest" style="max-width:100%;">
+              <div class="msg-bubble" style="font-size:12px;padding:9px 12px;">Super, dziękuję! Jeśli będę potrzebował ręczników, napiszę do Was.</div>
+              <div class="msg-translation-card" style="padding:6px 10px;">
+                <div class="msg-translation-header"><span>Traduzione PL -> IT</span></div>
+                <div class="msg-translation-body" style="font-size:11.5px;">Super, grazie! Se avrò bisogno di asciugamani extra vi scriverò.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Mobile Compact Composer -->
+          <div style="padding:6px 8px;background:#F8FAFC;border-top:1px solid var(--border);">
+            <div class="composer-card" style="border-radius:10px;">
+              <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                <span class="mini-badge booking">Risposta Ospite · IT</span>
+                <button class="ai-action-btn primary-soft" style="height:24px;font-size:10.5px;">✦ AI Pronta</button>
+              </div>
+              <div style="padding:8px 10px;font-size:12px;color:var(--text-primary);">
+                Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile...
+              </div>
+              <div style="padding:6px 10px;background:#F8FAFC;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:11px;">
+                <span style="color:#059669;font-weight:600;">● Traduzione PL Sincronizzata</span>
+                <span style="color:var(--brand);font-weight:600;">Vedi PL ▾</span>
+              </div>
+              <div style="padding:6px 10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;gap:4px;">
+                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;">+ Allega</span>
+                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;">KB</span>
+                  <span class="tool-chip-btn" style="height:26px;font-size:10.5px;" onclick="openScheduleModal()">Programma</span>
+                </div>
+                <button class="send-btn" style="height:28px;font-size:11px;padding:0 12px;">Invia (PL)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCHERMATA MOBILE 3: BOTTOM SHEET FOCUS ESPANSO & COPILOT KB -->
+      <div>
+        <div class="phone-caption">3. Mobile · Bottom Sheet Focus Espanso & Copilot</div>
+        <div class="phone-frame">
+          <div class="mobile-top-header">
+            <div class="mobile-status-bar"><span>9:41</span><span>5G · 100%</span></div>
+            <div class="mobile-nav-row">
+              <span>☰</span>
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:15px;">Adam Nowak</div>
+                <div style="font-size:11px;opacity:0.75;">06/10/26 – 11/10/26 · Aggancio PMS Certo</div>
+              </div>
+              <span>⋮</span>
+            </div>
+          </div>
+          <!-- Contesto Ospite Fissato in Alto -->
+          <div style="padding:6px 10px;background:var(--bg-app);display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;color:#475569;">
+              <span>CONTESTO OSPITE FISSATO · 2 DOMANDE</span>
+              <span style="color:var(--rose-text);">AIRBNB · PL→IT</span>
+            </div>
+            <div style="background:#FFF;border:1px solid var(--border-strong);border-radius:8px;padding:6px 8px;font-size:11px;display:flex;flex-direction:column;gap:4px;">
+              <div><strong>11:20:</strong> "Il codice Nuki funziona! C'è un posto auto riservato?"</div>
+              <div style="border-top:1px solid #F1F5F9;padding-top:4px;"><strong>11:45:</strong> "Super, grazie! Se avrò bisogno di asciugamani vi scriverò."</div>
+            </div>
+          </div>
+          <!-- Bottom Sheet Espanso -->
+          <div style="flex:1;background:#FFF;border-top-left-radius:18px;border-top-right-radius:18px;border-top:1px solid #CBD5E1;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 -6px 20px rgba(14,20,36,0.08);">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="width:36px;height:4px;background:#CBD5E1;border-radius:99px;align-self:center;"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span class="mini-badge booking">Risposta Ospite · Focus</span>
+                <span style="font-size:11px;font-weight:600;color:#475569;">⤡ Riduci vista</span>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="ai-action-btn primary-soft" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">✦ Genera AI</button>
+                <button class="ai-action-btn" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">✎ Prompt</button>
+                <button class="ai-action-btn" style="flex:1;justify-content:center;height:28px;font-size:10.5px;">Manuale</button>
+              </div>
+              <div style="border:1.5px solid var(--brand);border-radius:10px;overflow:hidden;">
+                <div style="padding:8px 10px;background:#FFF;border-bottom:1px solid var(--border);font-size:11.5px;line-height:1.45;">
+                  <div style="font-size:10px;font-weight:700;color:var(--brand);margin-bottom:3px;">IT · TESTO ORIGINALE</div>
+                  Ciao Adam, siamo felici che il codice abbia funzionato! Per il parcheggio puoi usare il posto n. 14 nel cortile (codice 000000).
+                </div>
+                <div style="padding:8px 10px;background:#F8FAFC;font-size:11.5px;line-height:1.45;color:#1E293B;">
+                  <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#059669;margin-bottom:3px;">
+                    <span>PL · ANTEPRIMA TRADUZIONE IN USCITA</span>
+                    <span>● Sincronizzata</span>
+                  </div>
+                  Cześć Adam, cieszymy się, że kod zadziałał! Możesz skorzystać z miejsca nr 14 na dziedzińcu (kod 000000).
+                </div>
+              </div>
+              <div style="background:var(--bg-muted);border:1px solid var(--border-strong);border-radius:8px;padding:6px 8px;font-size:10.5px;display:flex;justify-content:space-between;align-items:center;">
+                <span>Copilot KB · Confidenza 94%</span>
+                <span style="color:var(--brand);font-weight:600;">2 Fonti attive</span>
+              </div>
+            </div>
+            <div style="padding-top:6px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;gap:4px;">
+                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;">+ Allega</span>
+                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;"># Tag</span>
+                <span class="tool-chip-btn" style="height:28px;font-size:10.5px;">KB</span>
+              </div>
+              <button class="send-btn" style="height:30px;font-size:11px;padding:0 12px;" onclick="openScheduleModal()">Invia / Programma ▾</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODALE MESSAGGI PROGRAMMABILI (P.S. DI DARIO) -->
+  <div class="modal-backdrop" id="scheduleModal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:15px;font-weight:700;">Programma invio messaggio (Bilingue IT → Target)</span>
+        <button class="icon-btn" onclick="closeScheduleModal()">✕</button>
+      </div>
+      <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.45;">
+        Il messaggio verrà inviato automaticamente nella lingua dell'ospite con verifica stato soggiorno PMS prima dell'invio.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button class="proposal-card" onclick="confirmScheduleMessage('Oggi ore 14:00 (Check-in)')">
+          <div class="proposal-top"><span>Oggi alle 14:00</span><span class="mini-badge pms">Check-in</span></div>
+          <div class="proposal-text">Invio programmato all'orario di inizio check-in</div>
+        </button>
+        <button class="proposal-card" onclick="confirmScheduleMessage('Domani mattina ore 08:30')">
+          <div class="proposal-top"><span>Domani mattina alle 08:30</span><span class="mini-badge booking">Fascia diurna</span></div>
+          <div class="proposal-text">Ideale per comunicazioni non urgenti</div>
+        </button>
+        <button class="proposal-card" onclick="confirmScheduleMessage('Domenica ore 08:30 (Promemoria Check-out)')">
+          <div class="proposal-top"><span>Domenica alle 08:30 (2h prima del Check-out)</span><span class="mini-badge ai">Automatico PMS</span></div>
+          <div class="proposal-text">Promemoria rilascio chiavi entro le 10:30</div>
+        </button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;padding-top:4px;border-top:1px solid var(--border);">
+        <input type="text" id="scheduleCustomTime" class="search-input" placeholder="Oppure inserisci data/ora (es. Sabato 18:00)" />
+        <button class="send-btn" onclick="confirmScheduleMessage()">Conferma</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const CONVERSATIONS = {
+  adam: {
+    id: 'adam',
+    bookingCode: 'DEMO-1048',
+    bookingStatus: 'Aperta · Soggiorno in corso',
+    guestName: 'Adam Nowak',
+    dates: '06/10/26 – 11/10/26',
+    unit: 'App. Duomo Suite · S04',
+    langCode: 'PL',
+    langName: 'Polacco',
+    channel: 'AIRBNB',
+    msgCount: 9,
+    handover: {
+      motivo: 'Richiesta posto auto cortile + biancheria extra',
+      urgenza: 'Media · Ospite in struttura',
+      sentiment: 'Positivo (Codice Nuki OK)',
+      statoAI: 'Bozza pronta da KB (94%)'
+    },
+    tags: ['#Parcheggio', '#Check-in', '#Biancheria', '#AccessoCodice'],
+    standardDraftIT: 'Ciao Adam, grazie! Per il parcheggio trovi il posto auto n. 14 nel cortile interno, per aprire il cancello puoi usare lo stesso codice 000000. Per gli asciugamani extra scrivici pure qui quando vuoi e te li portiamo subito.',
+    standardDraftTarget: 'Cześć Adam, dziękuję! Na wewnętrznym dziedzińcu czeka miejsce parkingowe nr 14, bramę otworzysz tym samym kodem 000000. W sprawie dodatkowych ręczników napisz do nas tutaj w każdej chwili, a od razu je przyniesiemy.',
+    focusDraftIT: "Ciao Adam, siamo felici che il codice abbia funzionato subito e che ti stia trovando bene!\n\nPer il parcheggio puoi usare il posto auto n. 14 nel cortile interno: il cancello automatico si apre con lo stesso codice 000000 sulla tastiera esterna.\n\nSe ti serviranno altri asciugamani scrivici pure qui e te li faremo avere in appartamento in mezz'ora. Ti ricordiamo solo che domenica il check-out è entro le 10:30 e potrai lasciare le chiavi sul tavolo. A presto!",
+    focusDraftTarget: 'Cześć Adam, cieszymy się, że kod zadziałał od razu i że dobrze się u nas czujesz! Jeśli chodzi o parking, możesz skorzystać z miejsca nr 14 na wewnętrznym dziedzińcu, brama automatyczna otwiera się tym samym kodem 000000 na zewnętrznej klawiaturze. Gdybyś potrzebował dodatkowych ręczników, napisz do nas tutaj, a dostarczymy je do apartamentu w pół godziny. Przypominamy tylko, że w niedzielę wymeldowanie jest do 10:30, a klucze możesz zostawić na stole. Do zobaczenia!',
+    messages: [
+      {
+        id: 'm1',
+        sender: 'guest',
+        author: 'ADAM · 11:20',
+        badges: [
+          { text: 'AIRBNB', cls: 'channel' },
+          { text: 'PL -> IT', cls: 'booking' }
+        ],
+        textOriginal: 'Dzień dobry! Kod Nuki zadziałał od razu, mieszkanie jest świetne. Mam pytanie: czy na podwórku jest dedykowane miejsce parkingowe dla gości?',
+        textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
+      },
+      {
+        id: 'm2',
+        sender: 'host',
+        scheduled: true,
+        author: 'TU · Programmato per Domani 09:00',
+        badges: [
+          { text: 'PROGRAMMATO', cls: 'channel' },
+          { text: 'TEMPLATE CHECK-OUT', cls: 'ai' },
+          { text: 'DOPPIA VERIFICA OK', cls: 'pms' }
+        ],
+        textOriginal: 'Dzień dobry Adam! Przypominamy, że jutro wymeldowanie jest do godziny 10:30. Klucze możesz zostawić na stole w salonie.',
+        textTranslated: ' Testo originale (IT): Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
+      },
+      {
+        id: 'm3',
+        sender: 'guest',
+        author: 'ADAM · 11:45',
+        badges: [
+          { text: 'AIRBNB', cls: 'channel' },
+          { text: 'PL -> IT', cls: 'booking' },
+          { text: 'SENTIMENT POSITIVO', cls: 'pms' }
+        ],
+        textOriginal: 'Super, dziękuję! Właśnie przeczytałem instrukcję segregacji. Jeśli będę potrzebował ręczników, napiszę do Was. Dziękuję za wskazówki na zwiedzanie miasta.',
+        textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
+      }
+    ]
+  },
+  sophie: {
+    id: 'sophie',
+    bookingCode: 'DEMO-1051',
+    bookingStatus: 'Da leggere · Check-in Oggi',
+    guestName: 'Sophie Laurent',
+    dates: '07/10/26 – 10/10/26',
+    unit: 'Suite Brera · S02',
+    langCode: 'FR',
+    langName: 'Francese',
+    channel: 'BOOKING.COM',
+    msgCount: 4,
+    handover: {
+      motivo: 'Richiesta deposito bagagli anticipato ore 11:30',
+      urgenza: 'Alta · Arrivo tra 2 ore',
+      sentiment: 'Cordiale',
+      statoAI: 'Bozza pronta da KB (91%)'
+    },
+    tags: ['#EarlyCheckIn', '#Bagagli', '#CodiciAccesso'],
+    standardDraftIT: 'Ciao Sophie! Puoi lasciare i bagagli già dalle 11:30 negli armadietti smart al piano terra usando il codice 4490. Appena la camera sarà pronta ti avviseremo qui.',
+    standardDraftTarget: 'Bonjour Sophie ! Vous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents au rez-de-chaussée avec le code 4490. Dès que la chambre sera prête, nous vous préviendrons ici.',
+    focusDraftIT: 'Ciao Sophie, benvenuta a Milano!\n\nPuoi lasciare comodamente i bagagli già dalle 11:30 negli armadietti smart al piano terra (Locker n. 2 e n. 3) inserendo il codice 4490.\n\nIl nostro team di pulizie darà priorità alla tua Suite Brera e ti invieremo un messaggio non appena sarà pronta per il check-in anticipato.',
+    focusDraftTarget: 'Bonjour Sophie, bienvenue à Milan !\n\nVous pouvez déposer vos bagages dès 11h30 dans les casiers intelligents du rez-de-chaussée (Casiers n°2 et n°3) en tapant le code 4490.\n\nNotre équipe de ménage donnera la priorité à votre Suite Brera et nous vous enverrons un message dès qu’elle sera prête.',
+    messages: [
+      {
+        id: 's1',
+        sender: 'guest',
+        author: 'SOPHIE · 10:15',
+        badges: [
+          { text: 'BOOKING.COM', cls: 'booking' },
+          { text: 'FR -> IT', cls: 'ai' }
+        ],
+        textOriginal: 'Bonjour ! Notre train arrive à Milan à 11h15. Est-il possible de déposer nos valises avant l’heure officielle du check-in ?',
+        textTranslated: "Buongiorno! Il nostro treno arriva a Milano alle 11:15. È possibile lasciare le valigie prima dell'orario ufficiale di check-in?"
+      }
+    ]
+  },
+  francesco: {
+    id: 'francesco',
+    bookingCode: 'DEMO-1042',
+    bookingStatus: 'Chiusa · Check-out effettuato',
+    guestName: 'Francesco Ira',
+    dates: '02/10/26 – 06/10/26',
+    unit: 'Casa Aurora · Attico',
+    langCode: 'EN',
+    langName: 'Inglese',
+    channel: 'WHATSAPP',
+    msgCount: 6,
+    handover: {
+      motivo: 'Invio ricevuta tassa di soggiorno e ringraziamenti',
+      urgenza: 'Bassa · Post soggiorno',
+      sentiment: 'Eccellente (5 stelle)',
+      statoAI: 'Completato'
+    },
+    tags: ['#Fattura', '#Check-out', '#Recensione'],
+    standardDraftIT: 'Ciao Francesco, grazie ancora per essere stato nostro ospite! Trovi in allegato la ricevuta richiesta. Ti aspettiamo presto a Casa Aurora!',
+    standardDraftTarget: 'Hi Francesco, thank you again for staying with us! Please find attached the requested receipt. We look forward to welcoming you back to Casa Aurora soon!',
+    focusDraftIT: 'Ciao Francesco, grazie mille per aver soggiornato a Casa Aurora!\n\nTi abbiamo allegato qui la ricevuta completa della tassa di soggiorno e del pernottamento.\n\nSe hai piacere di lasciarci una recensione, per noi è davvero preziosa. A presto!',
+    focusDraftTarget: 'Hi Francesco, thank you so much for staying at Casa Aurora!\n\nWe have attached the full receipt for your stay and city tax.\n\nIf you would like to leave us a review, it means a lot to our team. See you soon!',
+    messages: [
+      {
+        id: 'f1',
+        sender: 'guest',
+        author: 'FRANCESCO · Ieri 18:20',
+        badges: [
+          { text: 'WHATSAPP', cls: 'pms' }
+        ],
+        textOriginal: 'Grazie di tutto ragazzi, soggiorno impeccabile! Potete girarmi la ricevuta della tassa di soggiorno quando avete un attimo?',
+        textTranslated: 'Messaggio già in Italiano (nessuna traduzione necessaria).'
+      }
+    ]
+  }
+};
+
+let state = {
+  activeConvId: 'adam',
+  focusExpanded: false,
+  channelMode: 'guest', // 'guest' | 'note'
+  rightTab: 'ai', // 'ai' | 'kb'
+  demoStageMode: 'desktop-standard', // 'desktop-standard' | 'desktop-focus' | 'mobile-overview'
+  editingTranslation: false,
+  promptOpen: false,
+  leftCollapsed: false,
+  rightCollapsed: false
+};
+
+function getConv() {
+  return CONVERSATIONS[state.activeConvId];
+}
+
+function setDemoStageMode(mode) {
+  state.demoStageMode = mode;
+  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  const stage = document.getElementById('demoStage');
+  if (mode === 'mobile-overview') {
+    stage.classList.add('mobile-stage-active');
+  } else {
+    stage.classList.remove('mobile-stage-active');
+    if (mode === 'desktop-focus') {
+      state.focusExpanded = true;
+      state.rightTab = 'kb';
+    } else if (mode === 'desktop-standard') {
+      state.focusExpanded = false;
+      state.rightTab = 'ai';
+    }
+    syncAllUI();
+  }
+}
+
+function selectConversation(convId) {
+  state.activeConvId = convId;
+  document.querySelectorAll('.conv-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.conv === convId);
+  });
+  syncAllUI();
+}
+
+function toggleFocusView() {
+  state.focusExpanded = !state.focusExpanded;
+  state.demoStageMode = state.focusExpanded ? 'desktop-focus' : 'desktop-standard';
+  document.querySelectorAll('.demo-mode-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === state.demoStageMode);
+  });
+  syncAllUI();
+}
+
+function setChannelMode(mode) {
+  state.channelMode = mode;
+  syncAllUI();
+}
+
+function setRightTab(tab) {
+  state.rightTab = tab;
+  syncAllUI();
+}
+
+function toggleLeftSidebar() {
+  state.leftCollapsed = !state.leftCollapsed;
+  document.getElementById('inboxPanel').classList.toggle('collapsed', state.leftCollapsed);
+}
+
+function toggleRightSidebar() {
+  state.rightCollapsed = !state.rightCollapsed;
+  document.getElementById('aiSidebar').classList.toggle('collapsed', state.rightCollapsed);
+}
+
+function togglePromptBar() {
+  state.promptOpen = !state.promptOpen;
+  document.getElementById('promptInlineBar').classList.toggle('open', state.promptOpen);
+  if (state.promptOpen) {
+    document.getElementById('promptInput').focus();
+  }
+}
+
+function applyAiPrompt() {
+  const promptVal = document.getElementById('promptInput').value.trim();
+  const conv = getConv();
+  const itArea = document.getElementById('composerTextarea');
+  const plArea = document.getElementById('translationPreviewTextarea');
+  if (!promptVal) return;
+  itArea.value = itArea.value + "\n\n[Nota AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
+  plArea.value = plArea.value + "\n\n[AI: " + promptVal + "] Jesteśmy do Twojej dyspozycji na WhatsAppie lub tutaj na czacie!";
+  document.getElementById('promptInput').value = '';
+  state.promptOpen = false;
+  document.getElementById('promptInlineBar').classList.remove('open');
+  flashSyncBadge('Aggiornata con Prompt AI');
+}
+
+function insertProposal(type) {
+  const conv = getConv();
+  const itArea = document.getElementById('composerTextarea');
+  const plArea = document.getElementById('translationPreviewTextarea');
+  if (type === 'full') {
+    state.focusExpanded = true;
+    itArea.value = conv.focusDraftIT;
+    plArea.value = conv.focusDraftTarget;
+  } else if (type === 'short') {
+    itArea.value = conv.standardDraftIT;
+    plArea.value = conv.standardDraftTarget;
+  } else if (type === 'kb-parking') {
+    itArea.value = "Ciao " + conv.guestName.split(' ')[0] + "! Il posto auto riservato è il n. 14 nel cortile interno. Il cancello automatico si apre con il codice 000000.";
+    plArea.value = "Cześć! Dedykowane miejsce parkingowe to nr 14 na wewnętrznym dziedzińcu. Brama otwiera się kodem 000000.";
+  } else if (type === 'kb-towels') {
+    itArea.value = "Per il set di asciugamani extra, scrivici pure qui l'orario che preferisci e la governante te li consegnerà in 30 minuti.";
+    plArea.value = "W sprawie dodatkowych ręczników napisz, która godzina Ci odpowiada, a dostarczymy je w 30 minut.";
+  } else if (type === 'sched-checkin') {
+    itArea.value = "Ciao! Ti confermiamo che il self check-in è attivo dalle ore 15:00 con il codice Nuki 000000.";
+    plArea.value = "Cześć! Potwierdzamy, że zameldowanie samodzielne jest aktywne od 15:00 z kodem Nuki 000000.";
+  }
+  syncAllUI(true);
+  flashSyncBadge('Bozza inserita e tradotta');
+}
+
+function handleItalianInput() {
+  const itText = document.getElementById('composerTextarea').value;
+  const plArea = document.getElementById('translationPreviewTextarea');
+  const syncText = document.getElementById('syncStatusText');
+  syncText.textContent = 'Traduzione live...';
+
+  clearTimeout(window.__transTimer);
+  window.__transTimer = setTimeout(() => {
+    const conv = getConv();
+    if (itText.trim() === conv.standardDraftIT.trim()) {
+      plArea.value = conv.standardDraftTarget;
+    } else if (itText.trim() === conv.focusDraftIT.trim()) {
+      plArea.value = conv.focusDraftTarget;
+    } else {
+      // Smart live translation simulation preserving edits
+      plArea.value = conv.focusExpanded
+        ? conv.focusDraftTarget
+        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Tekst zaktualizowany na żywo]' : '');
+    }
+    syncText.textContent = 'Sincronizzata';
+  }, 320);
+}
+
+function toggleEditTranslation() {
+  state.editingTranslation = !state.editingTranslation;
+  const plArea = document.getElementById('translationPreviewTextarea');
+  const btn = document.getElementById('btnEditPl');
+  plArea.readOnly = !state.editingTranslation;
+  btn.classList.toggle('editing', state.editingTranslation);
+  btn.textContent = state.editingTranslation ? 'Salva PL' : ('Modifica ' + getConv().langCode);
+  if (state.editingTranslation) {
+    plArea.focus();
+  }
+}
+
+function flashSyncBadge(msg) {
+  const syncText = document.getElementById('syncStatusText');
+  if (!syncText) return;
+  syncText.textContent = msg;
+  setTimeout(() => {
+    syncText.textContent = 'Sincronizzata';
+  }, 1800);
+}
+
+function sendCurrentMessage(scheduledTime = null) {
+  const conv = getConv();
+  const itArea = document.getElementById('composerTextarea');
+  const plArea = document.getElementById('translationPreviewTextarea');
+  const itText = itArea.value.trim();
+  const targetText = plArea.value.trim();
+  if (!itText) return;
+
+  if (state.channelMode === 'note') {
+    conv.messages.push({
+      id: 'm_' + Date.now(),
+      sender: 'host',
+      internalNote: true,
+      author: 'TU · Nota Interna Team · Ora',
+      badges: [{ text: 'NOTA INTERNA PRIVATA', cls: 'channel' }],
+      textOriginal: itText,
+      textTranslated: ''
+    });
+  } else if (scheduledTime) {
+    conv.messages.push({
+      id: 'm_' + Date.now(),
+      sender: 'host',
+      scheduled: true,
+      author: 'TU · Programmato per ' + scheduledTime,
+      badges: [
+        { text: 'PROGRAMMATO', cls: 'channel' },
+        { text: 'TRADOTTO IN ' + conv.langCode, cls: 'pms' }
+      ],
+      textOriginal: targetText || itText,
+      textTranslated: 'Testo originale (IT): ' + itText
+    });
+  } else {
+    conv.messages.push({
+      id: 'm_' + Date.now(),
+      sender: 'host',
+      author: 'TU · Inviato ora',
+      badges: [
+        { text: 'INVIATO IN ' + conv.langCode, cls: 'pms' },
+        { text: 'DOPPIA VERIFICA OK', cls: 'booking' }
+      ],
+      textOriginal: targetText || itText,
+      textTranslated: 'Testo originale (IT): ' + itText
+    });
+  }
+
+  conv.msgCount = conv.messages.length;
+  renderMessages();
+  const stream = document.getElementById('messagesStream');
+  stream.scrollTop = stream.scrollHeight;
+  flashSyncBadge(scheduledTime ? 'Messaggio programmato!' : 'Messaggio inviato!');
+}
+
+function openScheduleModal() {
+  document.getElementById('scheduleModal').classList.add('open');
+}
+
+function closeScheduleModal() {
+  document.getElementById('scheduleModal').classList.remove('open');
+}
+
+function confirmScheduleMessage(presetLabel) {
+  const customInput = document.getElementById('scheduleCustomTime').value;
+  const label = presetLabel || customInput || 'Domani ore 08:30';
+  closeScheduleModal();
+  sendCurrentMessage(label);
+}
+
+function deleteScheduledMsg(msgId) {
+  const conv = getConv();
+  conv.messages = conv.messages.filter(m => m.id !== msgId);
+  renderMessages();
+}
+
+function renderMessages() {
+  const conv = getConv();
+  const stream = document.getElementById('messagesStream');
+  stream.innerHTML = conv.messages.map(m => {
+    const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
+    const badgesHtml = (m.badges || []).map(b => `<span class="mini-badge ${b.cls}">${b.text}</span>`).join('');
+    const transHtml = m.textTranslated ? `
+      <div class="msg-translation-card">
+        <div class="msg-translation-header">
+          <span>${m.sender === 'guest' ? `Traduzione automatica (${conv.langCode} -> IT)` : 'Originale scritto in Italiano'}</span>
+          <span>Sincronizzata</span>
+        </div>
+        <div class="msg-translation-body">${m.textTranslated}</div>
+      </div>
+    ` : '';
+    const actionsHtml = m.scheduled ? `
+      <div class="msg-actions-bar">
+        <button class="msg-action-tiny" onclick="sendCurrentMessage()">Invia subito</button>
+        <button class="msg-action-tiny danger" onclick="deleteScheduledMsg('${m.id}')">Annulla programmazione</button>
+      </div>
+    ` : '';
+    return `
+      <div class="${rowCls}">
+        <div class="msg-meta">
+          <span>${m.author}</span>
+          ${badgesHtml}
+        </div>
+        <div class="msg-bubble">${m.textOriginal}</div>
+        ${transHtml}
+        ${actionsHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function syncAllUI(preserveText = false) {
+  const conv = getConv();
+
+  // Thread header
+  document.getElementById('threadGuestName').textContent = conv.guestName;
+  document.getElementById('threadMsgCount').textContent = conv.msgCount;
+  document.getElementById('threadStayDates').textContent = `${conv.dates} · ${conv.unit}`;
+  document.getElementById('threadLangChip').textContent = `Lingua ospite: ${conv.langCode} (${conv.langName})`;
+
+  // Handover
+  document.getElementById('hoMotivo').textContent = conv.handover.motivo;
+  document.getElementById('hoUrgenza').textContent = conv.handover.urgenza;
+  document.getElementById('hoSentiment').textContent = conv.handover.sentiment;
+  document.getElementById('hoStato').textContent = conv.handover.statoAI;
+
+  // Composer focus & channel mode
+  const card = document.getElementById('composerCard');
+  card.classList.toggle('focus-expanded', state.focusExpanded);
+  card.classList.toggle('note-mode', state.channelMode === 'note');
+
+  const focusBtn = document.getElementById('focusToggleBtn');
+  focusBtn.classList.toggle('active', state.focusExpanded);
+  focusBtn.innerHTML = state.focusExpanded
+    ? '<span>⤡</span><span>Riduci vista</span>'
+    : '<span>⤢</span><span>Espandi vista</span>';
+
+  document.getElementById('tabChannelGuest').classList.toggle('active', state.channelMode === 'guest');
+  document.getElementById('tabChannelNote').classList.toggle('active', state.channelMode === 'note');
+
+  const sendBtn = document.getElementById('mainSendBtn');
+  sendBtn.textContent = state.channelMode === 'note'
+    ? 'Salva nota interna'
+    : `Invia risposta (${conv.langCode})`;
+
+  // Composer & Right Sidebar Translation texts
+  const itArea = document.getElementById('composerTextarea');
+  const plArea = document.getElementById('translationPreviewTextarea');
+  if (!preserveText) {
+    itArea.value = state.focusExpanded ? conv.focusDraftIT : conv.standardDraftIT;
+    plArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
+  }
+
+  // Right sidebar tabs
+  document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
+  document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');
+  document.getElementById('rightContentAi').style.display = state.rightTab === 'ai' ? 'flex' : 'none';
+  document.getElementById('rightContentKb').style.display = state.rightTab === 'kb' ? 'flex' : 'none';
+
+  // Right sidebar translation preview header
+  document.getElementById('langSelectDropdown').value = conv.langCode;
+  document.getElementById('btnEditPl').textContent = state.editingTranslation ? 'Salva' : `Modifica ${conv.langCode}`;
+  document.getElementById('aiSidebar').classList.toggle('composer-Expanded-sync', state.focusExpanded);
+
+  renderMessages();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  syncAllUI();
+});
+
+</script>
+</body>
+</html>
+
