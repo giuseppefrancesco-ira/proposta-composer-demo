@@ -116,7 +116,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 8px;
+  padding: 16px 8px;
   flex-shrink: 0;
 }
 
@@ -182,9 +182,9 @@ button {
   justify-content: center;
 }
 
-/* 2. LEFT COLUMN: LISTA MESSAGGI (340px on Desktop, Slide-over Drawer on Mobile) */
+/* 2. LEFT COLUMN: LISTA MESSAGGI (330px on Desktop, Slide-over Drawer on Mobile) */
 .inbox-panel {
-  width: 340px;
+  width: 330px;
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
   display: flex;
@@ -200,8 +200,8 @@ button {
 }
 
 .inbox-header {
-  height: 64px;
-  padding: 0 16px;
+  min-height: 64px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -210,7 +210,7 @@ button {
 }
 
 .inbox-title {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -230,6 +230,7 @@ button {
   justify-content: center;
   color: var(--text-secondary);
   background: var(--bg-pill);
+  flex-shrink: 0;
 }
 
 .icon-btn:hover {
@@ -238,14 +239,15 @@ button {
 }
 
 .btn-primary-square {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
   background: var(--brand);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .inbox-filters {
@@ -258,7 +260,7 @@ button {
 }
 
 .search-box {
-  padding: 0 14px 8px;
+  padding: 0 14px 10px;
   display: none;
 }
 
@@ -278,7 +280,7 @@ button {
 }
 
 .filter-pill {
-  height: 36px;
+  height: 34px;
   padding: 0 11px;
   border-radius: 20px;
   background: var(--bg-pill);
@@ -311,8 +313,8 @@ button {
 }
 
 .inbox-sort-row {
-  height: 40px;
-  padding: 0 16px;
+  min-height: 38px;
+  padding: 6px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -323,12 +325,12 @@ button {
 }
 
 .inbox-group-row {
-  height: 38px;
-  padding: 0 16px;
+  min-height: 38px;
+  padding: 6px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
@@ -371,7 +373,7 @@ button {
 }
 
 .booking-group-header {
-  padding: 9px 14px;
+  padding: 10px 14px;
   background: var(--bg-muted);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -407,7 +409,7 @@ button {
 }
 
 .conv-item {
-  padding: 10px 14px 10px 24px;
+  padding: 11px 14px 11px 22px;
   border-bottom: 1px solid var(--border);
   border-left: 3px solid transparent;
   background: var(--bg-surface);
@@ -466,6 +468,7 @@ button {
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .mini-badge.channel { background: var(--rose-bg); color: var(--rose-text); }
@@ -474,8 +477,8 @@ button {
 .mini-badge.pms { background: var(--success-bg); color: var(--success-text); }
 
 .inbox-footer {
-  height: 44px;
-  padding: 0 16px;
+  min-height: 44px;
+  padding: 8px 16px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -496,22 +499,24 @@ button {
   position: relative;
 }
 
+/* Desktop Thread Header: proper vertical padding and clean wrapping so nothing touches the top or bottom border */
 .thread-header {
-  height: 64px;
+  min-height: 64px;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 20px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  gap: 12px;
+  gap: 10px 16px;
+  flex-wrap: wrap;
 }
 
 .thread-header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px 10px;
   min-width: 0;
   flex-wrap: wrap;
 }
@@ -519,13 +524,14 @@ button {
 .thread-guest-block {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .thread-guest-name {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .thread-guest-sub-mobile {
@@ -537,10 +543,12 @@ button {
   align-items: center;
   gap: 4px;
   font-size: 12px;
+  font-weight: 500;
   color: var(--text-secondary);
   background: var(--bg-pill);
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 6px;
+  white-space: nowrap;
 }
 
 .pms-badge {
@@ -555,6 +563,7 @@ button {
   color: var(--success-text);
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .pms-dot {
@@ -562,6 +571,7 @@ button {
   height: 6px;
   border-radius: 50%;
   background: var(--success-dot);
+  flex-shrink: 0;
 }
 
 .stay-dates-pill {
@@ -569,8 +579,9 @@ button {
   color: var(--text-secondary);
   background: var(--bg-muted);
   border: 1px solid var(--border);
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: 6px;
+  white-space: nowrap;
 }
 
 .thread-header-right {
@@ -578,11 +589,12 @@ button {
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .header-chip-btn {
   height: 32px;
-  padding: 0 10px;
+  padding: 0 11px;
   border-radius: 6px;
   background: var(--bg-pill);
   color: var(--text-primary);
@@ -591,6 +603,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .header-chip-btn.outline {
@@ -602,12 +615,20 @@ button {
   background: #E2E8F0;
 }
 
+/* On medium laptop screens (901px - 1340px), hide non-essential secondary button so header stays on one line */
+@media (max-width: 1340px) and (min-width: 901px) {
+  .hide-on-laptop {
+    display: none;
+  }
+}
+
 /* MOBILE SUB-BARS & PINNED CARDS (Hidden on Desktop) */
 .mobile-conv-statusbar,
 .mobile-handover-inline,
 .mobile-pinned-guest-context,
 .mobile-sheet-drag-handle,
-.mobile-copilot-inline-section {
+.mobile-copilot-inline-section,
+.mobile-close-drawer-btn {
   display: none;
 }
 
@@ -615,7 +636,7 @@ button {
 .messages-stream {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 24px;
+  padding: 18px 24px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -731,7 +752,7 @@ button {
 .composer-wrapper {
   background: var(--bg-subtle);
   border-top: 1px solid var(--border);
-  padding: 10px 16px 14px;
+  padding: 12px 18px 14px;
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
@@ -757,15 +778,14 @@ button {
 }
 
 .composer-topbar {
-  height: 44px;
-  padding: 0 14px;
+  min-height: 46px;
+  padding: 8px 14px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   background: var(--bg-surface);
-  flex-wrap: wrap;
 }
 
 .composer-topbar-left, .composer-topbar-right {
@@ -778,6 +798,7 @@ button {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-right: auto;
 }
 
 .channel-switch {
@@ -789,7 +810,7 @@ button {
 }
 
 .channel-tab {
-  height: 24px;
+  height: 26px;
   padding: 0 10px;
   border-radius: 5px;
   font-size: 11.5px;
@@ -798,6 +819,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .channel-tab.active {
@@ -824,6 +846,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .ai-action-btn.primary-soft {
@@ -838,7 +861,7 @@ button {
 
 .focus-toggle-btn {
   height: 30px;
-  padding: 0 10px;
+  padding: 0 11px;
   border-radius: 6px;
   border: 1px solid var(--border-strong);
   background: var(--bg-surface);
@@ -848,6 +871,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .focus-toggle-btn.active {
@@ -858,7 +882,7 @@ button {
 /* PROMPT BAR (Optional inline when "Scrivi Prompt" clicked) */
 .prompt-inline-bar {
   display: none;
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: var(--brand-soft);
   border-bottom: 1px solid var(--brand-border);
   align-items: center;
@@ -871,7 +895,7 @@ button {
 
 .prompt-input {
   flex: 1;
-  height: 30px;
+  height: 32px;
   background: #FFFFFF;
   border: 1px solid var(--brand-border);
   border-radius: 6px;
@@ -881,7 +905,7 @@ button {
 }
 
 .prompt-apply-btn {
-  height: 30px;
+  height: 32px;
   padding: 0 12px;
   background: var(--brand);
   color: #FFFFFF;
@@ -908,7 +932,7 @@ button {
 }
 
 .composer-col-origin {
-  padding: 14px 18px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -918,7 +942,7 @@ button {
 
 .composer-card.focus-expanded .composer-col-origin,
 .composer-card.focus-expanded .composer-col-target {
-  padding: 16px 20px;
+  padding: 16px 18px;
   gap: 10px;
 }
 
@@ -928,7 +952,7 @@ button {
 }
 
 .composer-col-target {
-  padding: 14px 18px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -989,18 +1013,19 @@ button {
 
 .composer-card.focus-expanded .composer-textarea,
 .composer-card.focus-expanded .translation-preview-textarea {
-  min-height: 140px;
+  min-height: 136px;
 }
 
 /* COMPOSER BOTTOM BAR */
 .composer-bottombar {
-  height: 48px;
-  padding: 0 14px;
+  min-height: 48px;
+  padding: 8px 14px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--bg-surface);
+  gap: 8px;
 }
 
 .composer-tools-left, .composer-actions-right {
@@ -1021,15 +1046,12 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .tool-chip-btn:hover {
   background: var(--bg-pill);
   color: var(--text-primary);
-}
-
-.mobile-only-tool {
-  display: none;
 }
 
 .schedule-btn {
@@ -1044,6 +1066,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .send-btn {
@@ -1057,15 +1080,16 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .send-btn:hover {
   background: var(--brand-hover);
 }
 
-/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (384px) */
+/* 4. RIGHT SIDEBAR: PANNELLO AI & CONTESTO OPERATIVO (370px) */
 .ai-sidebar {
-  width: 384px;
+  width: 370px;
   background: var(--bg-surface);
   border-left: 1px solid var(--border);
   display: flex;
@@ -1082,7 +1106,7 @@ button {
 }
 
 .ai-sidebar-header {
-  height: 64px;
+  min-height: 64px;
   padding: 12px 16px;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -1093,7 +1117,7 @@ button {
 
 .ai-tab-pill {
   flex: 1;
-  height: 38px;
+  height: 36px;
   border-radius: 20px;
   background: var(--bg-pill);
   color: var(--text-secondary);
@@ -1118,11 +1142,11 @@ button {
 }
 
 .ai-section {
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .ai-section-banner {
@@ -1134,8 +1158,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
@@ -1199,7 +1223,7 @@ button {
 }
 
 .confidence-bar {
-  height: 28px;
+  height: 30px;
   padding: 0 10px;
   background: var(--bg-muted);
   border: 1px solid var(--border-strong);
@@ -1232,6 +1256,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 6px;
   font-size: 11.5px;
   font-weight: 600;
   color: var(--text-primary);
@@ -1353,23 +1378,19 @@ button {
 
 /* ==========================================================================
    TRUE MOBILE V2 RESPONSIVE TRANSFORMATION (<= 900px)
-   Matches Figma Mobile V2 Screens:
-   - 1:27 (Chat · Drawer navigazione aperto)
-   - 1:446 (Chat · Conversazione Standard)
-   - 1:320 (Chat · Composer Focus Espanso & Copilot KB Bottom Sheet)
    ========================================================================== */
 @media (max-width: 900px) {
   .nav-rail {
     display: none;
   }
 
-  /* Left Slide-over Drawer (1:90 Drawer navigazione) */
+  /* Left Slide-over Drawer (Drawer navigazione) */
   .inbox-panel {
     position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 335px;
+    width: 325px;
     max-width: 86vw;
     z-index: 110;
     box-shadow: 8px 0 32px rgba(14, 20, 36, 0.28);
@@ -1377,7 +1398,7 @@ button {
   }
 
   .inbox-panel.collapsed {
-    width: 335px;
+    width: 325px;
     transform: translateX(-105%);
     pointer-events: none;
   }
@@ -1385,12 +1406,13 @@ button {
   .inbox-header {
     background: var(--bg-mobile-header);
     border-bottom: none;
-    height: 60px;
+    min-height: 58px;
+    padding: 10px 14px;
   }
 
   .inbox-title {
     color: #FFFFFF;
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .inbox-header .icon-btn {
@@ -1404,37 +1426,48 @@ button {
     right: 0;
     top: 0;
     bottom: 0;
-    width: 350px;
-    max-width: 90vw;
+    width: 340px;
+    max-width: 88vw;
     z-index: 110;
     box-shadow: -8px 0 32px rgba(14, 20, 36, 0.28);
     transform: translateX(0);
   }
 
   .ai-sidebar.collapsed {
-    width: 350px;
+    width: 340px;
     transform: translateX(105%);
     pointer-events: none;
   }
 
-  /* Mobile Top Header (#131C4D - Intestazione ospite 1:447) */
+  .ai-sidebar-header {
+    min-height: 58px;
+    padding: 10px 14px;
+  }
+
+  .mobile-close-drawer-btn {
+    display: inline-flex;
+  }
+
+  /* Mobile Top Header (#131C4D - Intestazione ospite) */
   .thread-header {
     background: var(--bg-mobile-header);
     color: #FFFFFF;
-    height: 58px;
-    padding: 0 12px;
+    min-height: 58px;
+    padding: 10px 14px;
     border-bottom: none;
-    gap: 8px;
+    gap: 10px;
+    flex-wrap: nowrap;
   }
 
   .thread-header-left {
     flex: 1;
     flex-wrap: nowrap;
     gap: 10px;
+    min-width: 0;
   }
 
   .thread-header .icon-btn {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.14);
     color: #FFFFFF;
     width: 36px;
     height: 36px;
@@ -1446,8 +1479,9 @@ button {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1px;
+    gap: 2px;
     min-width: 0;
+    flex: 1;
   }
 
   .thread-guest-name {
@@ -1457,6 +1491,7 @@ button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .thread-guest-sub-mobile {
@@ -1466,6 +1501,7 @@ button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   /* Hide desktop-only header pills inside the navy top bar */
@@ -1476,37 +1512,42 @@ button {
     display: none;
   }
 
-  .thread-header-right .header-chip-btn {
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: #FFFFFF;
-    height: 34px;
-    padding: 0 10px;
-    font-size: 11.5px;
+  .thread-header-right {
+    flex-shrink: 0;
   }
 
-  /* Mobile Conversation Status Sub-bar (1:467 Stato conversazione) */
+  .thread-header-right .header-chip-btn {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    color: #FFFFFF;
+    height: 34px;
+    padding: 0 11px;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  /* Mobile Conversation Status Sub-bar (Stato conversazione) */
   .mobile-conv-statusbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 7px 12px;
+    padding: 8px 14px;
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
-    gap: 6px;
+    gap: 8px;
   }
 
   .thread-column.mobile-focus-mode .mobile-conv-statusbar {
     display: none;
   }
 
-  /* Mobile Pinned Guest Context in Focus Expanded Mode (1:341 Contesto Ospite Fissato) */
+  /* Mobile Pinned Guest Context in Focus Expanded Mode (Contesto Ospite Fissato) */
   .thread-column.mobile-focus-mode .mobile-pinned-guest-context {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 8px 12px;
+    gap: 6px;
+    padding: 10px 14px;
     background: var(--bg-app);
     flex-shrink: 0;
   }
@@ -1525,24 +1566,24 @@ button {
     background: #FFFFFF;
     border: 1px solid #CBD5E1;
     border-radius: 10px;
-    padding: 8px 10px;
+    padding: 9px 12px;
     display: flex;
     flex-direction: column;
     gap: 6px;
     font-size: 11.5px;
-    line-height: 1.4;
+    line-height: 1.45;
     color: #1E293B;
   }
 
-  /* Collapse full messages stream when Bottom Sheet Focus is expanded on mobile (1:320) */
+  /* Collapse full messages stream when Bottom Sheet Focus is expanded on mobile */
   .thread-column.mobile-focus-mode .messages-stream {
     display: none;
   }
 
-  /* Messages Stream & Inline Handover Card on Mobile Standard View (1:482) */
+  /* Messages Stream & Inline Handover Card on Mobile Standard View */
   .messages-stream {
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 12px 14px;
+    gap: 12px;
   }
 
   .mobile-handover-inline {
@@ -1552,7 +1593,7 @@ button {
     background: #FFFFFF;
     border: 1px solid var(--border-strong);
     border-radius: 10px;
-    padding: 9px 11px;
+    padding: 10px 12px;
     flex-shrink: 0;
   }
 
@@ -1565,7 +1606,7 @@ button {
     font-size: 13px;
   }
 
-  /* Mobile Standard Composer (1:520 Composer Mobile · Senior UI v2) */
+  /* Mobile Standard Composer */
   .composer-wrapper {
     padding: 0;
     background: transparent;
@@ -1579,7 +1620,7 @@ button {
     border-bottom: none;
   }
 
-  /* Mobile Bottom Sheet Focus Expanded (1:364 Bottom Sheet Focus · Senior Mobile UI v2) */
+  /* Mobile Bottom Sheet Focus Expanded */
   .thread-column.mobile-focus-mode .composer-wrapper {
     flex: 1;
     display: flex;
@@ -1601,52 +1642,62 @@ button {
   .composer-card.focus-expanded .mobile-sheet-drag-handle {
     display: flex;
     justify-content: center;
-    padding: 8px 0 2px;
+    padding: 10px 0 4px;
     background: var(--bg-surface);
     flex-shrink: 0;
   }
 
   .drag-pill {
-    width: 36px;
+    width: 38px;
     height: 4px;
     border-radius: 99px;
     background: #CBD5E1;
   }
 
+  /* Mobile Composer Topbar: clean single row for Channel Switch + Espandi, and dedicated row for AI buttons when expanded */
   .composer-topbar {
-    height: auto;
+    min-height: 44px;
     padding: 8px 12px;
     gap: 8px;
+    flex-wrap: wrap;
   }
 
   .composer-topbar-left {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .composer-topbar-right {
+    flex-shrink: 0;
   }
 
   .composer-topbar .v-divider {
     display: none;
   }
 
-  /* Hide the 3 AI buttons in mobile compact standard mode; show them as a 3-column bar in Focus Bottom Sheet */
+  /* Hide the 3 AI buttons in mobile compact standard mode; show them in Focus Bottom Sheet */
   .composer-ai-buttons-group {
     display: none;
   }
 
+  .composer-card.focus-expanded .composer-topbar {
+    padding-bottom: 10px;
+  }
+
   .composer-card.focus-expanded .composer-ai-buttons-group {
     display: flex;
-    width: 100%;
-    gap: 6px;
     order: 3;
-    padding-top: 4px;
+    width: 100%;
+    margin-right: 0;
+    gap: 6px;
+    padding-top: 6px;
   }
 
   .composer-card.focus-expanded .composer-ai-buttons-group .ai-action-btn {
     flex: 1;
     justify-content: center;
     height: 30px;
-    padding: 0 6px;
+    padding: 0 8px;
     font-size: 11px;
   }
 
@@ -1656,7 +1707,7 @@ button {
   }
 
   .composer-card.focus-expanded .composer-split-surface {
-    margin: 6px 12px;
+    margin: 10px 12px;
     width: calc(100% - 24px);
     border: 1.5px solid var(--brand);
     border-radius: 10px;
@@ -1665,39 +1716,49 @@ button {
   }
 
   .composer-col-origin {
-    padding: 10px 12px;
+    padding: 8px 12px;
+    gap: 4px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
 
   .composer-col-target {
     padding: 8px 12px;
+    gap: 4px;
+  }
+
+  .composer-card.focus-expanded .composer-col-origin,
+  .composer-card.focus-expanded .composer-col-target {
+    padding: 10px 12px;
+    gap: 6px;
   }
 
   .composer-textarea {
-    min-height: 52px;
+    min-height: 44px;
     font-size: 12.5px;
+    line-height: 1.45;
   }
 
   .translation-preview-textarea {
-    min-height: 42px;
+    min-height: 38px;
     font-size: 12px;
+    line-height: 1.45;
   }
 
   .composer-card.focus-expanded .composer-textarea {
-    min-height: 76px;
+    min-height: 74px;
   }
 
   .composer-card.focus-expanded .translation-preview-textarea {
-    min-height: 68px;
+    min-height: 66px;
   }
 
-  /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet (1:406) */
+  /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet */
   .composer-card.focus-expanded .mobile-copilot-inline-section {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 4px 12px 8px;
+    padding: 2px 12px 10px;
     flex-shrink: 0;
   }
 
@@ -1705,7 +1766,7 @@ button {
     background: var(--bg-subtle);
     border: 1px solid #E2E8F0;
     border-radius: 9px;
-    padding: 7px 10px;
+    padding: 8px 10px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -1719,44 +1780,40 @@ button {
     font-size: 11px;
   }
 
-  /* Thumb Zone Bottom Bar (1:547 / 1:429) */
+  /* Thumb Zone Bottom Bar: clean and uncluttered on mobile (no # Tag, / Pronti, KB (2)) */
   .composer-bottombar {
-    height: auto;
+    min-height: 48px;
     padding: 8px 12px;
     margin-top: auto;
-    gap: 6px;
+    gap: 8px;
     flex-wrap: nowrap;
   }
 
   .composer-tools-left {
-    gap: 4px;
-    overflow-x: auto;
+    gap: 6px;
   }
 
-  .composer-tools-left .desktop-autosave-hint {
+  .composer-tools-left .desktop-autosave-hint,
+  .composer-tools-left .desktop-only-tool {
     display: none;
   }
 
-  .mobile-only-tool {
-    display: inline-flex;
-  }
-
   .tool-chip-btn {
-    height: 30px;
-    padding: 0 8px;
-    font-size: 11px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 11.5px;
     white-space: nowrap;
   }
 
   .schedule-btn {
     height: 32px;
-    padding: 0 8px;
-    font-size: 11px;
+    padding: 0 10px;
+    font-size: 11.5px;
   }
 
   .send-btn {
     height: 32px;
-    padding: 0 12px;
+    padding: 0 13px;
     font-size: 11.5px;
     white-space: nowrap;
   }
@@ -1765,16 +1822,15 @@ button {
   </style>
 </head>
 <body>
-  <!-- CONTENITORE PRINCIPALE -->
-  <main class="demo-stage" id="demoStage">
+  <!-- WORKSPACE PRINCIPALE (Responsivo Nativo: Desktop 4 Colonne -> Mobile 1 Colonna con Drawer e Bottom Sheet Focus) -->
+  <main class="demo-stage">
 
-    <!-- ======================= DESKTOP & MOBILE RESPONSIVE SHELL ======================= -->
+    <!-- Sfondo oscurato quando i Drawer Mobile sono aperti -->
+    <div class="mobile-backdrop" id="mobileBackdrop" onclick="closeMobileDrawers()"></div>
+
     <div class="app-shell">
 
-      <!-- Scrim Backdrop per Drawer Mobile -->
-      <div class="mobile-backdrop" id="mobileBackdrop" onclick="closeMobileDrawers()"></div>
-
-      <!-- 1. NAVIGAZIONE LATERALE DESKTOP (64px) -->
+      <!-- 1. RAIL DI NAVIGAZIONE SINISTRO (64px - Nascosto su Mobile) -->
       <nav class="nav-rail">
         <div class="nav-rail-top">
           <div class="rail-logo">CA</div>
@@ -1807,6 +1863,9 @@ button {
             </button>
             <button class="btn-primary-square" title="Nuovo messaggio" onclick="openScheduleModal()">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="icon-btn mobile-close-drawer-btn" title="Chiudi menu" onclick="closeMobileDrawers()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
         </div>
@@ -1963,7 +2022,7 @@ button {
           </div>
           <div class="thread-header-right">
             <button class="header-chip-btn outline desktop-only-chip">Scheda Soggiorno S04</button>
-            <button class="header-chip-btn desktop-only-chip" onclick="flashSyncBadge('Dati PMS aggiornati')">Aggiorna dati</button>
+            <button class="header-chip-btn desktop-only-chip hide-on-laptop" onclick="flashSyncBadge('Dati PMS aggiornati')">Aggiorna dati</button>
             <button class="header-chip-btn desktop-only-chip" id="threadLangChip">Lingua ospite: EN (Inglese)</button>
             <button class="header-chip-btn outline" onclick="toggleRightSidebar()" title="Mostra/Nascondi Pannello AI">
               AI &amp; KB
@@ -2017,17 +2076,17 @@ button {
                   </button>
                 </div>
                 <div class="v-divider"></div>
-                <div class="composer-ai-buttons-group">
-                  <button class="ai-action-btn primary-soft" onclick="insertProposal(state.focusExpanded ? 'full' : 'short')">
-                    Genera AI
-                  </button>
-                  <button class="ai-action-btn" onclick="togglePromptBar()">
-                    Scrivi Prompt
-                  </button>
-                  <button class="ai-action-btn" onclick="document.getElementById('composerTextarea').focus()">
-                    Manuale
-                  </button>
-                </div>
+              </div>
+              <div class="composer-ai-buttons-group">
+                <button class="ai-action-btn primary-soft" onclick="insertProposal(state.focusExpanded ? 'full' : 'short')">
+                  Genera AI
+                </button>
+                <button class="ai-action-btn" onclick="togglePromptBar()">
+                  Scrivi Prompt
+                </button>
+                <button class="ai-action-btn" onclick="document.getElementById('composerTextarea').focus()">
+                  Manuale
+                </button>
               </div>
               <div class="composer-topbar-right">
                 <button class="focus-toggle-btn" id="focusToggleBtn" onclick="toggleFocusView()">
@@ -2104,13 +2163,11 @@ button {
               </div>
             </div>
 
-            <!-- Barra Inferiore Strumenti e Invio (Thumb Zone su Mobile) -->
+            <!-- Barra Inferiore Strumenti e Invio (Thumb Zone su Mobile: pulita, senza # Tag, / Pronti o KB (2)) -->
             <div class="composer-bottombar">
               <div class="composer-tools-left">
                 <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega</button>
-                <button class="tool-chip-btn mobile-only-tool" onclick="setRightTab('kb')"># Tag</button>
-                <button class="tool-chip-btn mobile-only-tool" onclick="setRightTab('kb')">/ Pronti</button>
-                <button class="tool-chip-btn" onclick="setRightTab('kb')">KB (2)</button>
+                <button class="tool-chip-btn desktop-only-tool" onclick="setRightTab('kb')">KB (2)</button>
                 <button class="tool-chip-btn" onclick="flashSyncBadge('Dettatura vocale pronta')">Vocale</button>
                 <span class="desktop-autosave-hint" style="font-size:11px;font-weight:500;color:var(--text-muted);margin-left:4px;">Bozza salvata automaticamente</span>
               </div>
@@ -2128,7 +2185,7 @@ button {
         </div>
       </section>
 
-      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (384px Desktop / Drawer su Mobile) -->
+      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (370px Desktop / Drawer su Mobile) -->
       <aside class="ai-sidebar" id="aiSidebar">
         <!-- Intestazione Tabs -->
         <div class="ai-sidebar-header">
@@ -2137,6 +2194,9 @@ button {
           </button>
           <button class="ai-tab-pill" id="rightTabKb" onclick="setRightTab('kb')">
             Risorse e KB
+          </button>
+          <button class="icon-btn mobile-close-drawer-btn" title="Chiudi pannello" onclick="closeMobileDrawers()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
