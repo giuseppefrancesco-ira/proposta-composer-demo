@@ -431,9 +431,9 @@ function syncAllUI(preserveText = false) {
   document.getElementById('tabChannelNote').classList.toggle('active', state.channelMode === 'note');
 
   const sendBtn = document.getElementById('mainSendBtn');
-  sendBtn.textContent = state.channelMode === 'note'
-    ? 'Salva nota interna'
-    : `Invia risposta (${conv.langCode})`;
+  sendBtn.innerHTML = state.channelMode === 'note'
+    ? '<span>Salva nota interna</span>'
+    : `<span>Invia in ${conv.langName} (${conv.langCode})</span><span style="background:#1D4ED8;color:#DBEAFE;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:500;">⌘↵</span>`;
 
   const itArea = document.getElementById('composerTextarea');
   const plArea = document.getElementById('translationPreviewTextarea');

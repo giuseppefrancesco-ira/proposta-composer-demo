@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -909,9 +909,15 @@ button {
   font-weight: 600;
 }
 
-/* FULL-WIDTH ITALIAN EDITOR SURFACE */
-.composer-editor-surface {
+/* BILINGUAL SPLIT COMPOSER SURFACE (COL ORIGIN IT + COL TARGET LIVE TRANSLATION) */
+.composer-split-surface {
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg-surface);
+}
+
+.composer-col-origin {
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
@@ -919,14 +925,32 @@ button {
   background: var(--bg-surface);
 }
 
-.composer-card.note-mode .composer-editor-surface {
+.composer-col-target {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #F8FAFC;
+  border-left: 1px solid var(--border);
+}
+
+.composer-card.note-mode .composer-split-surface {
+  grid-template-columns: 1fr;
+}
+
+.composer-card.note-mode .composer-col-origin {
   background: #FFFBEB;
+}
+
+.composer-card.note-mode .composer-col-target {
+  display: none;
 }
 
 .editor-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 22px;
 }
 
 .editor-lang-group {
@@ -961,7 +985,7 @@ button {
 
 .composer-textarea {
   width: 100%;
-  min-height: 56px;
+  min-height: 64px;
   resize: none;
   font-size: 13.5px;
   line-height: 1.55;
@@ -973,7 +997,24 @@ button {
 }
 
 .composer-card.focus-expanded .composer-textarea {
-  min-height: 132px;
+  min-height: 136px;
+}
+
+.composer-col-target .translation-preview-textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: none;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #1E293B;
+  background: transparent;
+  outline: none;
+  border: none;
+  transition: min-height 0.2s ease;
+}
+
+.composer-card.focus-expanded .composer-col-target .translation-preview-textarea {
+  min-height: 136px;
 }
 
 /* COMPOSER BOTTOM BAR */
@@ -1458,6 +1499,13 @@ button {
     width: 340px;
     box-shadow: var(--shadow-modal);
   }
+  .composer-split-surface {
+    grid-template-columns: 1fr;
+  }
+  .composer-col-target {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
 }
 
 </style>
@@ -1481,7 +1529,7 @@ button {
       </div>
     </div>
     <div class="demo-topbar-right">
-      <span class="demo-hint">Testo IT a tutta larghezza nel composer · Traduzione in uscita nella sidebar destra</span>
+      <span class="demo-hint">Composer Centrale Split Bilingue (IT + Traduzione Live affiancata) · Sidebar Destra Assistente AI & KB</span>
     </div>
   </header>
 
@@ -1726,37 +1774,67 @@ button {
               <button class="prompt-apply-btn" onclick="applyAiPrompt()">Applica alla bozza</button>
             </div>
 
-            <!-- Superficie Scrittura · Testo Originale (Italiano) 100% Larghezza Orizzontale -->
-            <div class="composer-editor-surface">
-              <div class="editor-header-row">
-                <div class="editor-lang-group">
-                  <span class="lang-badge-it">IT</span>
-                  <span class="editor-title-label">Testo originale (Italiano) · Larghezza piena</span>
+            <!-- Superficie Split Scrittura e Traduzione (Colonna Origine IT + Colonna Destinazione Traduzione Live nel Composer) -->
+            <div class="composer-split-surface">
+              <!-- Colonna Origine · Italiano -->
+              <div class="composer-col-origin">
+                <div class="editor-header-row">
+                  <div class="editor-lang-group">
+                    <span class="lang-badge-it">IT</span>
+                    <span class="editor-title-label">Testo originale (Italiano)</span>
+                  </div>
+                  <span class="editor-status-label">Editor attivo</span>
                 </div>
-                <span class="editor-status-label">Editor attivo · Traduzione in uscita nella sidebar destra →</span>
+                <textarea
+                  id="composerTextarea"
+                  class="composer-textarea"
+                  oninput="handleItalianInput()"
+                  placeholder="Scrivi qui la risposta in italiano..."
+                ></textarea>
               </div>
-              <textarea
-                id="composerTextarea"
-                class="composer-textarea"
-                oninput="handleItalianInput()"
-                placeholder="Scrivi qui la risposta in italiano..."
-              ></textarea>
+
+              <!-- Colonna Destinazione · Traduzione Live -->
+              <div class="composer-col-target">
+                <div class="editor-header-row">
+                  <div class="translation-target-selector">
+                    <span>→ Traduzione in uscita:</span>
+                    <select id="langSelectDropdown" class="lang-select-dropdown" onchange="flashSyncBadge('Lingua aggiornata')">
+                      <option value="PL">PL · Polacco</option>
+                      <option value="FR">FR · Francese</option>
+                      <option value="EN">EN · Inglese</option>
+                      <option value="DE">DE · Tedesco</option>
+                    </select>
+                  </div>
+                  <div class="translation-sync-actions">
+                    <span class="sync-indicator">
+                      <span class="sync-dot"></span>
+                      <span id="syncStatusText">Sincronizzata</span>
+                    </span>
+                    <button class="btn-edit-pl" id="btnEditPl" onclick="toggleEditTranslation()">Modifica PL</button>
+                  </div>
+                </div>
+                <textarea
+                  id="translationPreviewTextarea"
+                  class="translation-preview-textarea"
+                  readonly
+                ></textarea>
+              </div>
             </div>
 
             <!-- Barra Inferiore Strumenti e Invio -->
             <div class="composer-bottombar">
               <div class="composer-tools-left">
-                <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega</button>
-                <button class="tool-chip-btn" onclick="setRightTab('kb')">KB · Inserisci da KB</button>
-                <button class="tool-chip-btn" onclick="setRightTab('kb')">Template · Messaggi pronti</button>
-                <button class="tool-chip-btn" onclick="setRightTab('kb')"># Tag</button>
+                <button class="tool-chip-btn" onclick="flashSyncBadge('Selettore allegati aperto')">+ Allega file</button>
+                <button class="tool-chip-btn" onclick="setRightTab('kb')">Salva in KB</button>
+                <button class="tool-chip-btn" onclick="flashSyncBadge('Dettatura vocale pronta')">Dettatura vocale</button>
+                <span style="font-size:11px;font-weight:500;color:var(--text-muted);margin-left:4px;">Bozza salvata automaticamente</span>
               </div>
               <div class="composer-actions-right">
                 <button class="schedule-btn" onclick="openScheduleModal()">
-                  Programma invio
+                  Programma invio · Orario OK
                 </button>
                 <button class="send-btn" id="mainSendBtn" onclick="sendCurrentMessage()">
-                  Invia risposta (PL)
+                  Invia in Polacco (PL) ⌘↵
                 </button>
               </div>
             </div>
@@ -1765,7 +1843,7 @@ button {
         </div>
       </section>
 
-      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI + PREVIEW TRADUZIONE IN USCITA (384px) -->
+      <!-- 4. SIDEBAR DI DESTRA: PANNELLO AI & CONTESTO OPERATIVO (384px) -->
       <aside class="ai-sidebar" id="aiSidebar">
         <!-- Intestazione Tabs -->
         <div class="ai-sidebar-header">
@@ -1932,35 +2010,6 @@ button {
               <span class="tag-chip" onclick="this.classList.toggle('active')">#LateCheckOut</span>
               <span class="tag-chip" onclick="this.classList.toggle('active')">#VIP</span>
             </div>
-          </div>
-        </div>
-
-        <!-- SEZIONE FISSA IN BASSO: ANTEPRIMA TRADUZIONE IN USCITA (SPOSTATA NELLA SIDEBAR DESTRA) -->
-        <div class="translation-preview-section">
-          <div class="translation-preview-header">
-            <div class="translation-target-selector">
-              <span>Traduzione in uscita:</span>
-              <select id="langSelectDropdown" class="lang-select-dropdown" onchange="flashSyncBadge('Lingua aggiornata')">
-                <option value="PL">PL · Polacco</option>
-                <option value="FR">FR · Francese</option>
-                <option value="EN">EN · Inglese</option>
-                <option value="DE">DE · Tedesco</option>
-              </select>
-            </div>
-            <div class="translation-sync-actions">
-              <span class="sync-indicator">
-                <span class="sync-dot"></span>
-                <span id="syncStatusText">Sincronizzata</span>
-              </span>
-              <button class="btn-edit-pl" id="btnEditPl" onclick="toggleEditTranslation()">Modifica PL</button>
-            </div>
-          </div>
-          <div class="translation-preview-box">
-            <textarea
-              id="translationPreviewTextarea"
-              class="translation-preview-textarea"
-              readonly
-            ></textarea>
           </div>
         </div>
 
@@ -2614,7 +2663,7 @@ function syncAllUI(preserveText = false) {
   const sendBtn = document.getElementById('mainSendBtn');
   sendBtn.textContent = state.channelMode === 'note'
     ? 'Salva nota interna'
-    : `Invia risposta (${conv.langCode})`;
+    : `Invia in ${conv.langName} (${conv.langCode}) ⌘↵`;
 
   // Composer & Right Sidebar Translation texts
   const itArea = document.getElementById('composerTextarea');
