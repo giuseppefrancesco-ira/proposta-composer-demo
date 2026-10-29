@@ -981,50 +981,38 @@ button {
   font-weight: 600;
 }
 
-/* SPLIT BILINGUAL COMPOSER SURFACE (IT LEFT + LIVE TRANSLATION RIGHT ON DESKTOP) */
+/* COMPOSER SURFACE: FULL-WIDTH PRIMARY TEXTBOX + SECONDARY TRANSLATION DRAFT */
 .composer-split-surface {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-surface);
 }
 
 .composer-card.note-mode .composer-split-surface {
-  grid-template-columns: 1fr;
   background: #FFFBEB;
 }
 
-.composer-card.note-mode .composer-col-target,
-.composer-card.note-mode .mobile-compact-trans-bar {
+.composer-card.note-mode .composer-secondary-draft {
   display: none !important;
 }
 
 .composer-col-origin {
-  padding: 12px 16px;
+  padding: 12px 16px 10px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   background: var(--bg-surface);
-  border-right: 1px solid var(--border);
+  flex: 1;
 }
 
-.composer-card.focus-expanded .composer-col-origin,
-.composer-card.focus-expanded .composer-col-target {
-  padding: 14px 18px;
+.composer-card.focus-expanded .composer-col-origin {
+  padding: 14px 18px 12px;
   gap: 8px;
 }
 
 .composer-card.note-mode .composer-col-origin {
   background: #FFFBEB;
-  border-right: none;
-}
-
-.composer-col-target {
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: var(--bg-subtle);
 }
 
 .editor-header-row {
@@ -1065,23 +1053,81 @@ button {
   color: var(--text-muted);
 }
 
-.composer-textarea,
-.translation-preview-textarea {
+.composer-textarea {
   width: 100%;
-  min-height: 58px;
+  min-height: 76px;
   resize: none;
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.5;
   color: var(--text-primary);
   outline: none;
   border: none;
   background: transparent;
   transition: min-height 0.2s ease;
+  flex: 1;
 }
 
-.composer-card.focus-expanded .composer-textarea,
-.composer-card.focus-expanded .translation-preview-textarea {
-  min-height: 185px;
+.composer-card.focus-expanded .composer-textarea {
+  min-height: 190px;
+}
+
+/* SECONDARY TRANSLATION DRAFT (Subordinate preview box, not a second primary textarea) */
+.composer-secondary-draft {
+  margin: 0 14px 10px;
+  padding: 8px 12px;
+  background: var(--bg-subtle);
+  border: 1px dashed #CBD5E1;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.composer-secondary-draft.editing {
+  background: #FFFFFF;
+  border-style: solid;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(36, 87, 230, 0.1);
+}
+
+.secondary-draft-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.secondary-draft-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #E2E8F0;
+  color: #475569;
+}
+
+.secondary-draft-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  max-height: 44px;
+  overflow-y: auto;
+  outline: none;
+}
+
+.composer-card.focus-expanded .secondary-draft-text {
+  max-height: 105px;
+}
+
+.composer-secondary-draft.editing .secondary-draft-text {
+  color: var(--text-primary);
+  max-height: 120px;
 }
 
 /* COMPOSER BOTTOM BAR */
@@ -1766,63 +1812,9 @@ button {
     font-size: 11px;
   }
 
-  /* Stacked IT + Target Language Split Surface on Mobile */
-  .composer-split-surface {
-    grid-template-columns: 1fr;
-  }
-
-  /* In compact mobile view (not expanded): hide origin header & full target textarea, show sleek 1-line translation bar */
+  /* Primary IT Textbox + Secondary Translation Draft on Mobile */
   .composer-card:not(.focus-expanded) .composer-col-origin .editor-header-row {
     display: none;
-  }
-
-  .composer-card:not(.focus-expanded) .composer-col-target {
-    display: none;
-  }
-
-  .composer-card:not(.focus-expanded) .mobile-compact-trans-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-subtle);
-    border-top: 1px solid var(--border);
-    cursor: pointer;
-  }
-
-  .mobile-compact-trans-left {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-width: 0;
-    flex: 1;
-  }
-
-  .mobile-compact-trans-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 5px;
-    border-radius: 4px;
-    background: var(--brand-soft);
-    color: var(--brand);
-    flex-shrink: 0;
-  }
-
-  .mobile-compact-trans-text {
-    font-size: 11.5px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-  }
-
-  .mobile-compact-trans-action {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--brand);
-    flex-shrink: 0;
   }
 
   .composer-card.focus-expanded .composer-split-surface {
@@ -1845,39 +1837,50 @@ button {
   }
 
   .composer-card.focus-expanded .composer-col-origin {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .composer-col-target {
-    padding: 8px 12px;
-    gap: 4px;
-  }
-
-  .composer-card.focus-expanded .composer-col-origin,
-  .composer-card.focus-expanded .composer-col-target {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 12px 14px;
+    padding: 12px 14px 8px;
     gap: 8px;
-    min-height: 120px;
+    min-height: 150px;
   }
 
   .composer-textarea {
-    min-height: 44px;
-    max-height: 62px;
+    min-height: 52px;
+    max-height: 72px;
     font-size: 13px;
     line-height: 1.45;
   }
 
-  .composer-card.focus-expanded .composer-textarea,
-  .composer-card.focus-expanded .translation-preview-textarea {
+  .composer-card.focus-expanded .composer-textarea {
     flex: 1;
     height: 100%;
-    min-height: 95px;
+    min-height: 140px;
     max-height: none;
-    font-size: 13px;
+    font-size: 13.5px;
     line-height: 1.5;
+  }
+
+  .composer-secondary-draft {
+    margin: 0 10px 8px;
+    padding: 6px 10px;
+    gap: 3px;
+  }
+
+  .composer-card.focus-expanded .composer-secondary-draft {
+    margin: 0 10px 10px;
+    padding: 8px 11px;
+    gap: 4px;
+  }
+
+  .secondary-draft-text {
+    font-size: 11.5px;
+    max-height: 36px;
+  }
+
+  .composer-card.focus-expanded .secondary-draft-text {
+    font-size: 12px;
+    max-height: 88px;
   }
 
   /* Mobile Inline Copilot & Autonomy Section inside Focus Bottom Sheet */

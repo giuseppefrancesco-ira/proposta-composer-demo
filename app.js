@@ -235,22 +235,24 @@ function togglePromptBar() {
   }
 }
 
-function updateMobileCompactTransPreview() {
-  const enArea = document.getElementById('translationPreviewTextarea');
-  const compactEl = document.getElementById('mobileCompactTransText');
-  if (compactEl && enArea) {
-    compactEl.textContent = enArea.value.replace(/\s+/g, ' ').trim();
+function getTranslationDraftText() {
+  const draftEl = document.getElementById('translationDraftPreview');
+  return draftEl ? (draftEl.innerText || draftEl.textContent || '') : '';
+}
+
+function setTranslationDraftText(val) {
+  const draftEl = document.getElementById('translationDraftPreview');
+  if (draftEl) {
+    draftEl.textContent = val;
   }
 }
 
 function applyAiPrompt() {
   const promptVal = document.getElementById('promptInput').value.trim();
   const itArea = document.getElementById('composerTextarea');
-  const enArea = document.getElementById('translationPreviewTextarea');
   if (!promptVal) return;
   itArea.value = itArea.value + "\n\n[Modifica AI applicata: " + promptVal + "] Restiamo a tua completa disposizione su WhatsApp o qui in chat!";
-  enArea.value = enArea.value + "\n\n[AI update: " + promptVal + "] We remain at your full disposal on WhatsApp or right here in the chat!";
-  updateMobileCompactTransPreview();
+  setTranslationDraftText(getTranslationDraftText() + "\n\n[AI update: " + promptVal + "] We remain at your full disposal on WhatsApp or right here in the chat!");
   document.getElementById('promptInput').value = '';
   state.promptOpen = false;
   document.getElementById('promptInlineBar').classList.remove('open');
@@ -260,35 +262,32 @@ function applyAiPrompt() {
 function insertProposal(type) {
   const conv = getConv();
   const itArea = document.getElementById('composerTextarea');
-  const enArea = document.getElementById('translationPreviewTextarea');
   if (type === 'full') {
     state.focusExpanded = true;
     itArea.value = conv.focusDraftIT;
-    enArea.value = conv.focusDraftTarget;
+    setTranslationDraftText(conv.focusDraftTarget);
   } else if (type === 'short') {
     itArea.value = conv.standardDraftIT;
-    enArea.value = conv.standardDraftTarget;
+    setTranslationDraftText(conv.standardDraftTarget);
   } else if (type === 'kb-parking') {
     itArea.value = "Ciao " + conv.guestName.split(' ')[0] + "! Il posto auto riservato è il n. 14 nel cortile interno. Il cancello automatico si apre con il codice 000000.";
-    enArea.value = "Hi " + conv.guestName.split(' ')[0] + "! Reserved parking spot #14 is in the inner courtyard. The automatic gate opens with code 000000.";
+    setTranslationDraftText("Hi " + conv.guestName.split(' ')[0] + "! Reserved parking spot #14 is in the inner courtyard. The automatic gate opens with code 000000.");
   } else if (type === 'kb-towels') {
     itArea.value = "Per il set di asciugamani extra, scrivici pure qui l'orario che preferisci e la governante te li consegnerà in 30 minuti.";
-    enArea.value = "For the extra towel set, just let us know your preferred time here and housekeeping will deliver them within 30 minutes.";
+    setTranslationDraftText("For the extra towel set, just let us know your preferred time here and housekeeping will deliver them within 30 minutes.");
   } else if (type === 'sched-checkin') {
     itArea.value = "Ciao! Ti confermiamo che il self check-in è attivo dalle ore 15:00 con il codice Nuki 000000.";
-    enArea.value = "Hi! We confirm that self check-in is active from 3:00 PM using Nuki code 000000.";
+    setTranslationDraftText("Hi! We confirm that self check-in is active from 3:00 PM using Nuki code 000000.");
   }
   if (isMobileViewport()) {
     closeMobileDrawers();
   }
   syncAllUI(true);
-  updateMobileCompactTransPreview();
   flashSyncBadge('Bozza inserita e tradotta');
 }
 
 function handleItalianInput() {
   const itText = document.getElementById('composerTextarea').value;
-  const enArea = document.getElementById('translationPreviewTextarea');
   const syncText = document.getElementById('syncStatusText');
   syncText.textContent = 'Traduzione live...';
 
@@ -296,32 +295,35 @@ function handleItalianInput() {
   window.__transTimer = setTimeout(() => {
     const conv = getConv();
     if (itText.trim() === conv.standardDraftIT.trim()) {
-      enArea.value = conv.standardDraftTarget;
+      setTranslationDraftText(conv.standardDraftTarget);
     } else if (itText.trim() === conv.focusDraftIT.trim()) {
-      enArea.value = conv.focusDraftTarget;
+      setTranslationDraftText(conv.focusDraftTarget);
     } else {
-      enArea.value = state.focusExpanded
-        ? conv.focusDraftTarget
-        : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '');
+      setTranslationDraftText(
+        state.focusExpanded
+          ? conv.focusDraftTarget
+          : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '')
+      );
     }
-    updateMobileCompactTransPreview();
     syncText.textContent = 'Sincronizzata';
   }, 280);
 }
 
 function toggleEditTranslation() {
-  if (isMobileViewport() && !state.focusExpanded) {
-    state.focusExpanded = true;
-    syncAllUI(true);
-  }
   state.editingTranslation = !state.editingTranslation;
-  const enArea = document.getElementById('translationPreviewTextarea');
+  const draftBox = document.getElementById('secondaryTranslationDraft');
+  const draftEl = document.getElementById('translationDraftPreview');
   const btn = document.getElementById('btnEditPl');
-  enArea.readOnly = !state.editingTranslation;
+  if (draftEl) {
+    draftEl.contentEditable = state.editingTranslation ? 'true' : 'false';
+  }
+  if (draftBox) {
+    draftBox.classList.toggle('editing', state.editingTranslation);
+  }
   btn.classList.toggle('editing', state.editingTranslation);
-  btn.textContent = state.editingTranslation ? 'Salva ' + getConv().langCode : ('Modifica ' + getConv().langCode);
-  if (state.editingTranslation) {
-    enArea.focus();
+  btn.textContent = state.editingTranslation ? 'Salva bozza ' + getConv().langCode : ('Modifica bozza ' + getConv().langCode);
+  if (state.editingTranslation && draftEl) {
+    draftEl.focus();
   }
 }
 
@@ -337,9 +339,8 @@ function flashSyncBadge(msg) {
 function sendCurrentMessage(scheduledTime = null) {
   const conv = getConv();
   const itArea = document.getElementById('composerTextarea');
-  const enArea = document.getElementById('translationPreviewTextarea');
   const itText = itArea.value.trim();
-  const targetText = enArea.value.trim();
+  const targetText = getTranslationDraftText().trim();
   if (!itText) return;
 
   if (state.channelMode === 'note') {
@@ -519,12 +520,10 @@ function syncAllUI(preserveText = false) {
   }
 
   const itArea = document.getElementById('composerTextarea');
-  const enArea = document.getElementById('translationPreviewTextarea');
   if (!preserveText) {
     itArea.value = state.focusExpanded ? conv.focusDraftIT : conv.standardDraftIT;
-    enArea.value = state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
+    setTranslationDraftText(state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget);
   }
-  updateMobileCompactTransPreview();
 
   document.getElementById('rightTabAi').classList.toggle('active', state.rightTab === 'ai');
   document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');
@@ -532,7 +531,7 @@ function syncAllUI(preserveText = false) {
   document.getElementById('rightContentKb').style.display = state.rightTab === 'kb' ? 'flex' : 'none';
 
   document.getElementById('langSelectDropdown').value = conv.langCode;
-  document.getElementById('btnEditPl').textContent = state.editingTranslation ? 'Salva' : `Modifica ${conv.langCode}`;
+  document.getElementById('btnEditPl').textContent = state.editingTranslation ? `Salva bozza ${conv.langCode}` : `Modifica bozza ${conv.langCode}`;
 
   renderMessages();
 }
