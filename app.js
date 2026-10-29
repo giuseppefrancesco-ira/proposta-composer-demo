@@ -34,7 +34,18 @@ const CONVERSATIONS = {
         time: '11:20',
         badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Good morning! The Nuki code worked right away, the apartment is great. Quick question: is there a dedicated parking spot in the courtyard for guests?',
-        textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?"
+        textTranslated: "Buongiorno! Il codice Nuki ha funzionato subito, l'appartamento è ottimo. Ho una domanda: nel cortile c'è un posto auto riservato per gli ospiti?",
+        transCollapsed: false
+      },
+      {
+        id: 'm1_reply',
+        sender: 'host',
+        author: 'Tu',
+        time: '11:26',
+        badge: { text: 'Inviato in EN', cls: 'pms' },
+        textOriginal: 'Ciao Adam! Il posto auto riservato è il n. 14 nel cortile interno, puoi aprire il cancello con lo stesso codice 000000.',
+        textTranslated: 'Hi Adam! Reserved parking spot #14 is in the inner courtyard, you can open the gate using the same code 000000.',
+        transCollapsed: false
       },
       {
         id: 'm2',
@@ -43,8 +54,9 @@ const CONVERSATIONS = {
         author: 'Tu',
         time: 'Programmato Domani 09:00',
         badge: { text: 'Programmato', cls: 'channel' },
-        textOriginal: 'Good morning Adam! Just a friendly reminder that check-out tomorrow is by 10:30 AM. You can leave the keys on the living room table.',
-        textTranslated: 'Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.'
+        textOriginal: 'Buongiorno Adam! Ti ricordiamo che domani il check-out è previsto entro le 10:30. Puoi lasciare le chiavi sul tavolo in soggiorno.',
+        textTranslated: 'Good morning Adam! Just a friendly reminder that check-out tomorrow is by 10:30 AM. You can leave the keys on the living room table.',
+        transCollapsed: true
       },
       {
         id: 'm3',
@@ -53,7 +65,8 @@ const CONVERSATIONS = {
         time: '11:45',
         badge: { text: 'Airbnb', cls: 'channel' },
         textOriginal: 'Great, thank you! I just read the recycling instructions. If I need extra towels I will message you here. Thanks for the city sightseeing tips!',
-        textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.'
+        textTranslated: 'Super, grazie! Ho appena letto le istruzioni per la raccolta differenziata. Se avrò bisogno di asciugamani extra vi scriverò. Grazie per i consigli su cosa visitare in città.',
+        transCollapsed: false
       }
     ]
   },
@@ -236,15 +249,13 @@ function togglePromptBar() {
 }
 
 function getTranslationDraftText() {
-  const draftEl = document.getElementById('translationDraftPreview');
-  return draftEl ? (draftEl.innerText || draftEl.textContent || '') : '';
+  const conv = getConv();
+  if (state.currentTargetDraft) return state.currentTargetDraft;
+  return state.focusExpanded ? conv.focusDraftTarget : conv.standardDraftTarget;
 }
 
 function setTranslationDraftText(val) {
-  const draftEl = document.getElementById('translationDraftPreview');
-  if (draftEl) {
-    draftEl.textContent = val;
-  }
+  state.currentTargetDraft = val;
 }
 
 function applyAiPrompt() {
@@ -283,48 +294,31 @@ function insertProposal(type) {
     closeMobileDrawers();
   }
   syncAllUI(true);
-  flashSyncBadge('Bozza inserita e tradotta');
+  flashSyncBadge('Bozza inserita nel composer');
 }
 
 function handleItalianInput() {
   const itText = document.getElementById('composerTextarea').value;
-  const syncText = document.getElementById('syncStatusText');
-  syncText.textContent = 'Traduzione live...';
-
-  clearTimeout(window.__transTimer);
-  window.__transTimer = setTimeout(() => {
-    const conv = getConv();
-    if (itText.trim() === conv.standardDraftIT.trim()) {
-      setTranslationDraftText(conv.standardDraftTarget);
-    } else if (itText.trim() === conv.focusDraftIT.trim()) {
-      setTranslationDraftText(conv.focusDraftTarget);
-    } else {
-      setTranslationDraftText(
-        state.focusExpanded
-          ? conv.focusDraftTarget
-          : conv.standardDraftTarget + (itText.length > conv.standardDraftIT.length ? ' [Live translated]' : '')
-      );
-    }
-    syncText.textContent = 'Sincronizzata';
-  }, 280);
+  const conv = getConv();
+  if (itText.trim() === conv.standardDraftIT.trim()) {
+    setTranslationDraftText(conv.standardDraftTarget);
+  } else if (itText.trim() === conv.focusDraftIT.trim()) {
+    setTranslationDraftText(conv.focusDraftTarget);
+  } else {
+    setTranslationDraftText(
+      state.focusExpanded
+        ? conv.focusDraftTarget
+        : conv.standardDraftTarget
+    );
+  }
 }
 
-function toggleEditTranslation() {
-  state.editingTranslation = !state.editingTranslation;
-  const draftBox = document.getElementById('secondaryTranslationDraft');
-  const draftEl = document.getElementById('translationDraftPreview');
-  const btn = document.getElementById('btnEditPl');
-  if (draftEl) {
-    draftEl.contentEditable = state.editingTranslation ? 'true' : 'false';
-  }
-  if (draftBox) {
-    draftBox.classList.toggle('editing', state.editingTranslation);
-  }
-  btn.classList.toggle('editing', state.editingTranslation);
-  btn.textContent = state.editingTranslation ? 'Salva bozza ' + getConv().langCode : ('Modifica bozza ' + getConv().langCode);
-  if (state.editingTranslation && draftEl) {
-    draftEl.focus();
-  }
+function toggleBubbleTranslation(msgId) {
+  const conv = getConv();
+  const msg = conv.messages.find(m => m.id === msgId);
+  if (!msg) return;
+  msg.transCollapsed = !msg.transCollapsed;
+  renderMessages();
 }
 
 function flashSyncBadge(msg) {
@@ -332,7 +326,7 @@ function flashSyncBadge(msg) {
   if (!syncText) return;
   syncText.textContent = msg;
   setTimeout(() => {
-    syncText.textContent = 'Sincronizzata';
+    syncText.textContent = '2 fonti KB attive';
   }, 1800);
 }
 
@@ -362,8 +356,9 @@ function sendCurrentMessage(scheduledTime = null) {
       author: 'Tu',
       time: 'Programmato ' + scheduledTime,
       badge: { text: 'Programmato', cls: 'channel' },
-      textOriginal: targetText || itText,
-      textTranslated: itText
+      textOriginal: itText,
+      textTranslated: targetText || itText,
+      transCollapsed: false
     });
   } else {
     conv.messages.push({
@@ -372,8 +367,9 @@ function sendCurrentMessage(scheduledTime = null) {
       author: 'Tu',
       time: 'Ora',
       badge: { text: 'Inviato in ' + conv.langCode, cls: 'pms' },
-      textOriginal: targetText || itText,
-      textTranslated: itText
+      textOriginal: itText,
+      textTranslated: targetText || itText,
+      transCollapsed: false
     });
   }
 
@@ -420,12 +416,21 @@ function renderMessages() {
 
   const messagesHtml = conv.messages.map(m => {
     const isGuest = m.sender === 'guest';
+    const isCollapsed = !!m.transCollapsed;
     const rowCls = ['msg-row', m.sender, m.scheduled ? 'scheduled' : '', m.internalNote ? 'internal-note' : ''].filter(Boolean).join(' ');
     const badgeHtml = m.badge ? `<span class="mini-badge ${m.badge.cls}">${m.badge.text}</span>` : '';
 
+    const transLabel = isGuest
+      ? `IT &middot; Traduzione`
+      : `${conv.langCode} &middot; Traduzione cliente (${conv.langName})`;
+    const toggleLabel = isCollapsed ? 'Mostra traduzione &#9662;' : 'Nascondi &#9652;';
+
     const inlineTranslationHtml = m.textTranslated ? `
-      <div class="msg-inline-translation">
-        <span class="msg-inline-trans-label">${isGuest ? `IT &middot; Traduzione` : `IT &middot; Originale`}</span>
+      <div class="msg-inline-translation ${isCollapsed ? 'collapsed' : ''}">
+        <div class="msg-inline-trans-header" onclick="toggleBubbleTranslation('${m.id}')" title="Clicca per mostrare o nascondere la traduzione">
+          <span class="msg-inline-trans-label">${transLabel}</span>
+          <span class="msg-inline-trans-toggle">${toggleLabel}</span>
+        </div>
         <div class="msg-inline-trans-text">${m.textTranslated}</div>
       </div>
     ` : '';
@@ -529,9 +534,6 @@ function syncAllUI(preserveText = false) {
   document.getElementById('rightTabKb').classList.toggle('active', state.rightTab === 'kb');
   document.getElementById('rightContentAi').style.display = state.rightTab === 'ai' ? 'flex' : 'none';
   document.getElementById('rightContentKb').style.display = state.rightTab === 'kb' ? 'flex' : 'none';
-
-  document.getElementById('langSelectDropdown').value = conv.langCode;
-  document.getElementById('btnEditPl').textContent = state.editingTranslation ? `Salva bozza ${conv.langCode}` : `Modifica bozza ${conv.langCode}`;
 
   renderMessages();
 }
